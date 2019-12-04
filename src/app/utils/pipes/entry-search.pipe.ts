@@ -9,6 +9,13 @@ export class EntrySearchPipe implements PipeTransform {
   transform(entries: Entry[], filterBy: string): Entry[] {
     filterBy = filterBy ? filterBy.toLocaleLowerCase() : null;
 
-    return filterBy ? entries.filter((entry: Entry) => entry.address.name.toLocaleLowerCase().indexOf(filterBy) !== -1) : entries;
+    return filterBy
+      ? entries.filter((entry: Entry) => {
+          return (
+            entry.address.name.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+            entry.address.category.name.toLocaleLowerCase().indexOf(filterBy) !== -1
+          );
+        })
+      : entries;
   }
 }

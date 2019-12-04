@@ -6,9 +6,10 @@ import { MaterialModule } from './material.module';
 import { MainComponent } from './main.component';
 import { FormsModule } from '@angular/forms';
 import { GridModule, SortService, VirtualScrollService } from '@syncfusion/ej2-angular-grids';
+import { EntrySearchPipe } from '../utils/pipes';
 
 @NgModule({
-  declarations: [MainComponent, ...navigatableComponents],
+  declarations: [MainComponent, EntrySearchPipe, ...navigatableComponents],
   imports: [CommonModule, RouterModule.forChild(routes), MaterialModule, FormsModule, GridModule],
   providers: [SortService, VirtualScrollService],
   schemas: [NO_ERRORS_SCHEMA]

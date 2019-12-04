@@ -18,7 +18,6 @@ import { AddressService } from './shared/address';
 import { DrawerService } from './shared/drawer';
 import { EntryService } from './shared/entry';
 import { TrafficInterceptor } from './utils/interceptor';
-import { EntrySearchPipe } from './utils/pipes';
 
 registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
 
@@ -33,7 +32,6 @@ registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
     AddressService,
     DrawerService,
     EntryService,
-    EntrySearchPipe,
     { provide: HTTP_INTERCEPTORS, useClass: TrafficInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: 'fr-CH' }
   ],

@@ -20,23 +20,28 @@
       </div>
     </div>
   </nav>
-  <div class="flex items-ce items-center justify-between px-4 py-2 text-base">
+  <div class="flex flex-col items-start xl:items-center justify-between px-4 py-2 text-base xl:flex-row">
     <div class="flex items-center justify-start">
       <div class="flex mr-4">
-        <div [class.bg-navy]="selectedFilter === 0" class="bg-gray-500 p-1 hover:bg-navy" (click)="onChooseFilter(0)">
-          <img class="w-8 h-8 cursor-pointer" src="assets/images/all_white.png" alt="All">
+        <div [class.bg-navy]="selectedFilter === 0"
+          class="bg-gray-500 bg-navy flex h-10 hover:bg-navy items-center p-1 w-10" (click)="onChooseFilter(0)">
+          <img class="cursor-pointer" src="assets/images/all_white.png" alt="All">
         </div>
-        <div [class.bg-green-400]="selectedFilter === 1" class="bg-gray-500 p-1 hover:bg-green-400"
-          (click)="onChooseFilter(1)">
-          <img class="w-8 h-8 cursor-pointer" src="assets/images/entreDlg_active_white.png" alt="Entree">
+        <div [class.bg-green-400]="selectedFilter === 1"
+          class="bg-gray-500 p-1 hover:bg-green-400 flex items-center h-10 w-10" (click)="onChooseFilter(1)">
+          <img class="cursor-pointer" src="assets/images/entreDlg_active_white.png" alt="Entree">
         </div>
-        <div [class.bg-red-400]="selectedFilter === 2" class="bg-gray-500 p-1 hover:bg-red-400"
-          (click)="onChooseFilter(2)">
-          <img class="w-8 h-8 cursor-pointer" src="assets/images/sortieDlg_active_white.png" alt="Sortie">
+        <div [class.bg-red-400]="selectedFilter === 2"
+          class="bg-gray-500 p-1 hover:bg-red-400 flex items-center h-10 w-10" (click)="onChooseFilter(2)">
+          <img class="cursor-pointer" src="assets/images/sortieDlg_active_white.png" alt="Sortie">
         </div>
       </div>
+      <div class="flex items-center justify-center bg-gray-800 p-1 mr-4" (click)="onResetFilters()">
+        <img class="w-6 h-6 cursor-pointer" src="assets/images/cancel_white.png" alt="Cancel">
+      </div>
       <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Date Du" (focus)="picker.open()">
+        <input matInput [matDatepicker]="picker" placeholder="Date Du" (focus)="picker.open()"
+          [(ngModel)]="searchTerms.dateFrom" (dateChange)="changeDateFrom($event)">
         <mat-datepicker-toggle matSuffix [for]="picker">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
         </mat-datepicker-toggle>
@@ -46,7 +51,8 @@
         -
       </div>
       <mat-form-field>
-        <input matInput [matDatepicker]="pickerTo" placeholder="Date Du" (focus)="pickerTo.open()">
+        <input matInput [matDatepicker]="pickerTo" placeholder="Date Du" (focus)="pickerTo.open()"
+          [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)">
         <mat-datepicker-toggle matSuffix [for]="pickerTo">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
         </mat-datepicker-toggle>
@@ -54,12 +60,12 @@
       </mat-form-field>
       <div class="flex ml-6">
         <label class="flex items-center">
-          <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox">
+          <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox" (change)="onExporteesFilter()">
           <span class="ml-2">Exportees</span>
         </label>
       </div>
       <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center ml-8 w-64">
-        <input
+        <input [(ngModel)]="searchText"
           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           type="text" placeholder="Recherche" aria-label="Search">
         <img class="w-4 h-4" src="assets/images/search_black.png" alt="Search">
@@ -80,9 +86,10 @@
       </div>
     </div>
   </div>
-  <div class="table-container px-3">
-    <ejs-grid [dataSource]="entries | async" [allowSorting]='true' [allowFiltering]='true' [enableVirtualization]='true'
-      height='600' (rowDataBound)='rowDataBound($event)'>
+  <div class="table-container px-3 hidden md:block">
+    <ejs-grid #grid [dataSource]="(entries | async) | entrySearch:searchText" [allowSorting]='true'
+      [allowFiltering]='true' [enableVirtualization]='true' [locale]='fr-CH' height='600'
+      (rowDataBound)='rowDataBound($event)'>
       <e-columns>
         <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
         <e-column headerText='Entree/Sortie' field="inout">
@@ -93,7 +100,7 @@
           </ng-template>
         </e-column>
         <e-column headerText='No de piece' field="pieceNo"></e-column>
-        <e-column headerText='Date' field="entryDate">
+        <e-column headerText='Date'>
           <ng-template #template let-entry>
             <div>
               <span id="Emptext">{{entry.entryDate | date:'dd.MM.yyyy'}}</span>
@@ -101,9 +108,27 @@
           </ng-template>
         </e-column>
         <e-column headerText='Adresse' field="address.name"></e-column>
-        <e-column headerText='Categorie' field="address.category.name"></e-column>
+        <e-column headerText='Categorie' field="address.category.name">
+          <ng-template #template let-entry>
+            <div class="flex flex-col">
+              <span class="font-bold border-b border-gray-600" *ngIf="entry.entryitems.length > 1">total</span>
+              <span *ngFor="let item of entry.entryitems">{{item.category.name}}</span>
+            </div>
+          </ng-template>
+        </e-column>
         <!-- <e-column headerText=''></e-column> -->
-        <e-column headerText='Montant' field="totalAmount"></e-column>
+        <e-column headerText='Montant'>
+          <ng-template #template let-entry>
+            <div class="flex flex-col text-right">
+              <span *ngIf="entry.entryitems.length > 1"
+                class="font-bold border-b border-gray-600">{{entry.totalAmount | number:'0.2-2'}}</span>
+              <span *ngFor="let item of entry.entryitems">{{item.amount | number:'0.2-2'}}</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column width="120" textAlign='Center' [visible]="false" headerText='Exportés' field="exported" type="boolean"
+          [displayAsCheckBox]="true">
+        </e-column>
       </e-columns>
     </ejs-grid>
     <!-- <table class="table-auto w-full text-sm">
@@ -135,14 +160,14 @@
             <input type="checkbox" class="form-checkbox black-checkbox">
           </td>
           <td class="px-4 py-2">{{getEntryInOutText(entry)}}</td>
-          <td class="px-4 py-2">{{entry.pieceNo}}</td>
-          <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
-          <td class="px-4 py-2">{{entry.address.name}}</td>
-          <td class="px-4 py-2">{{entry.address.category.name}}</td>
-          <td class="px-4 py-2">FR</td>
-          <td class="px-4 py-2">{{entry.totalAmount | number:'0.2-2'}}</td>
-        </tr>
-      </tbody>
-    </table> -->
+                <td class="px-4 py-2">{{entry.pieceNo}}</td>
+                <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
+                <td class="px-4 py-2">{{entry.address.name}}</td>
+                <td class="px-4 py-2">{{entry.address.category.name}}</td>
+                <td class="px-4 py-2">FR</td>
+                <td class="px-4 py-2">{{entry.totalAmount | number:'0.2-2'}}</td>
+                </tr>
+                </tbody>
+                </table> -->
   </div>
 </div>
