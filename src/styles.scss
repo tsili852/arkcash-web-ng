@@ -1,1 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
+@import './tailwind-styles.css';
+@import '~@angular/material/theming';
+
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+// @import '../node_modules/@syncfusion/ej2-calendars/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+// @import '../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+// @import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+// @import '../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+
+@include mat-core();
+
+$custom-app-primary: mat-palette($mat-pink, 500);
+$custom-app-accent: mat-palette($mat-blue-gray, 800);
+$custom-app-theme: mat-light-theme($custom-app-primary, $custom-app-accent);
+
+@include mat-core-theme($custom-app-theme);
+@include mat-datepicker-theme($custom-app-theme);
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #ff4567;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #ff4567;
+}
+
+html {
+  height: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body {
+  height: 100%;
+  font-family: Roboto;
+  // background-color: #f9f9f9;
+  overscroll-behavior-y: contain;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.form-checkbox {
+  color: #ff4567;
+}

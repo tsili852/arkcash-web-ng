@@ -1,0 +1,42 @@
+<div class="flex flex-col-reverse md:flex-col h-full">
+  <nav
+    class="bg-white md:bg-gray-900 shadow pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto md:block w-full z-20 hidden md:top-0 md:bottom-auto"
+    style="height: 6%;">
+    <div class="flex flex-row justify-between items-center px-2 py-1">
+      <div class="flex items-center">
+        <img class="w-10 h-10 cursor-pointer" src="assets/images/home.svg" alt="Home">
+        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+        <img class="w-10 h-10 cursor-pointer" src="assets/images/journal_rose.png" alt="Journal">
+        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+        <img class="w-10 h-10 cursor-pointer" src="assets/images/config_blanc.png" alt="Settings">
+        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+      </div>
+      <div class="flex items-center">
+        <div class="text-xl text-white">
+          2000 Cafe sports Ayent
+        </div>
+        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+        <img class="w-10 h-8 cursor-pointer" src="assets/images/menu_log_out.png" alt="LogOut" (click)="onLogout()">
+      </div>
+    </div>
+  </nav>
+  <nav class="bg-gray-900 shadow pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto w-full z-20 bottom-0 md:hidden" style="height: 7%;">
+    <div class="flex flex-row justify-between items-center px-2 py-1">
+      <div class="h-full w-full flex justify-center border-r">
+        <img class="w-10 h-8 cursor-pointer" src="assets/images/menu_log_out.png" alt="LogOut">
+      </div>
+      <div class="h-full w-full flex justify-center border-r">
+        <img class="w-10 h-10 cursor-pointer" src="assets/images/config_blanc.png" alt="Settings">
+      </div>
+      <div class="h-full w-full flex justify-center border-r">
+        <img class="w-10 h-10 cursor-pointer" src="assets/images/journal_rose.png" alt="Journal">
+      </div>
+      <div class="h-full w-full flex justify-center">
+        <img class="w-10 h-10 cursor-pointer" src="assets/images/add_small.png" alt="Journal">
+      </div>
+    </div>
+  </nav>
+  <div class="h-full overflow-auto">
+    <router-outlet></router-outlet>
+  </div>
+</div>

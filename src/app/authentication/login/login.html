@@ -1,0 +1,32 @@
+<div class="flex flex-col items-center justify-start main-container h-full">
+  <img class="h-48 w-56" src="assets/images/logo.png" alt="">
+  <div class="rounded-lg pb-10 pt-1 bg-white shadow-lg mt-6">
+    <div class="flex flex-col items-center mx-10 mt-3">
+      <div class="text-navy text-3xl tracking-wide font-light mb-6">
+        LOGIN
+      </div>
+      <div class="relative my-4 border-b border-navy label-floating md:w-88 w-64">
+        <input class="w-full py-2 px-3 text-navy leading-normal outline-none" id="email" type="text"
+          placeholder="Username" [(ngModel)]="user.username">
+      </div>
+      <div class="relative my-4 border-b border-navy label-floating md:w-88 w-64">
+        <input class="w-full py-2 px-3 text-navy leading-normal outline-none" id="password" type="password"
+          placeholder="Password" [(ngModel)]="user.password">
+      </div>
+      <button class="mt-4 bg-transparent text-navy py-4 px-8 text-navy border border-navy focus:outline-none rounded-xl shadow hover:shadow-md"
+        (click)="onLogin()">
+        Login
+      </button>
+      <a class="text-navy-darker cursor-pointer underline text-xs mt-3">
+        Forgot Password
+      </a>
+      <div *ngIf="loginError || usernameWrong || usernamePasswordEmpty"
+        class="error-container py-3 rounded-lg text-red-700 px-5 mt-6 border-2 border-red-700 text-sm">
+        Username or Password wrong
+      </div>
+    </div>
+  </div>
+  <div class="w-full absolute bottom-0 flex justify-center footer">
+    <img class="h-12" src="assets/images/logo_prolectronic.png" alt="Prolectronic SA">
+  </div>
+</div>
