@@ -51,6 +51,8 @@ export class LedgerComponent implements OnInit {
 
   sortOptions: any;
 
+  showSearchModal = false;
+
   constructor(
     private readonly entryService: EntryService,
     private readonly router: Router,
@@ -139,6 +141,16 @@ export class LedgerComponent implements OnInit {
     } else {
       args.row.classList.add('bg-red-100');
     }
+  }
+
+  onShowSearchModal() {
+    this.showSearchModal = true;
+  }
+
+  onApplySearch() {
+    this.searchTerms.exportees = this.exporteesChecked;
+    this.showSearchModal = false;
+    this.fetchEntries();
   }
 
   onResetFilters() {

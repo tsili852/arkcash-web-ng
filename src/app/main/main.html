@@ -21,7 +21,7 @@
     </div>
   </nav>
   <nav class="bg-gray-900 shadow pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto w-full z-20 bottom-0 md:hidden" style="height: 7%;">
-    <div class="flex flex-row justify-between items-center px-2 py-1">
+    <div class="flex flex-row justify-between items-center px-2">
       <div class="h-full w-full flex justify-center border-r">
         <img class="w-10 h-8 cursor-pointer" src="assets/images/menu_log_out.png" alt="LogOut">
       </div>
@@ -38,5 +38,30 @@
   </nav>
   <div class="h-full overflow-auto">
     <router-outlet></router-outlet>
+  </div>
+</div>
+<div [class.opacity-100]="showInstallPopUp" [class.pointer-events-auto]="showInstallPopUp"
+  class="opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div class="absolute w-88 h-auto bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-4">
+    <div class="flex flex-row justify-between w-full">
+      <div class="icon-tile bg-gray-100 rounded-lg"></div>
+      <div class="icon-tile bg-gray-200 rounded-lg"></div>
+      <div class="icon-tile bg-gray-300 rounded-lg shadow-lg p-1">
+        <img class="w-40 h-auto" src="assets/images/logo.png" alt="">
+      </div>
+      <div class="icon-tile bg-gray-200 rounded-lg"></div>
+      <div class="icon-tile bg-gray-100 rounded-lg"></div>
+    </div>
+    <div class="text-xl mt-6">Installer Arkcash</div>
+    <div class="text-base mt-6 text-center">Installez Arkcash sur votre appareil pour un accès rapide et facile</div>
+    <button class="bg-navy hover:bg-navy-light text-white py-1 h-8 px-4 rounded mt-6" (click)="onInstall()">
+      Installer
+    </button>
+    <button
+      class="bg-transparent hover:bg-navy text-navy hover:text-white py-1 px-4 h-8 mt-4 border border-navy hover:border-transparent rounded"
+      (click)="onCancel()">
+      Annuler
+    </button>
   </div>
 </div>

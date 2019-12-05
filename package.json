@@ -19,10 +19,13 @@
     "@angular/material": "^8.2.3",
     "@angular/platform-browser": "~8.2.4",
     "@angular/platform-browser-dynamic": "~8.2.4",
+    "@angular/pwa": "^0.803.20",
     "@angular/router": "~8.2.4",
+    "@angular/service-worker": "~8.2.4",
     "@auth0/angular-jwt": "^3.0.1",
     "@syncfusion/ej2-angular-grids": "^17.3.29",
     "hammerjs": "^2.0.8",
+    "ngx-izitoast": "^1.0.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

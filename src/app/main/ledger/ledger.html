@@ -1,5 +1,58 @@
 <div class="flex flex-col h-full flex flex-col">
-  <nav class="bg-gray-300 px-2 py-2 shadow">
+  <div class="flex flex-col md:hidden py-2 bg-gray-500 fixed w-full">
+    <div class="flex justify-between items-center">
+      <div [ngClass]="selectedFilter === 0 ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'"
+        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onChooseFilter(0)">
+        <img *ngIf="selectedFilter !== 0" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/all_gris.png"
+          alt="Tous">
+        <img *ngIf="selectedFilter === 0" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/all_white_64.png"
+          alt="Tous">
+        <span>Tous</span>
+      </div>
+      <div [ngClass]="selectedFilter === 1 ? 'bg-green-500 text-white' : 'bg-gray-300 text-black'"
+        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onChooseFilter(1)">
+        <img *ngIf="selectedFilter !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
+          alt="Entrees">
+        <img *ngIf="selectedFilter === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
+          alt="Entrees">
+        <span>Entrée</span>
+      </div>
+      <div [ngClass]="selectedFilter === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
+        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onChooseFilter(2)">
+        <img *ngIf="selectedFilter !== 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
+          alt="Sorties">
+        <img *ngIf="selectedFilter === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
+          alt="Sorties">
+        <span>Sortie</span>
+      </div>
+    </div>
+    <div class="flex justify-between items-center mt-1 px-2">
+      <div class="flex">
+        <div class="flex items-center justify-center bg-gray-700 p-2 mr-2 h-8 w-8 rounded"
+          (click)="onShowSearchModal()">
+          <img class="cursor-pointer" src="assets/images/search_white.png" alt="Cancel">
+        </div>
+        <div class="flex items-center justify-center bg-gray-700 p-2 mr-2 h-8 w-8 rounded" (click)="onResetFilters()">
+          <img class="cursor-pointer" src="assets/images/cancel_white_mobile.png" alt="Cancel">
+        </div>
+        <div class="border-b border-b-2 flex items-center ml-2 w-48">
+          <input [(ngModel)]="searchText"
+            class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-white text-white"
+            type="text" placeholder="Recherche" aria-label="Search">
+        </div>
+      </div>
+      <div class="flex mt-2" *ngIf="(entriesTotal | async) as totalArray">
+        <div [class.bg-green-600]="totalArray[0].total >= 0" [class.bg-red-600]="totalArray[0].total < 0"
+          class="shadow px-3 text-white rounded">
+          {{totalArray[0].total | number:'0.2-2'}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="bg-gray-300 px-2 py-2 shadow hidden md:block">
     <div class="flex justify-between items-center">
       <div class="breadcrumbs flex items-center">
         <div class="text-lg">
@@ -20,11 +73,13 @@
       </div>
     </div>
   </nav>
-  <div class="flex flex-col items-start xl:items-center justify-between px-4 py-2 text-base xl:flex-row">
+  <div
+    class="hidden md:flex flex-row lg:flex-col xl:flex-row items-start xl:items-center justify-between px-4 py-2 text-base">
     <div class="flex items-center justify-start">
       <div class="flex mr-4">
         <div [class.bg-navy]="selectedFilter === 0"
-          class="bg-gray-500 bg-navy flex h-10 hover:bg-navy items-center p-1 w-10" (click)="onChooseFilter(0)">
+          class="bg-gray-500 bg-navy flex h-10 hover:bg-navy items-center p-1 w-10 rounded-l"
+          (click)="onChooseFilter(0)">
           <img class="cursor-pointer" src="assets/images/all_white.png" alt="All">
         </div>
         <div [class.bg-green-400]="selectedFilter === 1"
@@ -32,39 +87,47 @@
           <img class="cursor-pointer" src="assets/images/entreDlg_active_white.png" alt="Entree">
         </div>
         <div [class.bg-red-400]="selectedFilter === 2"
-          class="bg-gray-500 p-1 hover:bg-red-400 flex items-center h-10 w-10" (click)="onChooseFilter(2)">
+          class="bg-gray-500 p-1 hover:bg-red-400 flex items-center h-10 w-10 rounded-r" (click)="onChooseFilter(2)">
           <img class="cursor-pointer" src="assets/images/sortieDlg_active_white.png" alt="Sortie">
         </div>
       </div>
-      <div class="flex items-center justify-center bg-gray-800 p-1 mr-4" (click)="onResetFilters()">
-        <img class="w-6 h-6 cursor-pointer" src="assets/images/cancel_white.png" alt="Cancel">
+      <div class="flex lg:hidden items-center justify-center bg-gray-800 p-2 mr-4 h-8 w-8 rounded"
+        (click)="onShowSearchModal()">
+        <img class="cursor-pointer" src="assets/images/search_white.png" alt="Cancel">
       </div>
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Date Du" (focus)="picker.open()"
-          [(ngModel)]="searchTerms.dateFrom" (dateChange)="changeDateFrom($event)">
-        <mat-datepicker-toggle matSuffix [for]="picker">
-          <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-        </mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <div class="text-lg mx-3">
-        -
+      <div class="flex items-center justify-center bg-gray-800 p-1 mr-2 lg:mr-4 h-6 w-6 rounded"
+        (click)="onResetFilters()">
+        <img class="cursor-pointer" src="assets/images/cancel_white.png" alt="Cancel">
       </div>
-      <mat-form-field>
-        <input matInput [matDatepicker]="pickerTo" placeholder="Date Du" (focus)="pickerTo.open()"
-          [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)">
-        <mat-datepicker-toggle matSuffix [for]="pickerTo">
-          <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-        </mat-datepicker-toggle>
-        <mat-datepicker #pickerTo></mat-datepicker>
-      </mat-form-field>
-      <div class="flex ml-6">
-        <label class="flex items-center">
-          <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox" (change)="onExporteesFilter()">
-          <span class="ml-2">Exportees</span>
-        </label>
+      <div class="hidden lg:flex items-center">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()"
+            [(ngModel)]="searchTerms.dateFrom" (dateChange)="changeDateFrom($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+            <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div class="text-lg mx-3">
+          -
+        </div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()"
+            [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)">
+          <mat-datepicker-toggle matSuffix [for]="pickerTo">
+            <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #pickerTo></mat-datepicker>
+        </mat-form-field>
+        <div class="flex ml-6">
+          <label class="flex items-center">
+            <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox" (change)="onExporteesFilter()">
+            <span class="ml-2">Exportees</span>
+          </label>
+        </div>
       </div>
-      <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center ml-8 w-64">
+      <div
+        class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center ml-2 lg:ml-8 lg:w-64 w-72">
         <input [(ngModel)]="searchText"
           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           type="text" placeholder="Recherche" aria-label="Search">
@@ -74,21 +137,21 @@
         {{entriesCount}}
       </div>
     </div>
-    <div class="flex" *ngIf="(entriesTotal | async) as totalArray">
+    <div class="flex mt-2 lg:mt-0" *ngIf="(entriesTotal | async) as totalArray">
       <div [class.border-green-600]="totalArray[0].total >= 0" [class.border-red-600]="totalArray[0].total < 0"
-        class="border px-3">
+        class="border px-3 rounded-l">
         Solde de caisse
       </div>
       <div [class.bg-green-600]="totalArray[0].total >= 0" [class.border-green-600]="totalArray[0].total >= 0"
         [class.bg-red-600]="totalArray[0].total < 0" [class.border-red-600]="totalArray[0].total < 0"
-        class="border px-3 text-white">
+        class="border px-3 text-white rounded-r">
         {{totalArray[0].total | number:'0.2-2'}}
       </div>
     </div>
   </div>
-  <div class="table-container px-3 hidden md:block">
+  <div class="table-container px-3 hidden md:block z-0">
     <ejs-grid #grid [dataSource]="(entries | async) | entrySearch:searchText" [allowSorting]='true'
-      [allowFiltering]='true' [enableVirtualization]='true' [locale]='fr-CH' height='600'
+      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='600'
       (rowDataBound)='rowDataBound($event)'>
       <e-columns>
         <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
@@ -131,43 +194,57 @@
         </e-column>
       </e-columns>
     </ejs-grid>
-    <!-- <table class="table-auto w-full text-sm">
-      <thead class="text-left">
-        <tr>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy text-center text-lg">
-            <input type="checkbox" class="form-checkbox">
-          </th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">
-            Entree/Sortie</th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">No
-            de piece</th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">
-            Date</th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">
-            Adress</th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">
-            Categorie</th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">
-          </th>
-          <th class="py-4 px-4 bg-navy text-sm text-white border-b border-navy">
-            Montant</th>
-        </tr>
-      </thead>
+  </div>
+  <div class="table-container block md:hidden mt-24">
+    <table class="table-auto w-full text-sm">
       <tbody>
         <tr class="border-b-2 border-white" [class.bg-red-200]="entry.inout === 1"
-          [class.bg-green-200]="entry.inout === -1" *ngFor="let entry of entries | async">
-          <td class="px-4 py-2 text-center text-lg">
-            <input type="checkbox" class="form-checkbox black-checkbox">
-          </td>
-          <td class="px-4 py-2">{{getEntryInOutText(entry)}}</td>
-                <td class="px-4 py-2">{{entry.pieceNo}}</td>
-                <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
-                <td class="px-4 py-2">{{entry.address.name}}</td>
-                <td class="px-4 py-2">{{entry.address.category.name}}</td>
-                <td class="px-4 py-2">FR</td>
-                <td class="px-4 py-2">{{entry.totalAmount | number:'0.2-2'}}</td>
-                </tr>
-                </tbody>
-                </table> -->
+          [class.bg-green-200]="entry.inout === -1" *ngFor="let entry of (entries | async) | entrySearch:searchText">
+          <td class="px-4 py-2">{{entry.pieceNo}}</td>
+          <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
+          <td class="px-4 py-2">{{entry.address.name}}</td>
+          <!-- <td class="px-4 py-2">{{entry.address.category.name}}</td> -->
+          <td class="px-4 py-2">{{entry.totalAmount | number:'0.2-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div [class.opacity-100]="showSearchModal" [class.pointer-events-auto]="showSearchModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div class="absolute w-88 h-88 bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-4">
+    <mat-form-field>
+      <input matInput [matDatepicker]="pickerModal" placeholder="Date du" (focus)="pickerModal.open()"
+        [(ngModel)]="searchTerms.dateFrom">
+      <mat-datepicker-toggle matSuffix [for]="pickerModal">
+        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #pickerModal></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="pickerToModal" placeholder="Date à" (focus)="pickerToModal.open()"
+        [(ngModel)]="searchTerms.dateTo">
+      <mat-datepicker-toggle matSuffix [for]="pickerToModal">
+        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #pickerToModal></mat-datepicker>
+    </mat-form-field>
+    <div class="flex ml-6">
+      <label class="flex items-center">
+        <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox">
+        <span class="ml-2">Exportees</span>
+      </label>
+    </div>
+    <div class="text-xl mt-6"></div>
+    <button class="bg-navy hover:bg-navy-light text-white py-1 h-8 px-4 rounded mt-6 w-24" (click)="onApplySearch()">
+      Appliquer
+    </button>
+    <button
+      class="bg-transparent hover:bg-navy text-navy hover:text-white py-1 px-4 h-8 mt-4 border border-navy hover:border-transparent rounded w-24"
+      (click)="showSearchModal = false">
+      Annuler
+    </button>
   </div>
 </div>

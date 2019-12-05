@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://www.arkcash.ch/api/'
+  apiUrl: '/api/'
+  // apiUrl: 'https://www.arkcash.ch/api/'
 };
