@@ -10,7 +10,7 @@
           alt="Tous">
         <span>Tous</span>
       </div>
-      <div [ngClass]="selectedFilter === 1 ? 'bg-green-500 text-white' : 'bg-gray-300 text-black'"
+      <div [ngClass]="selectedFilter === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
         class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
         (click)="onChooseFilter(1)">
         <img *ngIf="selectedFilter !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
@@ -56,7 +56,7 @@
     <div class="flex justify-between items-center">
       <div class="breadcrumbs flex items-center">
         <div class="text-lg">
-          2000 CAFE
+          {{connectedUser.name}}
         </div>
         <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
           <path
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="icons-container flex">
-        <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add">
+        <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onShowAddModal()">
         <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/export-xls.png" alt="Export">
         <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete">
       </div>
@@ -139,50 +139,61 @@
     </div>
     <div class="flex mt-2 lg:mt-0" *ngIf="(entriesTotal | async) as totalArray">
       <div [class.border-green-600]="totalArray[0].total >= 0" [class.border-red-600]="totalArray[0].total < 0"
-        class="border px-3 rounded-l">
+        class="border px-3 rounded-l hidden lg:block">
         Solde de caisse
       </div>
       <div [class.bg-green-600]="totalArray[0].total >= 0" [class.border-green-600]="totalArray[0].total >= 0"
         [class.bg-red-600]="totalArray[0].total < 0" [class.border-red-600]="totalArray[0].total < 0"
-        class="border px-3 text-white rounded-r">
+        class="border px-3 text-white rounded lg:rounded-l-none lg:rounded-r">
         {{totalArray[0].total | number:'0.2-2'}}
       </div>
     </div>
   </div>
   <div class="table-container px-3 hidden md:block z-0">
     <ejs-grid #grid [dataSource]="(entries | async) | entrySearch:searchText" [allowSorting]='true'
-      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='600'
-      (rowDataBound)='rowDataBound($event)'>
+      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
+      (rowDataBound)='rowDataBound($event)' [selectionSettings]='selectionOptions'>
       <e-columns>
         <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
         <e-column headerText='Entree/Sortie' field="inout">
           <ng-template #template let-entry>
-            <div>
+            <div (click)="onRowClick(entry)">
               <span id="Emptext">{{getEntryInOutText(entry)}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='No de piece' field="pieceNo"></e-column>
+        <e-column headerText='No de piece'>
+          <ng-template #template let-entry>
+            <div (click)="onRowClick(entry)">
+              <span>{{entry.pieceNo}}</span>
+            </div>
+          </ng-template>
+        </e-column>
         <e-column headerText='Date'>
           <ng-template #template let-entry>
-            <div>
+            <div (click)="onRowClick(entry)">
               <span id="Emptext">{{entry.entryDate | date:'dd.MM.yyyy'}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Adresse' field="address.name"></e-column>
+        <e-column headerText='Adresse'>
+          <ng-template #template let-entry>
+            <div (click)="onRowClick(entry)">
+              <span>{{entry.address.name}}</span>
+            </div>
+          </ng-template>
+        </e-column>
         <e-column headerText='Categorie' field="address.category.name">
           <ng-template #template let-entry>
-            <div class="flex flex-col">
+            <div class="flex flex-col" (click)="onRowClick(entry)">
               <span class="font-bold border-b border-gray-600" *ngIf="entry.entryitems.length > 1">total</span>
               <span *ngFor="let item of entry.entryitems">{{item.category.name}}</span>
             </div>
           </ng-template>
         </e-column>
-        <!-- <e-column headerText=''></e-column> -->
         <e-column headerText='Montant'>
           <ng-template #template let-entry>
-            <div class="flex flex-col text-right">
+            <div class="flex flex-col text-right" (click)="onRowClick(entry)">
               <span *ngIf="entry.entryitems.length > 1"
                 class="font-bold border-b border-gray-600">{{entry.totalAmount | number:'0.2-2'}}</span>
               <span *ngFor="let item of entry.entryitems">{{item.amount | number:'0.2-2'}}</span>
@@ -246,5 +257,179 @@
       (click)="showSearchModal = false">
       Annuler
     </button>
+  </div>
+</div>
+<div [class.opacity-100]="showAddModal" [class.pointer-events-auto]="showAddModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div [ngClass]="newEntryInOut === 1 ? 'border-green-600' : 'border-red-600'"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-0 border-4">
+    <div [class.bg-red-600]="newEntryInOut === 2" [class.bg-green-600]="newEntryInOut === 1"
+      class="-mt-3 flex items-center justify-center mb-4 text-white px-5 text-xl font-bold rounded">
+      <span>{{newEntryPieceNo}}</span>
+    </div>
+    <div class="flex w-full items-center justify-start">
+      <div [ngClass]="newEntryInOut === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
+        class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded-lg cursor-pointer"
+        (click)="onChangeNewEntryInOut(1)">
+        <img *ngIf="newEntryInOut !== 1" class="w-6 h-auto" src="assets/images/entrees_gris.png" alt="Entrees">
+        <img *ngIf="newEntryInOut === 1" class="w-6 h-auto" src="assets/images/entrees.png" alt="Entrees">
+        <!-- <span>Entrée</span> -->
+      </div>
+      <div [ngClass]="newEntryInOut === 2 ? 'bg-red-600 text-white' : 'bg-gray-300 text-black'"
+        class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded-lg cursor-pointer"
+        (click)="onChangeNewEntryInOut(2)">
+        <img *ngIf="newEntryInOut !== 2" class="w-6 h-auto" src="assets/images/sorties_gris.png" alt="Sorties">
+        <img *ngIf="newEntryInOut === 2" class="w-6 h-auto" src="assets/images/sorties.png" alt="Sorties">
+        <!-- <span>Sortie</span> -->
+      </div>
+    </div>
+    <div class="flex w-full items-center justify-start mt-4 text-sm">
+      <ejs-dropdownlist *ngIf="newEntryAddress" class="ml-2 w-56" id='ddAddresses' [dataSource]='addressList'
+        [fields]="addressListFields" [(value)]="newEntryAddress.id" (change)="onNewAddressChange($event)"
+        placeholder="Adresse">
+      </ejs-dropdownlist>
+      <mat-form-field class="ml-6" style="padding-top: 6px">
+        <input matInput [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
+          [(ngModel)]="newEntryDate">
+        <mat-datepicker-toggle matSuffix [for]="newEntryPicker">
+          <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #newEntryPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="bg-gray-300 mb-3 mt-1 rounded w-56" style="height: 0.2vh;"></div>
+    <div class="flex flex-col w-full">
+      <div *ngFor="let item of newEntryItems; let itemIndex = index"
+        class="flex justify-between items-center w-full px-2 my-2">
+        <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddCategories' [dataSource]='categoryList$ | async'
+          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
+          (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
+        </ejs-dropdownlist>
+        <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
+          <input [ngModel]="item.amount" (ngModelChange)="onNewEntryItemAmountChange(item, $event)" inputmode="numeric"
+            type="number"
+            class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right"
+            type="text" placeholder="Montant" aria-label="Amount">
+        </div>
+        <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties"
+          (click)="onRemoveNewEntryItem(itemIndex)">
+      </div>
+      <div class="flex items-center justify-end mt-4 px-2">
+        <div class="text-lg text-green-600 mr-6">{{newEntryItemsTotal | number:'0.2-2'}}</div>
+        <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_add.png" alt="Sorties"
+          (click)="onAddNewEntryItem()">
+      </div>
+    </div>
+    <div *ngIf="newEntryErrors" class="bg-transparent border border-red-600 p-3 rounded-xl mt-12">
+      <span class="text-base text-red-600">Veuillez ajouter au moins une entrée valide</span>
+    </div>
+    <div [class.mt-12]="!newEntryErrors" class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveNewEntry()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showAddModal = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showEditModal" [class.pointer-events-auto]="showEditModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div *ngIf="selectedEditEntry" [ngClass]="editEntryInOut === -1 ? 'border-green-600' : 'border-red-600'"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-0 border-4">
+    <div [class.bg-red-600]="editEntryInOut === 1" [class.bg-green-600]="editEntryInOut === -1"
+      class="-mt-3 flex items-center justify-center mb-4 text-white px-5 text-xl font-bold rounded">
+      <span>{{selectedEditEntry.pieceNo}}</span>
+    </div>
+    <div class="flex w-full items-center justify-start">
+      <div *ngIf="editEntryInOut === -1"
+        class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow rounded-lg bg-green-600 text-white">
+        <img class="w-6 h-auto" src="assets/images/entrees.png" alt="Entrees">
+        <span class="ml-2">Entrée</span>
+      </div>
+      <div *ngIf="editEntryInOut === 1"
+        class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow rounded-lg bg-red-600 text-white">
+        <img class="w-6 h-auto" src="assets/images/sorties.png" alt="Entrees">
+        <span class="ml-2">Sortie</span>
+      </div>
+    </div>
+    <div class="flex w-full items-center justify-start mt-4 text-sm">
+      <ejs-dropdownlist *ngIf="editEntryAddress" class="ml-2 w-56" id='ddEntryAddresses' [dataSource]='addressList'
+        [fields]="addressListFields" [(value)]="editEntryAddress.id" (change)="onEditAddressChange($event)"
+        placeholder="Adresse">
+      </ejs-dropdownlist>
+      <mat-form-field class="ml-6" style="padding-top: 6px">
+        <input matInput [matDatepicker]="editEntryPicker" placeholder="Date" (focus)="editEntryPicker.open()"
+          [(ngModel)]="editEntryDate">
+        <mat-datepicker-toggle matSuffix [for]="editEntryPicker">
+          <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #editEntryPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="bg-gray-300 mb-3 mt-1 rounded w-56" style="height: 0.2vh;"></div>
+    <div class="flex flex-col w-full">
+      <div *ngFor="let item of editEntryItems; let itemIndex = index"
+        class="flex justify-between items-center w-full px-2 my-2">
+        <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddEditCategories' [dataSource]='categoryList$ | async'
+          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
+          (change)="onEditChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
+        </ejs-dropdownlist>
+        <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
+          <input [ngModel]="item.amount" (ngModelChange)="onEditEntryItemAmountChange(item, $event)" inputmode="numeric"
+            type="number"
+            class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right"
+            type="text" placeholder="Montant" aria-label="Amount">
+        </div>
+        <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties"
+          (click)="onRemoveEditEntryItem(itemIndex)">
+      </div>
+      <div class="flex items-center justify-end mt-4 px-2">
+        <div [ngClass]="editEntryInOut === -1 ? 'text-green-600': 'text-red-600'" class="text-lg mr-6">
+          {{editEntryItemsTotal | number:'0.2-2'}}</div>
+        <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_add.png" alt="Sorties"
+          (click)="onAddEditEntryItem()">
+      </div>
+    </div>
+    <div *ngIf="editEntryErrors" class="bg-transparent border border-red-600 p-3 rounded-xl mt-12">
+      <span class="text-base text-red-600">Veuillez ajouter au moins une entrée valide</span>
+    </div>
+    <div *ngIf="!deleteOldEntryConfirm" [class.mt-12]="!editEntryErrors"
+      class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveEditEntry()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-red-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="onDeleteEntry()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showEditModal = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
+    </div>
+    <div *ngIf="deleteOldEntryConfirm"
+      class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow">
+      <div class="text-xl">
+        Êtes-vous sûr ?
+      </div>
+      <div class="flex justify-center items-center mt-2">
+        <div
+          class="bg-red-500 border-gray-600 cursor-pointer flex items-center justify-center py-1 rounded shadow text-white w-12"
+          (click)="onDeleteConfirmed()">
+          Oui
+        </div>
+        <div
+          class="bg-gray-600 border-gray-600 cursor-pointer flex items-center justify-center ml-3 py-1 rounded shadow text-white w-12"
+          (click)="deleteOldEntryConfirm = false">
+          No
+        </div>
+      </div>
+    </div>
   </div>
 </div>

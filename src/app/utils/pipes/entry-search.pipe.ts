@@ -11,10 +11,7 @@ export class EntrySearchPipe implements PipeTransform {
 
     return filterBy
       ? entries.filter((entry: Entry) => {
-          return (
-            entry.address.name.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
-            entry.address.category.name.toLocaleLowerCase().indexOf(filterBy) !== -1
-          );
+          return entry.address.name.toLocaleLowerCase().indexOf(filterBy) !== -1;
         })
       : entries;
   }

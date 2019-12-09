@@ -1,6 +1,6 @@
 {
   "name": "arkcash-web-ng",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "scripts": {
     "start": "ng serve & ngtw watch",
     "build": "ngtw build --purge && ng build",
@@ -23,6 +23,7 @@
     "@angular/router": "~8.2.4",
     "@angular/service-worker": "~8.2.4",
     "@auth0/angular-jwt": "^3.0.1",
+    "@syncfusion/ej2-angular-dropdowns": "^17.3.30",
     "@syncfusion/ej2-angular-grids": "^17.3.29",
     "hammerjs": "^2.0.8",
     "ngx-izitoast": "^1.0.1",

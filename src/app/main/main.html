@@ -1,19 +1,29 @@
 <div class="flex flex-col-reverse md:flex-col h-full">
   <nav
-    class="bg-white md:bg-gray-900 shadow pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto md:block w-full z-20 hidden md:top-0 md:bottom-auto"
+    class="bg-white md:bg-gray-900 shadow pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto md:flex w-full z-20 hidden md:top-0 md:bottom-auto"
     style="height: 6%;">
-    <div class="flex flex-row justify-between items-center px-2 py-1">
+    <div class="flex flex-row justify-between items-center px-2 w-full">
       <div class="flex items-center">
-        <img class="w-10 h-10 cursor-pointer" src="assets/images/home.svg" alt="Home">
+        <!-- <img class="w-10 h-10 cursor-pointer" src="assets/images/logo.png" alt="Home">
+        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div> -->
+        <img class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 0 ? 'assets/images/journal_rose.png' : 'assets/images/journal_blanc.png'"
+          alt="Journal" (click)="onGoToLedger()">
         <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
-        <img class="w-10 h-10 cursor-pointer" src="assets/images/journal_rose.png" alt="Journal">
+        <img class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 1 ? 'assets/images/config_rose.png' : 'assets/images/config_blanc.png'" alt="Settings"
+          (click)="onGoToConfiguration()">
         <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
-        <img class="w-10 h-10 cursor-pointer" src="assets/images/config_blanc.png" alt="Settings">
-        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+      </div>
+      <div class="flex justify-center items-center">
+        <img class="w-auto h-12" src="assets/images/logo.png" alt="Home">
+        <div class="text-xl text-white ml-2">
+          Arkcash
+        </div>
       </div>
       <div class="flex items-center">
         <div class="text-xl text-white">
-          2000 Cafe sports Ayent
+          {{connectedUser.name}}
         </div>
         <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
         <img class="w-10 h-8 cursor-pointer" src="assets/images/menu_log_out.png" alt="LogOut" (click)="onLogout()">

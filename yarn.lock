@@ -938,6 +938,15 @@
     rxjs "^5.0.0"
     zone.js "^0.7.2"
 
+"@syncfusion/ej2-angular-dropdowns@^17.3.30":
+  version "17.3.30"
+  resolved "https://registry.yarnpkg.com/@syncfusion/ej2-angular-dropdowns/-/ej2-angular-dropdowns-17.3.30.tgz#d328a0ea9c018ec2c9598659b3b42fdb2f3cf4ef"
+  integrity sha512-du9hmSzkoFbr0ED2/TfwAYEX9mFEFHhWE926PQPakGMMP32CgQcPdj+zdQJly2JlZudZZpTgFwi/6PaLCvdf2g==
+  dependencies:
+    "@syncfusion/ej2-angular-base" "~17.3.27"
+    "@syncfusion/ej2-base" "~17.3.27"
+    "@syncfusion/ej2-dropdowns" "17.3.30"
+
 "@syncfusion/ej2-angular-grids@^17.3.29":
   version "17.3.29"
   resolved "https://registry.yarnpkg.com/@syncfusion/ej2-angular-grids/-/ej2-angular-grids-17.3.29.tgz#fb341ae0ea895ce346d21037098c3189128b5537"
@@ -985,6 +994,24 @@
   integrity sha512-Hz6SZfv0kMG4YhVGQjfeddMKpcq7LxNBXt6EnwZNcSqKU5+cNvCnnKZZ+u3m4OtxyhSAKri0ArhNhdRP8FAUXw==
   dependencies:
     "@syncfusion/ej2-base" "~17.3.27"
+
+"@syncfusion/ej2-data@~17.3.30":
+  version "17.3.30"
+  resolved "https://registry.yarnpkg.com/@syncfusion/ej2-data/-/ej2-data-17.3.30.tgz#9f3dfdbbfda429fdc2b5c6b2cf79a7b7ffe55aa2"
+  integrity sha512-VysxKGGqKDNUmiJFOjj/XZw5CUz0swd6rnUYbmiQiS9UFUELWbcxxROlNf9AEF15Wo/UWQxUgM8xUFgFNddwUA==
+  dependencies:
+    "@syncfusion/ej2-base" "~17.3.27"
+
+"@syncfusion/ej2-dropdowns@17.3.30":
+  version "17.3.30"
+  resolved "https://registry.yarnpkg.com/@syncfusion/ej2-dropdowns/-/ej2-dropdowns-17.3.30.tgz#7886d1dbd3ef15a2b52d5df4b812f75b88837c9f"
+  integrity sha512-2m5SlYvWe05S/uu/HXxkDe9aF+z/hcj43htwtK6wSZmw8jUsbS4aHSBwc60Jan7pUmvhvU7aTR843nHeipSX/g==
+  dependencies:
+    "@syncfusion/ej2-base" "~17.3.27"
+    "@syncfusion/ej2-data" "~17.3.30"
+    "@syncfusion/ej2-inputs" "~17.3.29"
+    "@syncfusion/ej2-lists" "~17.3.27"
+    "@syncfusion/ej2-popups" "~17.3.29"
 
 "@syncfusion/ej2-dropdowns@~17.3.29":
   version "17.3.29"

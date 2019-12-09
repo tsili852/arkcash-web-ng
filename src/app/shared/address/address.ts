@@ -6,7 +6,7 @@ export interface Address {
   createdAt: Date;
   client: string;
   name: string;
-  category: Category;
+  category: Category | string;
   inout: number;
   accNo: number;
 }

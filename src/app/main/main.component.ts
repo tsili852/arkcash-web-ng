@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../shared/authentication';
-import { Router } from '@angular/router';
+import { AuthenticationService, User } from '../shared/authentication';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { NgxIzitoastService } from 'ngx-izitoast';
 
@@ -14,14 +14,19 @@ import { GlobalService } from '../shared/global.service';
 export class MainComponent implements OnInit {
   promptEvent: any;
   showInstallPopUp = false;
+  connectedUser: User;
+  currentRoute = 0;
 
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly swUpdate: SwUpdate,
     private readonly toastService: NgxIzitoastService,
     private readonly globalService: GlobalService
   ) {
+    this.connectedUser = this.authenticationService.getCurrentUser();
+
     window.addEventListener('online', () => {
       this.toastService.success({
         title: 'Connexion restaurée',
@@ -77,5 +82,15 @@ export class MainComponent implements OnInit {
   onCancel() {
     this.showInstallPopUp = false;
     this.globalService.setUserCancelInstall(true);
+  }
+
+  onGoToLedger() {
+    this.router.navigate(['ledger'], { relativeTo: this.route });
+    this.currentRoute = 0;
+  }
+
+  onGoToConfiguration() {
+    this.router.navigate(['configuration'], { relativeTo: this.route });
+    this.currentRoute = 1;
   }
 }

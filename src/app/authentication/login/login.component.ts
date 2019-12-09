@@ -28,6 +28,10 @@ export class LoginComponent implements OnInit {
       password: '',
       username: ''
     };
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+    });
   }
 
   ngOnInit(): void {}
