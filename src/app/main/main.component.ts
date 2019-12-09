@@ -27,6 +27,13 @@ export class MainComponent implements OnInit {
   ) {
     this.connectedUser = this.authenticationService.getCurrentUser();
 
+    const routerUrl = this.router.url;
+    if (routerUrl.search('ledger') > 0) {
+      this.currentRoute = 0;
+    } else {
+      this.currentRoute = 1;
+    }
+
     window.addEventListener('online', () => {
       this.toastService.success({
         title: 'Connexion restaurée',
