@@ -1,6 +1,6 @@
 {
   "name": "arkcash-web-ng",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "start": "ng serve & ngtw watch",
     "build": "ngtw build --purge && ng build",

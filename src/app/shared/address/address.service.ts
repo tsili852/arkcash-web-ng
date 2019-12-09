@@ -18,16 +18,16 @@ export class AddressService {
     }
     parameters += `&sort=name`;
 
-    return this.httpClient.get<Address[]>(`${Config.apiURL}address?${parameters}`);
+    return this.httpClient.get<Address[]>(`${Config.apiURL}address?${parameters}&populate=category`);
   }
 
   getAllUsedAddresses(): Observable<string[]> {
     const clientId = this.authenticationService.getClientId();
-    return this.httpClient.get<string[]>(`${Config}address/distinct?client=${clientId}`);
+    return this.httpClient.get<string[]>(`${Config.apiURL}address/distinct?client=${clientId}`);
   }
 
   getAddress(id: string): Observable<Address> {
-    return this.httpClient.get<Address>(`${Config.apiURL}address/${id}`);
+    return this.httpClient.get<Address>(`${Config.apiURL}address/${id}?populate=category`);
   }
 
   addMultipleAddresses(address: any[]) {

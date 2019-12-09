@@ -294,7 +294,7 @@ export class LedgerComponent implements OnInit {
     const newAddress: Address = args.itemData;
     this.newEntryAddress = newAddress;
     if (newAddress && newAddress.category) {
-      const addressCategory = this.categoryList.find((category) => category.id === newAddress.category);
+      const addressCategory = newAddress.category;
       this.selectedAddressCategory = addressCategory;
       this.newEntryItems.map((item) => (addressCategory ? (item.category = addressCategory) : (item.category = this.categoryList[0])));
       // this.newEntryItems.forEach((item) => {
@@ -436,7 +436,7 @@ export class LedgerComponent implements OnInit {
     const newAddress: Address = args.itemData;
     this.editEntryAddress = newAddress;
     if (newAddress && newAddress.category) {
-      const addressCategory = this.categoryList.find((category) => category.id === newAddress.category);
+      const addressCategory = newAddress.category;
       this.selectedEditAddressCategory = addressCategory;
       this.editEntryItems.map((item) => (addressCategory ? (item.category = addressCategory) : (item.category = this.categoryList[0])));
     }
