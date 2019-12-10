@@ -286,8 +286,7 @@
     </div>
     <div class="flex w-full items-center justify-start mt-4 text-sm">
       <ejs-dropdownlist *ngIf="newEntryAddress" class="ml-2 w-56" id='ddAddresses' [dataSource]='addressList'
-        [fields]="addressListFields" [(value)]="newEntryAddress.id" (change)="onNewAddressChange($event)"
-        placeholder="Adresse">
+        [fields]="addressListFields" [(value)]="newEntryAddress.id" placeholder="Adresse">
       </ejs-dropdownlist>
       <mat-form-field class="ml-6" style="padding-top: 6px">
         <input matInput [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
@@ -376,8 +375,7 @@
       <div *ngFor="let item of editEntryItems; let itemIndex = index"
         class="flex justify-between items-center w-full px-2 my-2">
         <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddEditCategories' [dataSource]='categoryList$ | async'
-          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
-          (change)="onEditChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
+          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id" placeholder="Catégorie">
         </ejs-dropdownlist>
         <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
           <input [ngModel]="item.amount" (ngModelChange)="onEditEntryItemAmountChange(item, $event)" inputmode="numeric"

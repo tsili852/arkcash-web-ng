@@ -29,18 +29,22 @@ export class ConfigurationComponent implements OnInit {
   searchText = '';
   addresses$: Observable<Address[]>;
   categories$: Observable<Category[]>;
+  categoriesList: Category[];
   addressesCount = 0;
+
   showEditModal = false;
   editAddressErrors = false;
   usedAddresses: string[];
-
   deleteOldAddressConfirm = false;
-
   selectedEditAddress: Address;
   addressListFields = { text: 'name', value: 'id' };
-
   selectedEditCategory: Category;
   categoryListFields = { text: 'name', value: 'id' };
+
+  showAddModal = false;
+  newAddress: Address;
+  addAddressErrors = false;
+  addAddressInout = -1;
 
   selectionOptions: SelectionSettingsModel;
 
@@ -68,12 +72,14 @@ export class ConfigurationComponent implements OnInit {
       this.addressesCount = addresses.length;
     });
     this.categories$ = this.categoryService.getCategories(this.selectedMode.toString());
+    this.categories$.subscribe((categories) => {
+      this.categoriesList = categories;
+    });
   }
-
-  onShowAddModal() {}
 
   onSelectMode(mode: number) {
     this.selectedMode = mode;
+    this.addAddressInout = mode;
     this.fetchAddresses();
   }
 
@@ -90,11 +96,14 @@ export class ConfigurationComponent implements OnInit {
     this.showEditModal = true;
     this.selectedEditAddress = address;
     this.selectedEditCategory = address.category;
+    this.deleteOldAddressConfirm = false;
   }
 
   onEditChangeAddressCategory(args: any) {
     const selectedCategory = args.itemData;
-    this.selectedEditAddress.category = selectedCategory;
+    if (selectedCategory) {
+      this.selectedEditAddress.category = selectedCategory;
+    }
   }
 
   canAddressesBeDeleted() {
@@ -133,5 +142,62 @@ export class ConfigurationComponent implements OnInit {
     this.deleteOldAddressConfirm = true;
   }
 
-  onDeleteConfirmed() {}
+  onDeleteConfirmed() {
+    this.addressService.deleteAddress(this.selectedEditAddress).subscribe(
+      () => {
+        this.showEditModal = false;
+        setTimeout(() => {
+          this.fetchAddresses();
+        }, 100);
+      },
+      (error) => {
+        console.log(`Error: ${JSON.stringify(error, null, 2)}`);
+      }
+    );
+  }
+
+  onAddNewAddress() {
+    this.newAddress = {
+      id: '',
+      accNo: 1000,
+      category: this.categoriesList[0],
+      client: this.authenticationService.getClientId(),
+      name: '',
+      inout: this.addAddressInout,
+      createdAt: new Date(),
+      updateAt: null
+    };
+    this.showAddModal = true;
+  }
+
+  onSaveAddAddress() {
+    if (this.newAddress.name.trim().length > 0) {
+      const addressToInsert = {
+        category: this.newAddress.category.id,
+        name: this.newAddress.name,
+        accNo: 1000,
+        client: this.newAddress.client,
+        inout: this.addAddressInout,
+        createdAt: new Date()
+      };
+
+      this.addressService.addNewAddress(addressToInsert).subscribe(
+        (returnAddress) => {
+          console.log(returnAddress);
+          this.showAddModal = false;
+          setTimeout(() => {
+            this.fetchAddresses();
+          }, 100);
+        },
+        (error) => {
+          console.log(`Error: ${JSON.stringify(error, null, 2)}`);
+        }
+      );
+    } else {
+      this.addAddressErrors = true;
+      setTimeout(() => {
+        this.addAddressErrors = false;
+      }, 3000);
+    }
+  }
 }

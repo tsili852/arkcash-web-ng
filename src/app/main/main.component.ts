@@ -3,7 +3,7 @@ import { AuthenticationService, User } from '../shared/authentication';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { NgxIzitoastService } from 'ngx-izitoast';
-
+import { version as applicationVersion } from '../../../package.json';
 import { GlobalService } from '../shared/global.service';
 
 @Component({
@@ -16,6 +16,9 @@ export class MainComponent implements OnInit {
   showInstallPopUp = false;
   connectedUser: User;
   currentRoute = 0;
+  appVersion = '';
+
+  userCancelInstall = false;
 
   constructor(
     private readonly authenticationService: AuthenticationService,
@@ -26,6 +29,9 @@ export class MainComponent implements OnInit {
     private readonly globalService: GlobalService
   ) {
     this.connectedUser = this.authenticationService.getCurrentUser();
+    this.appVersion = applicationVersion;
+
+    this.userCancelInstall = this.globalService.getUserCancelInstall();
 
     const routerUrl = this.router.url;
     if (routerUrl.search('ledger') > 0) {
@@ -52,7 +58,7 @@ export class MainComponent implements OnInit {
       event.preventDefault();
       this.promptEvent = event;
 
-      if (!this.globalService.getUserCancelInstall()) {
+      if (!this.userCancelInstall) {
         this.showInstallPopUp = true;
       }
     });
@@ -75,6 +81,11 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onResetInstall() {
+    this.globalService.resetUserCancelInstall();
+    window.location.reload();
+  }
 
   onLogout() {
     this.authenticationService.clearStorage();

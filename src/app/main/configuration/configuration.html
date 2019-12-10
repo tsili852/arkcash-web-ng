@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="icons-container flex">
-      <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onShowAddModal()">
+      <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onAddNewAddress()">
       <!-- <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete"> -->
     </div>
   </div>
@@ -72,11 +72,11 @@
 <div [class.opacity-100]="showEditModal" [class.pointer-events-auto]="showEditModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
-  <div *ngIf="selectedEditAddress"
-    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5">
+  <div *ngIf="selectedEditAddress" [ngClass]="selectedMode === -1 ? 'border-green-500' : 'border-red-500'"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
     <div class="flex flex-col">
       <div class="text-gray-600">Adresse</div>
-      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-64">
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
         <input [(ngModel)]="selectedEditAddress.name"
           class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500"
           type="text" placeholder="" aria-label="Search">
@@ -84,10 +84,9 @@
     </div>
     <div class="flex flex-col mt-6">
       <div class="text-gray-600">Catégorie</div>
-      <ejs-dropdownlist *ngIf="selectedEditAddress.category" class="w-64" id='ddEditCategories'
+      <ejs-dropdownlist *ngIf="selectedEditAddress.category" class="w-80" id='ddEditCategories'
         [dataSource]='categories$ | async' style="margin-top: 1px;" [fields]="categoryListFields"
-        [(value)]="selectedEditAddress.category.id" (change)="onEditChangeAddressCategory($event)"
-        placeholder="Catégorie">
+        [(value)]="selectedEditAddress.category.id" placeholder="Catégorie">
       </ejs-dropdownlist>
     </div>
     <div *ngIf="editAddressErrors" class="bg-transparent border border-red-600 p-3 rounded-xl mt-12">
@@ -98,7 +97,8 @@
         (click)="onSaveEditAddress()">
         <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
       </button>
-      <button *ngIf="canAddressesBeDeleted()" class="hover:bg-red-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+      <button *ngIf="canAddressesBeDeleted()"
+        class="hover:bg-red-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
         (click)="onDeleteAddress()">
         <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties">
       </button>
@@ -108,7 +108,7 @@
       </button>
     </div>
     <div *ngIf="deleteOldAddressConfirm"
-      class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow">
+      class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow mt-6">
       <div class="text-xl">
         Êtes-vous sûr ?
       </div>
@@ -124,6 +124,41 @@
           No
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showAddModal" [class.pointer-events-auto]="showAddModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div *ngIf="newAddress" [ngClass]="addAddressInout === -1 ? 'border-green-500' : 'border-red-500'"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
+    <div class="flex flex-col">
+      <div class="text-gray-600">Adresse</div>
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
+        <input [(ngModel)]="newAddress.name"
+          class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500"
+          type="text" placeholder="" aria-label="Search">
+      </div>
+    </div>
+    <div class="flex flex-col mt-6">
+      <div class="text-gray-600">Catégorie</div>
+      <ejs-dropdownlist *ngIf="newAddress.category" class="w-80" id='ddAddCategories' [dataSource]='categories$ | async'
+        style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="newAddress.category.id"
+        placeholder="Catégorie">
+      </ejs-dropdownlist>
+    </div>
+    <div *ngIf="addAddressErrors" class="bg-transparent border border-red-600 p-3 rounded-xl mt-12">
+      <span class="text-sm text-red-600">Le nom de l'adresse ne peut pas être vide</span>
+    </div>
+    <div class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveAddAddress()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showAddModal = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
     </div>
   </div>
 </div>

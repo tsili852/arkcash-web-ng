@@ -17,14 +17,22 @@
       </div>
       <div class="flex justify-center items-center">
         <img class="w-auto h-12" src="assets/images/logo.png" alt="Home">
-        <div class="text-xl text-white ml-2">
-          Arkcash
+        <div class="flex flex-col justify-center items-center">
+          <div class="text-xl text-white ml-2">
+            Arkcash
+          </div>
+          <div class="text-xs text-white">
+            {{appVersion}}
+          </div>
         </div>
       </div>
       <div class="flex items-center">
         <div class="text-xl text-white">
           {{connectedUser.name}}
         </div>
+        <div *ngIf="userCancelInstall" class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+        <img *ngIf="userCancelInstall" class="w-auto h-8 cursor-pointer" src="assets/images/pc.png" alt="LogOut"
+          (click)="onResetInstall()">
         <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
         <img class="w-10 h-8 cursor-pointer" src="assets/images/menu_log_out.png" alt="LogOut" (click)="onLogout()">
       </div>
