@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
-
-import { AuthenticationService, User } from '../../shared/authentication';
+import { Router, ActivatedRoute } from '@angular/router';
+import { User, AuthenticationService } from '../../shared/authentication';
+import { GlobalService } from '../../shared/global.service';
 import { Address, AddressService } from '../../shared/address';
 import { Category, CategoryService } from '../../shared/category';
 import { L10n, setCulture } from '@syncfusion/ej2-base';
@@ -25,7 +26,10 @@ export class ConfigurationComponent implements OnInit {
   @ViewChild('grid', { static: false }) public grid: GridComponent;
 
   connectedUser: User;
-  selectedMode = -1;
+  logedinUser: User;
+
+  selectedMode = 1;
+  selectedInOut = -1;
   searchText = '';
   addresses$: Observable<Address[]>;
   categories$: Observable<Category[]>;
@@ -49,11 +53,26 @@ export class ConfigurationComponent implements OnInit {
   selectionOptions: SelectionSettingsModel;
 
   constructor(
-    private readonly authenticationService: AuthenticationService,
+    private readonly globalService: GlobalService,
     private readonly addressService: AddressService,
-    private readonly categoryService: CategoryService
+    private readonly categoryService: CategoryService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly authenticationService: AuthenticationService
   ) {
-    this.connectedUser = this.authenticationService.getCurrentUser();
+    this.connectedUser = this.globalService.getSelectedUser();
+    this.logedinUser = this.authenticationService.getCurrentUser();
+
+    this.globalService.updateMenuItem(2);
+
+    if (this.logedinUser.isAdmin) {
+      if (!this.connectedUser) {
+        this.router.navigate(['../clients'], { relativeTo: this.route });
+      }
+    } else {
+      this.connectedUser = this.authenticationService.getCurrentUser();
+      this.globalService.setSelectedUser(this.connectedUser);
+    }
 
     this.selectionOptions = { checkboxOnly: true };
 
@@ -67,11 +86,11 @@ export class ConfigurationComponent implements OnInit {
   }
 
   fetchAddresses() {
-    this.addresses$ = this.addressService.getAddresses(this.selectedMode.toString());
+    this.addresses$ = this.addressService.getAddresses(this.selectedInOut.toString());
     this.addresses$.subscribe((addresses) => {
       this.addressesCount = addresses.length;
     });
-    this.categories$ = this.categoryService.getCategories(this.selectedMode.toString());
+    this.categories$ = this.categoryService.getCategories(this.selectedInOut.toString());
     this.categories$.subscribe((categories) => {
       this.categoriesList = categories;
     });
@@ -79,6 +98,11 @@ export class ConfigurationComponent implements OnInit {
 
   onSelectMode(mode: number) {
     this.selectedMode = mode;
+    if (mode === 1 || mode === 3) {
+      this.selectedInOut = -1;
+    } else {
+      this.selectedInOut = 1;
+    }
     this.addAddressInout = mode;
     this.fetchAddresses();
   }
@@ -161,7 +185,7 @@ export class ConfigurationComponent implements OnInit {
       id: '',
       accNo: 1000,
       category: this.categoriesList[0],
-      client: this.authenticationService.getClientId(),
+      client: this.globalService.getSelectedUser().id,
       name: '',
       inout: this.addAddressInout,
       createdAt: new Date(),

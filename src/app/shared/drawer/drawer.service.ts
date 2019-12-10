@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { User, AuthenticationService } from '../authentication';
+import { GlobalService } from '../global.service';
 import { Drawer } from './';
 import { Config } from '../config';
 
 @Injectable()
 export class DrawerService {
-  constructor(private readonly authenticationService: AuthenticationService, private readonly httpClient: HttpClient) {}
+  constructor(private readonly globalService: GlobalService, private readonly httpClient: HttpClient) {}
 
   getDrawerByClient(): Observable<Drawer> {
-    return this.httpClient.get<Drawer>(`${Config.apiURL}drawer?client=${this.authenticationService.getClientId()}`);
+    return this.httpClient.get<Drawer>(`${Config.apiURL}drawer?client=${this.globalService.getSelectedUser().id}`);
   }
 }

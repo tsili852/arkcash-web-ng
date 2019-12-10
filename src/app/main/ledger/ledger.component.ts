@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { L10n, setCulture } from '@syncfusion/ej2-base';
 import { GridComponent, SelectionSettingsModel, parentsUntil } from '@syncfusion/ej2-angular-grids';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -9,11 +9,12 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { environment } from '../../../environments/environment';
 import { Entry, EntryItem, EntryService } from '../../shared/entry';
 import { SearchTerms } from '../../shared/search-terms/search-terms';
-import { AuthenticationService, User } from '../../shared/authentication';
 import { Utilities } from '../../utils/utilities';
 import { Drawer, DrawerService } from '../../shared/drawer';
 import { Address, AddressService } from '../../shared/address';
 import { Category, CategoryService } from '../../shared/category';
+import { GlobalService } from '../../shared/global.service';
+import { User, AuthenticationService } from '../../shared/authentication';
 
 setCulture('fr-CH');
 
@@ -34,6 +35,7 @@ export class LedgerComponent implements OnInit {
   @ViewChild('grid', { static: false }) public grid: GridComponent;
 
   connectedUser: User;
+  logedinUser: User;
 
   searchText = '';
   selectedFilter = 0;
@@ -101,27 +103,41 @@ export class LedgerComponent implements OnInit {
   constructor(
     private readonly entryService: EntryService,
     private readonly router: Router,
-    private readonly authenticationService: AuthenticationService,
     private readonly zone: NgZone,
     private readonly drawerService: DrawerService,
     private readonly addressService: AddressService,
     private readonly categoryService: CategoryService,
-    private readonly datePipe: DatePipe
+    private readonly datePipe: DatePipe,
+    private readonly globalService: GlobalService,
+    private readonly route: ActivatedRoute,
+    private readonly authenticationService: AuthenticationService
   ) {
     this.selectionOptions = { checkboxOnly: true };
 
-    this.connectedUser = this.authenticationService.getCurrentUser();
+    this.connectedUser = this.globalService.getSelectedUser();
+    this.logedinUser = this.authenticationService.getCurrentUser();
+
+    this.globalService.updateMenuItem(1);
+
+    if (this.logedinUser.isAdmin) {
+      if (!this.connectedUser) {
+        this.router.navigate(['../clients'], { relativeTo: this.route });
+      }
+    } else {
+      this.connectedUser = this.authenticationService.getCurrentUser();
+      this.globalService.setSelectedUser(this.connectedUser);
+    }
 
     if (!environment.production) {
       this.isTest = true;
     }
 
-    this.connectedClientId = this.authenticationService.getClientId();
+    this.connectedClientId = this.connectedUser.id;
 
-    if (!this.authenticationService.getLastExportDate()) {
+    if (!this.connectedUser.lastExport) {
       this.initialDateFrom = Utilities.addDays(new Date(), 1);
     } else {
-      this.initialDateFrom = Utilities.addDays(this.authenticationService.getLastExportDate(), 1);
+      this.initialDateFrom = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
     }
 
     this.searchTerms = new SearchTerms(null, new Date(), 0, 0, '', this.exporteesChecked);
@@ -362,7 +378,7 @@ export class LedgerComponent implements OnInit {
       this.drawerService.getDrawerByClient().subscribe((drawer) => {
         const newEntry = {
           pieceNo: this.newEntryPieceNo,
-          client: this.authenticationService.getClientId(),
+          client: this.connectedUser.id,
           drawer: drawer[0].id,
           address: this.newEntryAddress.id,
           exported: false,

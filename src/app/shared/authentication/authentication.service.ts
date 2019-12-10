@@ -59,7 +59,11 @@ export class AuthenticationService {
     }
   }
 
-  getUserFromAPI(): Observable<User> {
-    return this.httpClient.get<User>(`${Config.apiURL}user/${this.getClientId()}`);
+  getUserFromAPI(userId: string): Observable<User> {
+    return this.httpClient.get<User>(`${Config.apiURL}user/${userId}`);
+  }
+
+  getAllUsers(isAdmin: boolean): Observable<User[]> {
+    return this.httpClient.get<User[]>(`${Config.apiURL}user?isAdmin=${isAdmin}&sort=slug`);
   }
 }

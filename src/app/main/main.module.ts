@@ -7,10 +7,10 @@ import { MainComponent } from './main.component';
 import { FormsModule } from '@angular/forms';
 import { GridModule, SortService, VirtualScrollService } from '@syncfusion/ej2-angular-grids';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
-import { EntrySearchPipe, AddressSearchPipe } from '../utils/pipes';
+import { EntrySearchPipe, AddressSearchPipe, UserSearchPipe } from '../utils/pipes';
 
 @NgModule({
-  declarations: [MainComponent, EntrySearchPipe, AddressSearchPipe, ...navigatableComponents],
+  declarations: [MainComponent, EntrySearchPipe, AddressSearchPipe, UserSearchPipe, ...navigatableComponents],
   imports: [CommonModule, RouterModule.forChild(routes), MaterialModule, FormsModule, GridModule, DropDownListModule],
   providers: [SortService, VirtualScrollService],
   schemas: [NO_ERRORS_SCHEMA]

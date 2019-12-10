@@ -20,15 +20,28 @@
 </nav>
 <div class="flex w-full" style="height: 95%;">
   <div class="sidebar w-2/12 bg-gray-700 flex flex-col justify-start items-center">
-    <div [ngClass]="selectedMode === -1 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
+    <div [ngClass]="selectedMode === 1 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
       class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 mt-10 w-full cursor-pointer"
-      (click)="onSelectMode(-1)">
+      (click)="onSelectMode(1)">
       <div>Saisie adresses entrées</div>
     </div>
-    <div [ngClass]="selectedMode === 1 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
+    <div [ngClass]="selectedMode === 2 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
       class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
-      (click)="onSelectMode(1)">
+      (click)="onSelectMode(2)">
       <div>Saisie adresses sorties</div>
+    </div>
+    <div *ngIf="logedinUser.isAdmin" class="bg-gray-500 h-1 my-4 rounded w-40">
+    </div>
+    <div *ngIf="logedinUser.isAdmin"
+      [ngClass]="selectedMode === 3 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
+      class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
+      (click)="onSelectMode(3)">
+      <div>Consultation categories entrées</div>
+    </div>
+    <div *ngIf="logedinUser.isAdmin" [ngClass]="selectedMode === 4 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
+      class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
+      (click)="onSelectMode(4)">
+      <div>Consultation categories sorties</div>
     </div>
   </div>
   <div class="main-content w-10/12">

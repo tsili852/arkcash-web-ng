@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from '../authentication';
+import { GlobalService } from '../global.service';
 import { SearchTerms } from '../search-terms/search-terms';
 import { DatePipe } from '@angular/common';
 import { Entry } from './';
@@ -9,11 +9,7 @@ import { Config } from '../config';
 
 @Injectable()
 export class EntryService {
-  constructor(
-    private readonly authenticationService: AuthenticationService,
-    private readonly httpClient: HttpClient,
-    private datePipe: DatePipe
-  ) {}
+  constructor(private readonly globalService: GlobalService, private readonly httpClient: HttpClient, private datePipe: DatePipe) {}
 
   getEntries(skip: number, amount: number, inout: string, searchTerms: SearchTerms, clientId: string): Observable<Entry[]> {
     let amountTo;
@@ -63,7 +59,7 @@ export class EntryService {
   }
 
   getEntriesTotal(): Observable<any> {
-    return this.httpClient.get<any>(`${Config.apiURL}entries/total/client/${this.authenticationService.getClientId()}`);
+    return this.httpClient.get<any>(`${Config.apiURL}entries/total/client/${this.globalService.getSelectedUser().id}`);
   }
 
   getEntry(id: string): Observable<Entry> {
@@ -71,7 +67,7 @@ export class EntryService {
   }
 
   getPieceNo(): Observable<any> {
-    return this.httpClient.get<any>(`${Config.apiURL}pieceno/${this.authenticationService.getClientId()}`);
+    return this.httpClient.get<any>(`${Config.apiURL}pieceno/${this.globalService.getSelectedUser().id}`);
   }
 
   addNewEntry(entry: any): Observable<Entry> {

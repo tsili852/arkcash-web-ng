@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Address } from './';
-import { AuthenticationService } from '../authentication';
+import { GlobalService } from '../global.service';
 import { Config } from '../config';
 
 @Injectable()
 export class AddressService {
-  constructor(private readonly httpClient: HttpClient, private readonly authenticationService: AuthenticationService) {}
+  constructor(private readonly httpClient: HttpClient, private readonly globalService: GlobalService) {}
 
   getAddresses(inout: string): Observable<Address[]> {
-    const clientId = this.authenticationService.getClientId();
+    const clientId = this.globalService.getSelectedUser().id;
     let parameters = `client=${clientId}`;
     if (inout) {
       parameters += `&inout=${inout}`;
@@ -22,7 +22,7 @@ export class AddressService {
   }
 
   getAllUsedAddresses(): Observable<string[]> {
-    const clientId = this.authenticationService.getClientId();
+    const clientId = this.globalService.getSelectedUser().id;
     return this.httpClient.get<string[]>(`${Config.apiURL}address/distinct?client=${clientId}`);
   }
 

@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 
 import { Category } from './';
 import { Config } from '../config';
-import { AuthenticationService } from '../authentication';
+import { GlobalService } from '../global.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly httpClient: HttpClient, private readonly authenticationService: AuthenticationService) {}
+  constructor(private readonly httpClient: HttpClient, private readonly globalService: GlobalService) {}
 
   getCategories(inout: string): Observable<Category[]> {
-    const clientId = this.authenticationService.getClientId();
+    const clientId = this.globalService.getSelectedUser().id;
     let parameters = `client=${clientId}`;
     if (inout) {
       parameters += `&inout=${inout}`;

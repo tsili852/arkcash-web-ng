@@ -6,14 +6,19 @@
       <div class="flex items-center">
         <!-- <img class="w-10 h-10 cursor-pointer" src="assets/images/logo.png" alt="Home">
         <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div> -->
-        <img class="w-10 h-10 cursor-pointer"
-          [src]="currentRoute === 0 ? 'assets/images/journal_rose.png' : 'assets/images/journal_blanc.png'"
+        <img *ngIf="connectedUser.isAdmin" class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 0 ? 'assets/images/user_rose.png' : 'assets/images/user_blanc.png'" alt="Journal"
+          (click)="onGoToClients()">
+        <div *ngIf="connectedUser.isAdmin && currentRoute !== 0" class="divider mx-2 bg-white"
+          style="width: 1px; height: 36px;"></div>
+        <img *ngIf="currentRoute !== 0" class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 1 ? 'assets/images/journal_rose.png' : 'assets/images/journal_blanc.png'"
           alt="Journal" (click)="onGoToLedger()">
-        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
-        <img class="w-10 h-10 cursor-pointer"
-          [src]="currentRoute === 1 ? 'assets/images/config_rose.png' : 'assets/images/config_blanc.png'" alt="Settings"
+        <div *ngIf="currentRoute !== 0" class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+        <img *ngIf="currentRoute !== 0" class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 2 ? 'assets/images/config_rose.png' : 'assets/images/config_blanc.png'" alt="Settings"
           (click)="onGoToConfiguration()">
-        <div class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
+        <div *ngIf="currentRoute !== 0" class="divider mx-2 bg-white" style="width: 1px; height: 36px;"></div>
       </div>
       <div class="flex justify-center items-center">
         <img class="w-auto h-12" src="assets/images/logo.png" alt="Home">

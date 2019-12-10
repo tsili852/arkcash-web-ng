@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full flex flex-col">
+<div class="flex flex-col h-full">
   <div class="flex flex-col md:hidden py-2 bg-gray-500 fixed w-full">
     <div class="flex justify-between items-center">
       <div [ngClass]="selectedFilter === 0 ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'"
@@ -45,8 +45,8 @@
         </div>
       </div>
       <div class="flex mt-2" *ngIf="(entriesTotal | async) as totalArray">
-        <div [class.bg-green-600]="totalArray[0].total >= 0" [class.bg-red-600]="totalArray[0].total < 0"
-          class="shadow px-3 text-white rounded">
+        <div *ngIf="totalArray[0]" [class.bg-green-600]="totalArray[0].total >= 0"
+          [class.bg-red-600]="totalArray[0].total < 0" class="shadow px-3 text-white rounded">
           {{totalArray[0].total | number:'0.2-2'}}
         </div>
       </div>
@@ -68,7 +68,8 @@
       </div>
       <div class="icons-container flex">
         <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onShowAddModal()">
-        <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/export-xls.png" alt="Export">
+        <img *ngIf="logedinUser.isAdmin" class="w-8 h-8 cursor-pointer mr-2" src="assets/images/export-xls.png"
+          alt="Export">
         <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete">
       </div>
     </div>
@@ -138,12 +139,13 @@
       </div>
     </div>
     <div class="flex mt-2 lg:mt-0" *ngIf="(entriesTotal | async) as totalArray">
-      <div [class.border-green-600]="totalArray[0].total >= 0" [class.border-red-600]="totalArray[0].total < 0"
-        class="border px-3 rounded-l hidden lg:block">
+      <div *ngIf="totalArray[0]" [class.border-green-600]="totalArray[0].total >= 0"
+        [class.border-red-600]="totalArray[0].total < 0" class="border px-3 rounded-l hidden lg:block">
         Solde de caisse
       </div>
-      <div [class.bg-green-600]="totalArray[0].total >= 0" [class.border-green-600]="totalArray[0].total >= 0"
-        [class.bg-red-600]="totalArray[0].total < 0" [class.border-red-600]="totalArray[0].total < 0"
+      <div *ngIf="totalArray[0]" [class.bg-green-600]="totalArray[0].total >= 0"
+        [class.border-green-600]="totalArray[0].total >= 0" [class.bg-red-600]="totalArray[0].total < 0"
+        [class.border-red-600]="totalArray[0].total < 0"
         class="border px-3 text-white rounded lg:rounded-l-none lg:rounded-r">
         {{totalArray[0].total | number:'0.2-2'}}
       </div>

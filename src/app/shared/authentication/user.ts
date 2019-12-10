@@ -10,4 +10,6 @@ export class User {
   accNo: number;
   isActive: boolean;
   id: string;
+  phone?: string;
+  email?: string;
 }

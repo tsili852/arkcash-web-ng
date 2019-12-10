@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
+import { User } from './authentication';
 
 @Injectable()
 export class GlobalService {
   private userCanceledInstall: boolean;
   private selectedLanguage: string;
+  private selectedUser: User;
+
+  private menuChoice: number;
+  menuChoice$: Subject<number> = new Subject<number>();
 
   constructor() {
     this.userCanceledInstall = localStorage.getItem('cancel_install') === 'true' || false;
@@ -36,5 +41,22 @@ export class GlobalService {
 
   clearAll(): void {
     localStorage.clear();
+  }
+
+  getSelectedUser(): User {
+    return this.selectedUser;
+  }
+
+  setSelectedUser(user: User) {
+    this.selectedUser = user;
+  }
+
+  updateMenuItem(itemNumber: number) {
+    this.menuChoice = itemNumber;
+    this.menuChoice$.next(itemNumber);
+  }
+
+  getMenuChoice$(): Observable<number> {
+    return this.menuChoice$.asObservable();
   }
 }

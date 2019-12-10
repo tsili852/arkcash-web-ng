@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../../shared/authentication';
 import { Router } from '@angular/router';
+
+import { AuthenticationService } from '../../shared/authentication';
+import { GlobalService } from '../../shared/global.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +25,11 @@ export class LoginComponent implements OnInit {
 
   loginToken = '';
 
-  constructor(private readonly authenticationService: AuthenticationService, private readonly router: Router) {
+  constructor(
+    private readonly authenticationService: AuthenticationService,
+    private readonly router: Router,
+    private readonly globalService: GlobalService
+  ) {
     this.user = {
       password: '',
       username: ''
@@ -41,7 +47,13 @@ export class LoginComponent implements OnInit {
       this.authenticationService.login(this.user).subscribe(
         (res) => {
           this.authenticationService.setToken(res.token);
-          this.router.navigate(['main/default']);
+          const user = this.authenticationService.getCurrentUser();
+          if (user.isAdmin) {
+            this.router.navigate(['main/default/clients']);
+          } else {
+            this.globalService.setSelectedUser(user);
+            this.router.navigate(['main/default']);
+          }
         },
         (error) => {
           this.loginError = true;
