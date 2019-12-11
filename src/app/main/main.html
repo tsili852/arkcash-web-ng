@@ -45,14 +45,22 @@
   </nav>
   <nav class="bg-gray-900 shadow pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto w-full z-20 bottom-0 md:hidden" style="height: 7%;">
     <div class="flex flex-row justify-between items-center px-2">
-      <div class="h-full w-full flex justify-center border-r">
+      <div class="h-full w-full flex justify-center border-r" (click)="showLogoutConfirmation = true">
         <img class="w-10 h-8 cursor-pointer" src="assets/images/menu_log_out.png" alt="LogOut">
       </div>
-      <div class="h-full w-full flex justify-center border-r">
-        <img class="w-10 h-10 cursor-pointer" src="assets/images/config_blanc.png" alt="Settings">
+      <div *ngIf="connectedUser.isAdmin" class="h-full w-full flex justify-center border-r" (click)="onGoToClients()">
+        <img class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 0 ? 'assets/images/user_rose.png' : 'assets/images/user_blanc.png'" alt="Clients">
       </div>
-      <div class="h-full w-full flex justify-center border-r">
-        <img class="w-10 h-10 cursor-pointer" src="assets/images/journal_rose.png" alt="Journal">
+      <div class="h-full w-full flex justify-center border-r" (click)="onGoToConfiguration()">
+        <img class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 2 ? 'assets/images/config_rose.png' : 'assets/images/config_blanc.png'"
+          alt="Settings">
+      </div>
+      <div class="h-full w-full flex justify-center border-r" (click)="onGoToLedger()">
+        <img class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 1 ? 'assets/images/journal_rose.png' : 'assets/images/journal_blanc.png'"
+          alt="Journal">
       </div>
       <div class="h-full w-full flex justify-center">
         <img class="w-10 h-10 cursor-pointer" src="assets/images/add_small.png" alt="Journal">
@@ -61,6 +69,27 @@
   </nav>
   <div class="h-full overflow-auto">
     <router-outlet></router-outlet>
+  </div>
+</div>
+<div [class.opacity-100]="showLogoutConfirmation" [class.pointer-events-auto]="showLogoutConfirmation"
+  class="opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow z-30 bg-white">
+    <div class="text-xl">
+      Êtes-vous sûr ?
+    </div>
+    <div class="flex justify-center items-center mt-2">
+      <div
+        class="bg-gray-600 border-gray-600 cursor-pointer flex items-center justify-center py-1 rounded shadow text-white w-12"
+        (click)="onLogout()">
+        Oui
+      </div>
+      <div
+        class="border border-gray-600 cursor-pointer flex items-center justify-center ml-3 py-1 rounded shadow text-gray-600 w-12"
+        (click)="showLogoutConfirmation = false">
+        No
+      </div>
+    </div>
   </div>
 </div>
 <div [class.opacity-100]="showInstallPopUp" [class.pointer-events-auto]="showInstallPopUp"

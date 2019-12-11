@@ -5,6 +5,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { NgxIzitoastService } from 'ngx-izitoast';
 import { version as applicationVersion } from '../../../package.json';
 import { GlobalService } from '../shared/global.service';
+import { LocationStrategy } from '@angular/common';
 
 @Component({
   selector: 'app-main',
@@ -18,6 +19,7 @@ export class MainComponent implements OnInit {
   selectedUser: User;
   currentRoute = 0;
   appVersion = '';
+  showLogoutConfirmation = false;
 
   userCancelInstall = false;
 
@@ -27,11 +29,16 @@ export class MainComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly swUpdate: SwUpdate,
     private readonly toastService: NgxIzitoastService,
-    private readonly globalService: GlobalService
+    private readonly globalService: GlobalService,
+    private readonly location: LocationStrategy
   ) {
     this.connectedUser = this.authenticationService.getCurrentUser();
     this.selectedUser = this.globalService.getSelectedUser();
     this.appVersion = applicationVersion;
+
+    this.location.onPopState(() => {
+      // console.log(`Back Button`);
+    });
 
     this.globalService.getMenuChoice$().subscribe((choice) => {
       this.currentRoute = choice;
@@ -93,7 +100,7 @@ export class MainComponent implements OnInit {
 
   onLogout() {
     this.authenticationService.clearStorage();
-    this.router.navigate(['login']);
+    this.router.navigate(['login'], { skipLocationChange: true });
   }
 
   onInstall() {

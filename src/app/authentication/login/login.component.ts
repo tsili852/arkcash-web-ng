@@ -40,7 +40,17 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authenticationService.getToken()) {
+      const user = this.authenticationService.getCurrentUser();
+      if (user.isAdmin) {
+        this.router.navigate(['main/default/clients']);
+      } else {
+        this.globalService.setSelectedUser(user);
+        this.router.navigate(['main/default']);
+      }
+    }
+  }
 
   onLogin() {
     if (this.user.username && this.user.username.trim().length > 0 && this.user.password && this.user.password.trim().length > 0) {

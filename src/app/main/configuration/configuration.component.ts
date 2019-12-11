@@ -30,11 +30,13 @@ export class ConfigurationComponent implements OnInit {
 
   selectedMode = 1;
   selectedInOut = -1;
-  searchText = '';
+  searchTextAddresses = '';
+  searchTextCategories = '';
   addresses$: Observable<Address[]>;
   categories$: Observable<Category[]>;
   categoriesList: Category[];
   addressesCount = 0;
+  categoriesCount = 0;
 
   showEditModal = false;
   editAddressErrors = false;
@@ -42,7 +44,7 @@ export class ConfigurationComponent implements OnInit {
   deleteOldAddressConfirm = false;
   selectedEditAddress: Address;
   addressListFields = { text: 'name', value: 'id' };
-  selectedEditCategory: Category;
+  selectedEditAddressCategory: Category;
   categoryListFields = { text: 'name', value: 'id' };
 
   showAddModal = false;
@@ -51,6 +53,18 @@ export class ConfigurationComponent implements OnInit {
   addAddressInout = -1;
 
   selectionOptions: SelectionSettingsModel;
+
+  showEditCategoryModal = false;
+  showAddCategoryModal = false;
+
+  usedCategories: string[];
+
+  selectedEditCategory: Category;
+  editCategoryError = false;
+  deleteOldCategoryConfirm = false;
+
+  newCategory: Category;
+  addCategoryError = false;
 
   constructor(
     private readonly globalService: GlobalService,
@@ -79,6 +93,10 @@ export class ConfigurationComponent implements OnInit {
     this.addressService.getAllUsedAddresses().subscribe((addresses) => {
       this.usedAddresses = addresses;
     });
+
+    this.categoryService.getAllUsedCategories().subscribe((categories) => {
+      this.usedCategories = categories;
+    });
   }
 
   ngOnInit(): void {
@@ -93,6 +111,7 @@ export class ConfigurationComponent implements OnInit {
     this.categories$ = this.categoryService.getCategories(this.selectedInOut.toString());
     this.categories$.subscribe((categories) => {
       this.categoriesList = categories;
+      this.categoriesCount = categories.length;
     });
   }
 
@@ -116,11 +135,26 @@ export class ConfigurationComponent implements OnInit {
     }
   }
 
+  rowDataBoundCategory(args: any) {
+    const category: Category = args.data;
+    if (category.inout === -1) {
+      args.row.classList.add('bg-green-100');
+    } else {
+      args.row.classList.add('bg-red-100');
+    }
+  }
+
   onRowClick(address: Address) {
     this.showEditModal = true;
     this.selectedEditAddress = address;
-    this.selectedEditCategory = address.category;
+    this.selectedEditAddressCategory = address.category;
     this.deleteOldAddressConfirm = false;
+  }
+
+  onRowClickCategory(category: Category) {
+    this.showEditCategoryModal = true;
+    this.selectedEditCategory = category;
+    this.deleteOldCategoryConfirm = false;
   }
 
   onEditChangeAddressCategory(args: any) {
@@ -132,6 +166,10 @@ export class ConfigurationComponent implements OnInit {
 
   canAddressesBeDeleted() {
     return this.usedAddresses.includes(this.selectedEditAddress.id) ? false : true;
+  }
+
+  canCategoryBeDeleted() {
+    return this.usedCategories.includes(this.selectedEditCategory.id) ? false : true;
   }
 
   onSaveEditAddress() {
@@ -221,6 +259,94 @@ export class ConfigurationComponent implements OnInit {
       this.addAddressErrors = true;
       setTimeout(() => {
         this.addAddressErrors = false;
+      }, 3000);
+    }
+  }
+
+  onSaveEditCategory() {
+    if (this.selectedEditCategory.name.trim().length > 0) {
+      const categoryToUpdate = {
+        name: this.selectedEditCategory.name,
+        accNo: this.selectedEditCategory.accNo,
+        id: this.selectedEditCategory.id
+      };
+
+      this.categoryService.updateCategory(categoryToUpdate).subscribe(
+        () => {
+          this.showEditCategoryModal = false;
+
+          setTimeout(() => {
+            this.fetchAddresses();
+          }, 100);
+        },
+        (error) => {
+          console.log(`Error: ${JSON.stringify(error, null, 2)}`);
+        }
+      );
+    } else {
+      this.editCategoryError = true;
+      setTimeout(() => {
+        this.editCategoryError = false;
+      }, 3000);
+    }
+  }
+
+  onDeleteCategory() {
+    this.deleteOldCategoryConfirm = true;
+  }
+
+  onDeleteCategoryConfirmed() {
+    this.categoryService.deleteCategory(this.selectedEditCategory).subscribe(
+      () => {
+        this.showEditCategoryModal = false;
+        setTimeout(() => {
+          this.fetchAddresses();
+        }, 100);
+      },
+      (error) => {
+        console.log(`Error: ${JSON.stringify(error, null, 2)}`);
+      }
+    );
+  }
+
+  onAddNewCategory() {
+    this.newCategory = {
+      accNo: '',
+      client: this.globalService.getSelectedUser().id,
+      createdAt: new Date(),
+      id: '',
+      inout: this.addAddressInout,
+      name: '',
+      updatedAt: null
+    };
+    this.showAddCategoryModal = true;
+  }
+
+  onSaveAddCategory() {
+    if (this.newCategory.name.trim().length > 0) {
+      const categoryToInsert = {
+        name: this.newCategory.name,
+        accNo: this.newCategory.accNo,
+        client: this.newCategory.client,
+        inout: this.addAddressInout,
+        createdAt: new Date()
+      };
+
+      this.categoryService.addNewCategory(categoryToInsert).subscribe(
+        (returnAddress) => {
+          this.showAddCategoryModal = false;
+          setTimeout(() => {
+            this.fetchAddresses();
+          }, 100);
+        },
+        (error) => {
+          console.log(`Error: ${JSON.stringify(error, null, 2)}`);
+        }
+      );
+    } else {
+      this.addCategoryError = true;
+      setTimeout(() => {
+        this.addCategoryError = false;
       }, 3000);
     }
   }

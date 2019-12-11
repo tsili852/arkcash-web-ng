@@ -36,6 +36,8 @@ export class AuthenticationService {
   }
 
   clearStorage() {
+    this.token = '';
+    this.user = null;
     localStorage.clear();
   }
 

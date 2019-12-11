@@ -19,18 +19,18 @@
       </div>
     </div>
   </nav>
-  <div class="flex justify-start items-center py-4 px-10">
-    <div class="text-xl">
+  <div class="flex justify-start items-center py-4 md:px-10 px-4">
+    <div class="text-lg md:text-xl">
       12
     </div>
-    <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center lg:ml-8 lg:w-64 w-72">
+    <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center ml-4 md:ml-8 lg:w-64 w-72">
       <input [(ngModel)]="searchText"
         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
         type="text" placeholder="Recherche" aria-label="Search">
       <img class="w-4 h-4" src="assets/images/search_black.png" alt="Search">
     </div>
   </div>
-  <div class="table-container px-3 hidden md:block z-0">
+  <div class="table-container px-3 hidden lg:block z-0">
     <ejs-grid #grid [dataSource]="(users$ | async) | userSearch:searchText" [allowSorting]='true'
       [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
       [selectionSettings]='selectionOptions'>
@@ -43,7 +43,7 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText="Nom d'utilisateur">
+        <e-column class="hidden lg:block" headerText="Nom d'utilisateur">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.username}}</span>
@@ -95,17 +95,77 @@
       </e-columns>
     </ejs-grid>
   </div>
-  <div class="table-container block md:hidden mt-24">
-    <!-- <table class="table-auto w-full text-sm">
+  <div class="table-container px-3 hidden md:block lg:hidden z-0">
+    <ejs-grid #grid [dataSource]="(users$ | async) | userSearch:searchText" [allowSorting]='true'
+      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
+      [selectionSettings]='selectionOptions'>
+      <e-columns>
+        <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
+        <e-column headerText='Nom' field="inout">
+          <ng-template #template let-user>
+            <div (click)="onRowClick(user)">
+              <span>{{user.name}}</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column class="hidden lg:block" headerText="Nom d'utilisateur">
+          <ng-template #template let-user>
+            <div (click)="onRowClick(user)">
+              <span>{{user.username}}</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column headerText="No.de Compte">
+          <ng-template #template let-user>
+            <div (click)="onRowClick(user)">
+              <span>{{user.accNo}}</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column headerText='Date de début'>
+          <ng-template #template let-user>
+            <div (click)="onRowClick(user)">
+              <span>{{user.startDate | date:'dd.MM.yyyy'}}</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column headerText='Solde'>
+          <ng-template #template let-user>
+            <div (click)="onRowClick(user)">
+              <span>2000</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column>
+          <ng-template #template let-user>
+            <div class="flex flex-col" (click)="onRowClick(user)">
+              <img class="w-6 h-6" src="assets/images/edit.png" alt="Edit">
+            </div>
+          </ng-template>
+        </e-column>
+      </e-columns>
+    </ejs-grid>
+  </div>
+  <div class="table-container block md:hidden mt-4">
+    <table class="table-auto w-full">
+      <thead>
+        <tr class="bg-gray-800 text-sm text-white">
+          <th class="px-4 py-1 text-left">Nom</th>
+          <th class="px-4 py-1 text-left">Date de début</th>
+          <th class="px-4 py-1 text-right">Solde</th>
+          <th></th>
+        </tr>
+      </thead>
       <tbody>
-        <tr class="border-b-2 border-white" [class.bg-red-200]="user.inout === 1"
-          [class.bg-green-200]="user.inout === -1" *ngFor="let user of (entries | async) | userSearch:searchText">
-          <td class="px-4 py-2">{{user.pieceNo}}</td>
-          <td class="px-4 py-2">{{user.userDate | date:'dd.MM.yyyy'}}</td>
-          <td class="px-4 py-2">{{user.address.name}}</td>
-          <td class="px-4 py-2">{{user.totalAmount | number:'0.2-2'}}</td>
+        <tr class="border-b-2 text-xs" *ngFor="let user of (users$ | async) | userSearch:searchText">
+          <td class="px-4 py-2" (click)="onRowClick(user)">{{user.name}}</td>
+          <td class="px-4 py-2" (click)="onRowClick(user)">{{user.startDate | date:'dd.MM.yyyy'}}</td>
+          <td class="px-4 py-2 text-right" (click)="onRowClick(user)">2000</td>
+          <td class="px-2">
+            <img class="w-4 h-4" src="assets/images/edit.png" alt="Edit">
+          </td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
   </div>
 </div>

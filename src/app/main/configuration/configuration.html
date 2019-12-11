@@ -1,4 +1,4 @@
-<nav class="bg-gray-300 px-2 py-2 shadow">
+<nav class="bg-gray-300 px-2 py-2 shadow hidden md:block">
   <div class="flex justify-between items-center">
     <div class="breadcrumbs flex items-center">
       <div class="text-lg">
@@ -13,20 +13,160 @@
       </div>
     </div>
     <div class="icons-container flex">
-      <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onAddNewAddress()">
-      <!-- <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete"> -->
+      <img *ngIf="selectedMode === 1 || selectedMode === 2" class="w-8 h-8 cursor-pointer mr-2"
+        src="assets/images/bt_add.png" alt="Add" (click)="onAddNewAddress()">
+      <img *ngIf="selectedMode === 3 || selectedMode === 4" class="w-8 h-8 cursor-pointer mr-2"
+        src="assets/images/bt_add.png" alt="Add" (click)="onAddNewCategory()">
     </div>
   </div>
 </nav>
-<div class="flex w-full" style="height: 95%;">
-  <div class="sidebar w-2/12 bg-gray-700 flex flex-col justify-start items-center">
+<div class="flex px-2 md:hidden">
+  <div class="text-sm">
+    {{connectedUser.name}}
+  </div>
+</div>
+<div class="flex md:hidden justify-between items-center px-2" *ngIf="logedinUser.isAdmin">
+  <div class="flex flex-col w-full">
+    <div class="flex justify-start items-center text-sm my-2">
+      <div [ngClass]="selectedMode === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
+        class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onSelectMode(1)">
+        <img *ngIf="selectedMode !== 1" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
+          alt="Entrees">
+        <img *ngIf="selectedMode === 1" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
+          alt="Entrees">
+        <span>Adresses</span>
+      </div>
+      <div [ngClass]="selectedMode === 3 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
+        class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onSelectMode(3)">
+        <img *ngIf="selectedMode !== 3" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
+          alt="Entrees">
+        <img *ngIf="selectedMode === 3" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
+          alt="Entrees">
+        <span>Categories</span>
+      </div>
+    </div>
+    <div class="flex justify-start items-center text-sm my-2">
+      <div [ngClass]="selectedMode === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
+        class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onSelectMode(2)">
+        <img *ngIf="selectedMode !== 2" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
+          alt="Entrees">
+        <img *ngIf="selectedMode === 2" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
+          alt="Entrees">
+        <span>Adresses</span>
+      </div>
+      <div [ngClass]="selectedMode === 4 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
+        class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        (click)="onSelectMode(4)">
+        <img *ngIf="selectedMode !== 4" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
+          alt="Entrees">
+        <img *ngIf="selectedMode === 4" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
+          alt="Entrees">
+        <span>Categories</span>
+      </div>
+    </div>
+  </div>
+  <div class="icons-container flex">
+    <img *ngIf="selectedMode === 1 || selectedMode === 2" class="w-8 h-8 cursor-pointer mr-2"
+      src="assets/images/bt_add.png" alt="Add" (click)="onAddNewAddress()">
+    <img *ngIf="selectedMode === 3 || selectedMode === 4" class="w-8 h-8 cursor-pointer mr-2"
+      src="assets/images/bt_add.png" alt="Add" (click)="onAddNewCategory()">
+  </div>
+</div>
+<div class="flex md:hidden justify-between items-center px-2" *ngIf="!logedinUser.isAdmin">
+  <div class="flex justify-start items-center text-sm my-2 w-full">
+    <div [ngClass]="selectedMode === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
+      class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg" (click)="onSelectMode(1)">
+      <img *ngIf="selectedMode !== 1" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
+        alt="Entrees">
+      <img *ngIf="selectedMode === 1" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
+        alt="Entrees">
+      <span>Entrée</span>
+    </div>
+    <div [ngClass]="selectedMode === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
+      class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg" (click)="onSelectMode(2)">
+      <img *ngIf="selectedMode !== 2" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
+        alt="Sorties">
+      <img *ngIf="selectedMode === 2" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
+        alt="Sorties">
+      <span>Sorties</span>
+    </div>
+  </div>
+  <div class="icons-container flex">
+    <img *ngIf="selectedMode === 1 || selectedMode === 2" class="w-8 h-8 cursor-pointer mr-2"
+      src="assets/images/bt_add.png" alt="Add" (click)="onAddNewAddress()">
+    <img *ngIf="selectedMode === 3 || selectedMode === 4" class="w-8 h-8 cursor-pointer mr-2"
+      src="assets/images/bt_add.png" alt="Add" (click)="onAddNewCategory()">
+  </div>
+</div>
+<div *ngIf="selectedMode === 1 || selectedMode === 2"
+  class="flex md:hidden justify-between items-center py-2 px-2 md:px-10">
+  <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-72 md:w-3/12">
+    <input [(ngModel)]="searchTextAddresses"
+      class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-500 text-gray-600"
+      type="text" placeholder="Recherche" aria-label="Search">
+  </div>
+  <div class="text-base md:text-2xl">
+    {{addressesCount}}
+  </div>
+</div>
+<div *ngIf="selectedMode === 1 || selectedMode === 2" class="block md:hidden table-container mt-2 px-1 overflow-y-auto"
+  style="height: 74%;">
+  <table class="table-auto w-full">
+    <thead>
+      <tr class="bg-gray-800 text-sm text-white">
+        <th class="px-4 py-1 text-left">Adresse</th>
+        <th class="px-4 py-1 text-left">Catégorie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b-2 text-xs" *ngFor="let address of (addresses$ | async) | addressSearch:searchTextAddresses">
+        <td class="px-4 py-2" (click)="onRowClick(address)">{{address.name}}</td>
+        <td class="px-4 py-2" (click)="onRowClick(address)">{{address.category.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="selectedMode === 3 || selectedMode === 4"
+  class="flex md:hidden justify-between items-center py-2 px-2 md:px-10">
+  <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-72 md:w-3/12">
+    <input [(ngModel)]="searchTextCategories"
+      class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-500 text-gray-600"
+      type="text" placeholder="Recherche" aria-label="Search">
+  </div>
+  <div class="text-base md:text-2xl">
+    {{categoriesCount}}
+  </div>
+</div>
+<div *ngIf="selectedMode === 3 || selectedMode === 4" class="block md:hidden table-container mt-2 px-1 overflow-y-auto"
+  style="height: 74%;">
+  <table class="table-auto w-full">
+    <thead>
+      <tr class="bg-gray-800 text-sm text-white">
+        <th class="px-4 py-1 text-left">Catégorie</th>
+        <th class="px-4 py-1 text-left">No de Compte</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b-2 text-xs"
+        *ngFor="let category of (categories$ | async) | categorySearch:searchTextCategories">
+        <td class="px-4 py-2" (click)="onRowClickCategory(category)">{{category.name}}</td>
+        <td class="px-4 py-2" (click)="onRowClickCategory(category)">{{category.accNo}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="hidden md:flex flex-row w-full" style="height: 95%;">
+  <div class="flex sidebar w-2/12 bg-gray-700 flex-col justify-start items-center">
     <div [ngClass]="selectedMode === 1 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 mt-10 w-full cursor-pointer"
+      class="text-base text-white flex justify-center items-center py-3 px-3 mt-10 w-full cursor-pointer"
       (click)="onSelectMode(1)">
       <div>Saisie adresses entrées</div>
     </div>
     <div [ngClass]="selectedMode === 2 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
+      class="text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
       (click)="onSelectMode(2)">
       <div>Saisie adresses sorties</div>
     </div>
@@ -34,30 +174,30 @@
     </div>
     <div *ngIf="logedinUser.isAdmin"
       [ngClass]="selectedMode === 3 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
+      class="text-base text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
       (click)="onSelectMode(3)">
       <div>Consultation categories entrées</div>
     </div>
     <div *ngIf="logedinUser.isAdmin" [ngClass]="selectedMode === 4 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base xl:text-lg text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
+      class="text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
       (click)="onSelectMode(4)">
       <div>Consultation categories sorties</div>
     </div>
   </div>
-  <div class="main-content w-10/12">
-    <div class="flex flex-col pt-8 px-2">
-      <div class="flex justify-between items-center py-2 px-10">
-        <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-3/12">
-          <input [(ngModel)]="searchText"
+  <div class="main-content w-full md:w-10/12">
+    <div class="flex flex-col pt-1 md:pt-8 px-2" *ngIf="selectedMode === 1 || selectedMode === 2">
+      <div class="flex justify-between items-center py-2 px-2 md:px-10">
+        <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-72 md:w-3/12">
+          <input [(ngModel)]="searchTextAddresses"
             class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-500 text-gray-600"
             type="text" placeholder="Recherche" aria-label="Search">
         </div>
-        <div class="text-2xl">
+        <div class="text-base md:text-2xl">
           {{addressesCount}}
         </div>
       </div>
       <div class="table-container mt-3">
-        <ejs-grid #grid [dataSource]="(addresses$ | async) | addressSearch:searchText" [allowSorting]='true'
+        <ejs-grid #grid [dataSource]="(addresses$ | async) | addressSearch:searchTextAddresses" [allowSorting]='true'
           [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
           (rowDataBound)='rowDataBound($event)' [selectionSettings]='selectionOptions'>
           <e-columns>
@@ -80,12 +220,47 @@
         </ejs-grid>
       </div>
     </div>
+    <div class="flex flex-col pt-1 md:pt-8 px-2" *ngIf="selectedMode === 3 || selectedMode === 4">
+      <div class="flex justify-between items-center py-2 px-2 md:px-10">
+        <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-72 md:w-3/12">
+          <input [(ngModel)]="searchTextCategories"
+            class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-500 text-gray-600"
+            type="text" placeholder="Recherche" aria-label="Search">
+        </div>
+        <div class="text-base md:text-2xl">
+          {{categoriesCount}}
+        </div>
+      </div>
+      <div class="table-container mt-3">
+        <ejs-grid #grid [dataSource]="(categories$ | async) | categorySearch:searchTextCategories" [allowSorting]='true'
+          [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
+          (rowDataBound)='rowDataBoundCategory($event)' [selectionSettings]='selectionOptions'>
+          <e-columns>
+            <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
+            <e-column headerText='Catégorie'>
+              <ng-template #template let-category>
+                <div (click)="onRowClickCategory(category)">
+                  <span id="Emptext">{{category.name}}</span>
+                </div>
+              </ng-template>
+            </e-column>
+            <e-column headerText='No de Compte'>
+              <ng-template #template let-category>
+                <div (click)="onRowClickCategory(category)">
+                  <span>{{category.accNo}}</span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+    </div>
   </div>
 </div>
 <div [class.opacity-100]="showEditModal" [class.pointer-events-auto]="showEditModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
-  <div *ngIf="selectedEditAddress" [ngClass]="selectedMode === -1 ? 'border-green-500' : 'border-red-500'"
+  <div *ngIf="selectedEditAddress" [ngClass]="selectedMode === 1 ? 'border-green-500' : 'border-red-500'"
     class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
     <div class="flex flex-col">
       <div class="text-gray-600">Adresse</div>
@@ -143,7 +318,7 @@
 <div [class.opacity-100]="showAddModal" [class.pointer-events-auto]="showAddModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
-  <div *ngIf="newAddress" [ngClass]="addAddressInout === -1 ? 'border-green-500' : 'border-red-500'"
+  <div *ngIf="newAddress" [ngClass]="addAddressInout === 1 ? 'border-green-500' : 'border-red-500'"
     class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
     <div class="flex flex-col">
       <div class="text-gray-600">Adresse</div>
@@ -170,6 +345,101 @@
       </button>
       <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
         (click)="showAddModal = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showEditCategoryModal" [class.pointer-events-auto]="showEditCategoryModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div *ngIf="selectedEditCategory" [ngClass]="selectedMode === 3 ? 'border-green-500' : 'border-red-500'"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
+    <div class="flex flex-col">
+      <div class="text-gray-600">Catégorie</div>
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
+        <input [(ngModel)]="selectedEditCategory.name"
+          class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500 text-sm"
+          type="text" placeholder="" aria-label="Category Name">
+      </div>
+    </div>
+    <div class="flex flex-col mt-4">
+      <div class="text-gray-600">No de compte</div>
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
+        <input [(ngModel)]="selectedEditCategory.accNo"
+          class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500 text-sm"
+          type="text" placeholder="" aria-label="No de compte">
+      </div>
+    </div>
+    <div *ngIf="editCategoryError" class="bg-transparent border bo`rder-red-600 p-3 rounded-xl mt-12">
+      <span class="text-sm text-red-600">Le nom de la catégorie ne peut pas être vide</span>
+    </div>
+    <div *ngIf="!deleteOldCategoryConfirm" class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveEditCategory()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button *ngIf="canCategoryBeDeleted()"
+        class="hover:bg-red-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="onDeleteCategory()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showEditCategoryModal = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
+    </div>
+    <div *ngIf="deleteOldCategoryConfirm"
+      class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow mt-6">
+      <div class="text-xl">
+        Êtes-vous sûr ?
+      </div>
+      <div class="flex justify-center items-center mt-2">
+        <div
+          class="bg-red-500 border-gray-600 cursor-pointer flex items-center justify-center py-1 rounded shadow text-white w-12"
+          (click)="onDeleteCategoryConfirmed()">
+          Oui
+        </div>
+        <div
+          class="bg-gray-600 border-gray-600 cursor-pointer flex items-center justify-center ml-3 py-1 rounded shadow text-white w-12"
+          (click)="deleteOldCategoryConfirm = false">
+          No
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showAddCategoryModal" [class.pointer-events-auto]="showAddCategoryModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div *ngIf="newCategory" [ngClass]="addAddressInout === 3 ? 'border-green-500' : 'border-red-500'"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
+    <div class="flex flex-col">
+      <div class="text-gray-600">Catégorie</div>
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
+        <input [(ngModel)]="newCategory.name"
+          class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500 text-sm"
+          type="text" placeholder="" aria-label="Nom">
+      </div>
+    </div>
+    <div class="flex flex-col mt-4">
+      <div class="text-gray-600">No de compte</div>
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
+        <input [(ngModel)]="newCategory.accNo"
+          class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500 text-sm"
+          type="text" placeholder="" aria-label="No de compte">
+      </div>
+    </div>
+    <div *ngIf="addCategoryError" class="bg-transparent border border-red-600 p-3 rounded-xl mt-12">
+      <span class="text-sm text-red-600">Le nom de la catégorie ne peut pas être vide</span>
+    </div>
+    <div class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveAddCategory()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showAddCategoryModal = false">
         <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
       </button>
     </div>

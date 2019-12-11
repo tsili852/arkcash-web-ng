@@ -10,10 +10,10 @@
           placeholder="Username" [(ngModel)]="user.username">
       </div>
       <div class="relative my-4 border-b border-navy label-floating md:w-88 w-64">
-        <input class="w-full py-2 px-3 text-navy leading-normal outline-none" id="password" type="password"
+        <input (keyup.enter)="onLogin()" class="w-full py-2 px-3 text-navy leading-normal outline-none" id="password" type="password"
           placeholder="Password" [(ngModel)]="user.password">
       </div>
-      <button class="mt-4 bg-transparent text-navy py-4 px-8 text-navy border border-navy focus:outline-none rounded-xl shadow hover:shadow-md"
+      <button (keyup.enter)="onLogin()" class="mt-4 bg-transparent text-navy py-4 px-8 text-navy border border-navy focus:outline-none rounded-xl shadow hover:shadow-md"
         (click)="onLogin()">
         Login
       </button>
