@@ -62,8 +62,9 @@
           [src]="currentRoute === 1 ? 'assets/images/journal_rose.png' : 'assets/images/journal_blanc.png'"
           alt="Journal">
       </div>
-      <div class="h-full w-full flex justify-center">
-        <img class="w-10 h-10 cursor-pointer" src="assets/images/add_small.png" alt="Journal">
+      <div class="h-full w-full flex justify-center" (click)="onGoToAddMobile()">
+        <img class="w-10 h-10 cursor-pointer"
+          [src]="currentRoute === 3 ? 'assets/images/add_small_rose.png' : 'assets/images/add_small.png'" alt="Add">
       </div>
     </div>
   </nav>

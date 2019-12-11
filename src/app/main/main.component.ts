@@ -131,4 +131,11 @@ export class MainComponent implements OnInit {
     this.currentRoute = 2;
     // }
   }
+
+  onGoToAddMobile() {
+    // if (this.selectedUser) {
+    this.router.navigate(['add-mobile'], { relativeTo: this.route });
+    this.currentRoute = 3;
+    // }
+  }
 }

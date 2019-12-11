@@ -83,7 +83,7 @@
         alt="Entrees">
       <img *ngIf="selectedMode === 1" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
         alt="Entrees">
-      <span>Entrée</span>
+      <span>Entrées</span>
     </div>
     <div [ngClass]="selectedMode === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
       class="py-1 w-32 flex justify-center items-center h-full mx-2 shadow active:shadow-lg" (click)="onSelectMode(2)">
@@ -122,7 +122,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b-2 text-xs" *ngFor="let address of (addresses$ | async) | addressSearch:searchTextAddresses">
+      <tr class="border-b-2 text-sm" *ngFor="let address of (addresses$ | async) | addressSearch:searchTextAddresses">
         <td class="px-4 py-2" (click)="onRowClick(address)">{{address.name}}</td>
         <td class="px-4 py-2" (click)="onRowClick(address)">{{address.category.name}}</td>
       </tr>
@@ -150,7 +150,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b-2 text-xs"
+      <tr class="border-b-2 text-sm"
         *ngFor="let category of (categories$ | async) | categorySearch:searchTextCategories">
         <td class="px-4 py-2" (click)="onRowClickCategory(category)">{{category.name}}</td>
         <td class="px-4 py-2" (click)="onRowClickCategory(category)">{{category.accNo}}</td>
