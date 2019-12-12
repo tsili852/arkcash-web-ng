@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
@@ -11,12 +11,15 @@ import { Category, CategoryService } from '../../shared/category';
 import { GlobalService } from '../../shared/global.service';
 import { User, AuthenticationService } from '../../shared/authentication';
 import { Observable } from 'rxjs';
+import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
   templateUrl: './add-mobile.html',
   styleUrls: ['./add-mobile.scss']
 })
 export class AddMobileComponent implements OnInit {
+  @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar;
+
   selectedMode = 1;
 
   connectedUser: User;
@@ -136,6 +139,10 @@ export class AddMobileComponent implements OnInit {
       amount: '',
       category: this.selectedAddressCategory || this.categoryList[0]
     });
+
+    setTimeout(() => {
+      this.scrollable.scrollTo({ bottom: 0 });
+    }, 100);
   }
 
   onChangeItemCategory(args: any, itemIndex: number) {

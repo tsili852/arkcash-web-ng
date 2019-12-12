@@ -118,7 +118,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/cdk@~8.2.3":
+"@angular/cdk@^8.2.3":
   version "8.2.3"
   resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-8.2.3.tgz#16b96ffa935cbf5a646757ecaf2b19c434678f72"
   integrity sha512-ZwO5Sn720RA2YvBqud0JAHkZXjmjxM0yNzCO8RVtRE9i8Gl26Wk0j0nQeJkVm4zwv2QO8MwbKUKGTMt8evsokA==
@@ -893,6 +893,11 @@
     esutils "^2.0.2"
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
+
+"@juggle/resize-observer@*":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-2.5.0.tgz#dbe3ebfa7b46b465dc85677ca23b15e854225a99"
+  integrity sha512-Nmkeaj5LalJeciRVEqi9Uxi61r0LvGc2yhUCykhXuft9fMyb/6VkZbwJ+UmUl8bk2k6qhwd1qJw6S2YJ0joXlA==
 
 "@ngtools/webpack@8.3.20":
   version "8.3.20"
@@ -1866,6 +1871,11 @@ better-assert@~1.0.0:
   integrity sha1-QIZrnhueC1W0gYlDEeaPr/rrxSI=
   dependencies:
     callsite "1.0.0"
+
+bezier-easing@*:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.1.0.tgz#c04dfe8b926d6ecaca1813d69ff179b7c2025d86"
+  integrity sha1-wE3+i5JtbsrKGBPWn/F5t8ICXYY=
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -5389,6 +5399,15 @@ ngx-izitoast@^1.0.1:
   integrity sha512-ETpfXosK1jLjy/MhMI5sC5SqDb6puRhSq/wAIIa5arlyLEJ9fzTg/cHFtbEvkHfOLcGASx5cSjfpQ25Ae3fo1Q==
   dependencies:
     izitoast "^1.2.0"
+
+ngx-scrollbar@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-scrollbar/-/ngx-scrollbar-7.1.0.tgz#702d2c4d17a8248631e59b3ceb6d3f56dab7f291"
+  integrity sha512-yA5XDyXSyxNVs+5RmyaFULkQLNN0mTIDVjBIWJEkxvCTVUhOuejR8PCXZj2CvudwiirM7Uxqla+Dqgn+Itvg9Q==
+  dependencies:
+    "@juggle/resize-observer" "*"
+    bezier-easing "*"
+    tslib "^1.9.0"
 
 nice-try@^1.0.4:
   version "1.0.5"

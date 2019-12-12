@@ -1,82 +1,86 @@
-<div class="flex flex-col" style="height: 29%;">
-  <div class="flex justify-start items-center w-full bg-gray-800 pt-2">
-    <div class="flex justify-start items-center w-full">
-      <div [ngClass]="selectedMode === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
-        class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(1)">
-        <img *ngIf="selectedMode !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
-          alt="Entrees">
-        <img *ngIf="selectedMode === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
-          alt="Entrees">
-        <span class="text-xl">Entrée</span>
+<div class="flex flex-col h-full">
+  <div class="flex flex-col">
+    <div class="flex justify-start items-center w-full bg-gray-800 pt-2">
+      <div class="flex justify-start items-center w-full">
+        <div [ngClass]="selectedMode === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
+          class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(1)">
+          <img *ngIf="selectedMode !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
+            alt="Entrees">
+          <img *ngIf="selectedMode === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
+            alt="Entrees">
+          <span class="text-xl">Entrée</span>
+        </div>
+        <div [ngClass]="selectedMode === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
+          class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(2)">
+          <img *ngIf="selectedMode !== 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
+            alt="Sorties">
+          <img *ngIf="selectedMode === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
+            alt="Sorties">
+          <span class="text-xl">Sorties</span>
+        </div>
       </div>
-      <div [ngClass]="selectedMode === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
-        class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(2)">
-        <img *ngIf="selectedMode !== 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
-          alt="Sorties">
-        <img *ngIf="selectedMode === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
-          alt="Sorties">
-        <span class="text-xl">Sorties</span>
+      <div class="flex justify-center items-center px-6">
+        <img class="w-6 h-auto cursor-pointer" src="assets/images/cancel_white_mobile.png" alt="Cancel"
+          (click)="onGoToLedger()">
       </div>
     </div>
-    <div class="flex justify-center items-center px-6">
-      <img class="w-6 h-auto cursor-pointer" src="assets/images/cancel_white_mobile.png" alt="Cancel"
-        (click)="onGoToLedger()">
-    </div>
-  </div>
-  <div class="flex flex-col shadow pt-4 px-4">
-    <ejs-dropdownlist *ngIf="newEntryAddress" class="w-full" id='ddAddresses' [dataSource]='addressList'
-      [fields]="addressListFields" [(value)]="newEntryAddress.id" placeholder="Adresse"
-      (change)="onNewAddressChange($event)">
-    </ejs-dropdownlist>
-    <div class="-mb-1 flex items-center justify-between mt-2">
-      <div class="text-base">
-        {{newEntryPieceNo}}
-      </div>
-      <mat-form-field class="ml-6" style="padding-top: 6px">
-        <input matInput [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
-          [(ngModel)]="newEntryDate">
-        <mat-datepicker-toggle matSuffix [for]="newEntryPicker">
-          <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-        </mat-datepicker-toggle>
-        <mat-datepicker touchUi #newEntryPicker></mat-datepicker>
-      </mat-form-field>
-      <div class="flex items-center justify-center">
+    <div class="flex flex-col pt-4 px-4">
+      <ejs-dropdownlist *ngIf="newEntryAddress" class="w-full" id='ddAddresses' [dataSource]='addressList'
+        [fields]="addressListFields" [(value)]="newEntryAddress.id" placeholder="Adresse"
+        (change)="onNewAddressChange($event)">
+      </ejs-dropdownlist>
+      <div class="-mb-1 flex items-center justify-between mt-2">
         <div class="text-base">
-          {{totalAmount | number:'0.2-2'}}
+          {{newEntryPieceNo}}
         </div>
-        <div class="ml-2 text-gray-700 text-xs">
-          CHF
+        <mat-form-field class="ml-6" style="padding-top: 6px">
+          <input matInput [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
+            [(ngModel)]="newEntryDate">
+          <mat-datepicker-toggle matSuffix [for]="newEntryPicker">
+            <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker touchUi #newEntryPicker></mat-datepicker>
+        </mat-form-field>
+        <div class="flex items-center justify-center">
+          <div class="text-base">
+            {{totalAmount | number:'0.2-2'}}
+          </div>
+          <div class="ml-2 text-gray-700 text-xs">
+            CHF
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center items-center shadow h-full">
+      <div class="flex justify-start items-center w-full h-full">
+        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onAddNewEntryItem()">
+          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add">
+          <span>Ajouter entrée</span>
+        </div>
+        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onSaveNewEntry()">
+          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_save.png" alt="Save">
+          <span>Enregistrer</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="flex justify-center items-center shadow h-full">
-    <div class="flex justify-start items-center w-full h-full">
-      <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onAddNewEntryItem()">
-        <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add">
-        <span>Ajouter entrée</span>
+  <div class="flex flex-col bg-gray-200 mt-1 overflow-y-auto pb-6 h-full">
+    <ng-scrollbar>
+      <div *ngFor="let item of newEntryItems; let itemIndex = index"
+        class="bg-white flex items-center justify-between my-1 ng-star-inserted px-2 py-2 shadow w-full">
+        <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddCategories' [dataSource]='categoryList$ | async'
+          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
+          (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
+        </ejs-dropdownlist>
+        <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
+          <input [ngModel]="item.amount" (ngModelChange)="onNewEntryItemAmountChange(item, $event)" inputmode="numeric"
+            type="number"
+            class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right"
+            type="text" placeholder="Montant" aria-label="Amount">
+        </div>
+        <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties"
+          (click)="onRemoveNewEntryItem(itemIndex)">
       </div>
-      <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onSaveNewEntry()">
-        <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_save.png" alt="Save">
-        <span>Enregistrer</span>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="flex flex-col bg-gray-200 mt-1 overflow-y-auto pb-6" style="height: 70%;">
-  <div *ngFor="let item of newEntryItems; let itemIndex = index"
-    class="bg-white flex items-center justify-between my-1 ng-star-inserted px-2 py-2 shadow w-full">
-    <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddCategories' [dataSource]='categoryList$ | async'
-      style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
-      (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
-    </ejs-dropdownlist>
-    <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
-      <input [ngModel]="item.amount" (ngModelChange)="onNewEntryItemAmountChange(item, $event)" inputmode="numeric"
-        type="number"
-        class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right"
-        type="text" placeholder="Montant" aria-label="Amount">
-    </div>
-    <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties"
-      (click)="onRemoveNewEntryItem(itemIndex)">
+    </ng-scrollbar>
   </div>
 </div>
