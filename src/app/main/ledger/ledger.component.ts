@@ -448,6 +448,10 @@ export class LedgerComponent implements OnInit {
     }
   }
 
+  onSelectEntry(entry: Entry) {
+    this.router.navigate(['../edit-mobile'], { relativeTo: this.route, queryParams: { entryId: entry.id } });
+  }
+
   onEditAddressChange(args: any) {
     const newAddress: Address = args.itemData;
     this.editEntryAddress = newAddress;

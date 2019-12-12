@@ -217,7 +217,8 @@
     <table class="table-auto w-full text-sm">
       <tbody>
         <tr class="border-b-2 border-white" [class.bg-red-200]="entry.inout === 1"
-          [class.bg-green-200]="entry.inout === -1" *ngFor="let entry of (entries | async) | entrySearch:searchText">
+          [class.bg-green-200]="entry.inout === -1" *ngFor="let entry of (entries | async) | entrySearch:searchText"
+          (click)="onSelectEntry(entry)">
           <td class="px-4 py-2">{{entry.pieceNo}}</td>
           <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
           <td class="px-4 py-2">{{entry.address.name}}</td>

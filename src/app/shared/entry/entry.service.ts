@@ -63,7 +63,7 @@ export class EntryService {
   }
 
   getEntry(id: string): Observable<Entry> {
-    return this.httpClient.get<Entry>(`${Config.apiURL}entry/${id}`);
+    return this.httpClient.get<Entry>(`${Config.apiURL}entry/${id}?populate=address,client,drawer,entryitems.category`);
   }
 
   getPieceNo(): Observable<any> {
