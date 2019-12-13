@@ -64,15 +64,15 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col bg-gray-200 mt-1 overflow-y-auto pb-6 h-full">
+  <div class="flex flex-col bg-gray-200 mt-1 overflow-y-auto pb-6 h-full px-1">
     <ng-scrollbar>
       <div *ngFor="let item of newEntryItems; let itemIndex = index"
         class="bg-white flex items-center justify-between my-1 ng-star-inserted px-2 py-2 shadow w-full">
-        <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddCategories' [dataSource]='categoryList$ | async'
+        <ejs-dropdownlist *ngIf="item.category" class="w-1/2" id='ddCategories' [dataSource]='categoryList$ | async'
           style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
           (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
         </ejs-dropdownlist>
-        <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
+        <div class="border-b border-gray-500 flex items-center ml-2 w-1/2 mr-4">
           <input [ngModel]="item.amount" (ngModelChange)="onNewEntryItemAmountChange(item, $event)" inputmode="numeric"
             type="number"
             class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right"

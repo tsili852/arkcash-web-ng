@@ -81,7 +81,13 @@ export class AddMobileComponent implements OnInit {
     this.entryService.getPieceNo().subscribe((entryNumber) => {
       this.newEntryPieceNo = entryNumber.value + 1;
     });
+  }
 
+  ngOnInit(): void {
+    this.fetchAddressesAndCategories();
+  }
+
+  fetchAddressesAndCategories() {
     this.addressList$ = this.addressService.getAddresses(this.selectedMode === 1 ? '-1' : '1');
     this.addressList$.subscribe((addresses) => {
       this.addressList = addresses;
@@ -100,8 +106,6 @@ export class AddMobileComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
-
   onSelectMode(choice: number) {
     this.selectedMode = choice;
     if (choice === 1) {
@@ -109,6 +113,7 @@ export class AddMobileComponent implements OnInit {
     } else {
       this.newEntryInOut = '1';
     }
+    this.fetchAddressesAndCategories();
   }
 
   onNewAddressChange(args: any) {
