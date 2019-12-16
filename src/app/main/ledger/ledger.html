@@ -1,13 +1,13 @@
 <div class="flex flex-col h-full">
   <div class="flex flex-col md:hidden py-2 bg-gray-500 fixed w-full">
-    <div class="flex px-2">
-      <div class="text-sm">
+    <div class="flex px-2 pb-1">
+      <div class="text-gray-200 text-sm underline">
         {{connectedUser.name}}
       </div>
     </div>
     <div class="flex justify-between items-center">
       <div [ngClass]="selectedFilter === 0 ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'"
-        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded"
         (click)="onChooseFilter(0)">
         <img *ngIf="selectedFilter !== 0" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/all_gris.png"
           alt="Tous">
@@ -16,22 +16,22 @@
         <span>Tous</span>
       </div>
       <div [ngClass]="selectedFilter === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
-        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded"
         (click)="onChooseFilter(1)">
         <img *ngIf="selectedFilter !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
           alt="Entrees">
         <img *ngIf="selectedFilter === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
           alt="Entrees">
-        <span>Entrées</span>
+        <span>Entrée</span>
       </div>
       <div [ngClass]="selectedFilter === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
-        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg"
+        class="py-2 w-1/3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded"
         (click)="onChooseFilter(2)">
         <img *ngIf="selectedFilter !== 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
           alt="Sorties">
         <img *ngIf="selectedFilter === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
           alt="Sorties">
-        <span>Sorties</span>
+        <span>Sortie</span>
       </div>
     </div>
     <div class="flex justify-between items-center mt-1 px-2">
@@ -51,7 +51,7 @@
       </div>
       <div class="flex mt-2" *ngIf="(entriesTotal | async) as totalArray">
         <div *ngIf="totalArray[0]" [class.bg-green-600]="totalArray[0].total >= 0"
-          [class.bg-red-600]="totalArray[0].total < 0" class="shadow px-3 text-white rounded">
+          [class.bg-red-600]="totalArray[0].total < 0" class="shadow px-3 text-white rounded text-sm">
           {{totalArray[0].total | number:'0.2-2'}}
         </div>
       </div>
@@ -107,7 +107,7 @@
       </div>
       <div class="hidden lg:flex items-center">
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()"
+          <input readonly matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()"
             [(ngModel)]="searchTerms.dateFrom" (dateChange)="changeDateFrom($event)">
           <mat-datepicker-toggle matSuffix [for]="picker">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
@@ -118,7 +118,7 @@
           -
         </div>
         <mat-form-field>
-          <input matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()"
+          <input readonly matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()"
             [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)">
           <mat-datepicker-toggle matSuffix [for]="pickerTo">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
@@ -134,7 +134,7 @@
       </div>
       <div
         class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center ml-2 lg:ml-8 lg:w-64 w-72">
-        <input [(ngModel)]="searchText"
+        <input [(ngModel)]="searchText" (ngModelChange)="searchTextChange($event)"
           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           type="text" placeholder="Recherche" aria-label="Search">
         <img class="w-4 h-4" src="assets/images/search_black.png" alt="Search">
@@ -157,48 +157,48 @@
     </div>
   </div>
   <div class="table-container px-3 hidden md:block z-0">
-    <ejs-grid #grid [dataSource]="(entries | async) | entrySearch:searchText" [allowSorting]='true'
-      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
-      (rowDataBound)='rowDataBound($event)' [selectionSettings]='selectionOptions'>
+    <ejs-grid #grid [dataSource]="entriesObj" [allowSorting]='true' [allowFiltering]='true'
+      [enableVirtualization]='true' [locale]="'fr-CH'" height='700' (rowDataBound)='rowDataBound($event)'
+      [selectionSettings]='selectionOptions'>
       <e-columns>
         <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
-        <e-column headerText='Entree/Sortie' field="inout">
+        <e-column headerText='Entrée/Sortie' field="inout" width=140>
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
               <span id="Emptext">{{getEntryInOutText(entry)}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='No de piece'>
+        <e-column headerText='N° de pièce' field="pieceNo" width=140>
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
               <span>{{entry.pieceNo}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Date'>
+        <e-column headerText='Date' width=120 field="entryDate">
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
               <span id="Emptext">{{entry.entryDate | date:'dd.MM.yyyy'}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Adresse'>
+        <e-column headerText='Adresse' field="address.name">
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
               <span>{{entry.address.name}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Categorie' field="address.category.name">
+        <e-column headerText='Catégorie' field="address.category.name">
           <ng-template #template let-entry>
             <div class="flex flex-col" (click)="onRowClick(entry)">
-              <span class="font-bold border-b border-gray-600" *ngIf="entry.entryitems.length > 1">total</span>
-              <span *ngFor="let item of entry.entryitems">{{item.category.name}}</span>
+              <span class="font-bold border-b border-gray-600" *ngIf="entry.entryitems.length > 1">Total</span>
+              <span *ngFor="let item of entry.entryitems">{{item.category ? item.category.name : ''}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Montant'>
+        <e-column headerText='Montant' textAlign='Right' field="totalAmount">
           <ng-template #template let-entry>
             <div class="flex flex-col text-right" (click)="onRowClick(entry)">
               <span *ngIf="entry.entryitems.length > 1"
@@ -213,17 +213,16 @@
       </e-columns>
     </ejs-grid>
   </div>
-  <div class="table-container block md:hidden" style="margin-top: 7.1rem;">
+  <div class="table-container block md:hidden" style="margin-top: 7.4rem;">
     <table class="table-auto w-full text-sm">
       <tbody>
         <tr class="border-b-2 border-white" [class.bg-red-200]="entry.inout === 1"
           [class.bg-green-200]="entry.inout === -1" *ngFor="let entry of (entries | async) | entrySearch:searchText"
           (click)="onSelectEntry(entry)">
-          <td class="px-4 py-2">{{entry.pieceNo}}</td>
+          <!-- <td class="px-4 py-2">{{entry.pieceNo}}</td> -->
           <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
           <td class="px-4 py-2">{{entry.address.name}}</td>
-          <!-- <td class="px-4 py-2">{{entry.address.category.name}}</td> -->
-          <td class="px-4 py-2">{{entry.totalAmount | number:'0.2-2'}}</td>
+          <td class="px-4 py-2 text-right">{{entry.totalAmount | number:'0.2-2'}}</td>
         </tr>
       </tbody>
     </table>
@@ -235,7 +234,7 @@
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
   <div class="absolute w-88 h-88 bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-4">
     <mat-form-field>
-      <input matInput [matDatepicker]="pickerModal" placeholder="Date du" (focus)="pickerModal.open()"
+      <input matInput readonly [matDatepicker]="pickerModal" placeholder="Date du" (focus)="pickerModal.open()"
         [(ngModel)]="searchTerms.dateFrom">
       <mat-datepicker-toggle matSuffix [for]="pickerModal">
         <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
@@ -243,14 +242,14 @@
       <mat-datepicker #pickerModal></mat-datepicker>
     </mat-form-field>
     <mat-form-field>
-      <input matInput [matDatepicker]="pickerToModal" placeholder="Date à" (focus)="pickerToModal.open()"
+      <input matInput readonly [matDatepicker]="pickerToModal" placeholder="Date à" (focus)="pickerToModal.open()"
         [(ngModel)]="searchTerms.dateTo">
       <mat-datepicker-toggle matSuffix [for]="pickerToModal">
         <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
       </mat-datepicker-toggle>
       <mat-datepicker #pickerToModal></mat-datepicker>
     </mat-form-field>
-    <div class="flex ml-6">
+    <div class="flex self-start" style="margin-left: 3.3rem;">
       <label class="flex items-center">
         <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox">
         <span class="ml-2">Exportees</span>
@@ -294,10 +293,11 @@
     </div>
     <div class="flex w-full items-center justify-start mt-4 text-sm">
       <ejs-dropdownlist *ngIf="newEntryAddress" class="ml-2 w-56" id='ddAddresses' [dataSource]='addressList'
-        [fields]="addressListFields" [(value)]="newEntryAddress.id" placeholder="Adresse">
+        [fields]="addressListFields" [value]="newEntryAddress.id" (change)="onNewAddressChange($event)"
+        placeholder="Adresse">
       </ejs-dropdownlist>
       <mat-form-field class="ml-6" style="padding-top: 6px">
-        <input matInput [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
+        <input matInput readonly [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
           [(ngModel)]="newEntryDate">
         <mat-datepicker-toggle matSuffix [for]="newEntryPicker">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
@@ -310,7 +310,7 @@
       <div *ngFor="let item of newEntryItems; let itemIndex = index"
         class="flex justify-between items-center w-full px-2 my-2">
         <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddCategories' [dataSource]='categoryList$ | async'
-          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
+          style="margin-top: 1px;" [fields]="categoryListFields" [value]="item.category.id"
           (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
         </ejs-dropdownlist>
         <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
@@ -356,21 +356,21 @@
       <div *ngIf="editEntryInOut === -1"
         class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow rounded-lg bg-green-600 text-white">
         <img class="w-6 h-auto" src="assets/images/entrees.png" alt="Entrees">
-        <span class="ml-2">Entrées</span>
+        <span class="ml-2">Entrée</span>
       </div>
       <div *ngIf="editEntryInOut === 1"
         class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow rounded-lg bg-red-600 text-white">
         <img class="w-6 h-auto" src="assets/images/sorties.png" alt="Entrees">
-        <span class="ml-2">Sorties</span>
+        <span class="ml-2">Sortie</span>
       </div>
     </div>
     <div class="flex w-full items-center justify-start mt-4 text-sm">
-      <ejs-dropdownlist *ngIf="editEntryAddress" class="ml-2 w-56" id='ddEntryAddresses' [dataSource]='addressList'
-        [fields]="addressListFields" [(value)]="editEntryAddress.id" (change)="onEditAddressChange($event)"
-        placeholder="Adresse">
+      <ejs-dropdownlist *ngIf="editEntryAddress" class="ml-2 w-56" id='ddEntryAddresses'
+        [dataSource]='addressList$ | async' [fields]="addressListFields" [(value)]="editEntryAddress.id"
+        (change)="onEditAddressChange($event)" placeholder="Adresse">
       </ejs-dropdownlist>
       <mat-form-field class="ml-6" style="padding-top: 6px">
-        <input matInput [matDatepicker]="editEntryPicker" placeholder="Date" (focus)="editEntryPicker.open()"
+        <input matInput readonly [matDatepicker]="editEntryPicker" placeholder="Date" (focus)="editEntryPicker.open()"
           [(ngModel)]="editEntryDate">
         <mat-datepicker-toggle matSuffix [for]="editEntryPicker">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
@@ -383,7 +383,8 @@
       <div *ngFor="let item of editEntryItems; let itemIndex = index"
         class="flex justify-between items-center w-full px-2 my-2">
         <ejs-dropdownlist *ngIf="item.category" class="w-56" id='ddEditCategories' [dataSource]='categoryList$ | async'
-          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id" placeholder="Catégorie">
+          style="margin-top: 1px;" [fields]="categoryListFields" [value]="item.category.id"
+          (change)="onChangeItemEditCategory($event, itemIndex)" placeholder="Catégorie">
         </ejs-dropdownlist>
         <div class="border-b border-gray-500 flex items-center ml-2 w-48 mr-4">
           <input [ngModel]="item.amount" (ngModelChange)="onEditEntryItemAmountChange(item, $event)" inputmode="numeric"

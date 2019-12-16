@@ -15,6 +15,7 @@ import { Address, AddressService } from '../../shared/address';
 import { Category, CategoryService } from '../../shared/category';
 import { GlobalService } from '../../shared/global.service';
 import { User, AuthenticationService } from '../../shared/authentication';
+import { EntrySearchPipe } from '../../utils/pipes';
 
 setCulture('fr-CH');
 
@@ -42,6 +43,7 @@ export class LedgerComponent implements OnInit {
 
   entries: Observable<Entry[]>;
   entriesObj: Entry[];
+  initialEntriesObj: Entry[];
   entriesTotal: Observable<number>;
   totalEntries: Observable<any>;
   skipEntries = 0;
@@ -110,7 +112,8 @@ export class LedgerComponent implements OnInit {
     private readonly datePipe: DatePipe,
     private readonly globalService: GlobalService,
     private readonly route: ActivatedRoute,
-    private readonly authenticationService: AuthenticationService
+    private readonly authenticationService: AuthenticationService,
+    private readonly entryPipe: EntrySearchPipe
   ) {
     this.selectionOptions = { checkboxOnly: true };
 
@@ -144,7 +147,13 @@ export class LedgerComponent implements OnInit {
 
     const storedInOut = localStorage.getItem('inout');
     if (storedInOut) {
-      this.selectedFilter = +storedInOut;
+      if (storedInOut === '') {
+        this.selectedFilter = 0;
+      } else if (storedInOut === '-1') {
+        this.selectedFilter = 1;
+      } else {
+        this.selectedFilter = 2;
+      }
       this.inoutParameter = storedInOut;
     }
   }
@@ -164,10 +173,16 @@ export class LedgerComponent implements OnInit {
 
     this.entries.subscribe((entries: Entry[]) => {
       this.entriesObj = entries;
+      this.initialEntriesObj = entries;
       this.entriesCount = entries.length;
     });
 
     this.entriesTotal = this.entryService.getEntriesTotal();
+  }
+
+  searchTextChange(changedText: string) {
+    this.entriesObj = this.initialEntriesObj;
+    this.entriesObj = this.entryPipe.transform(this.entriesObj, changedText);
   }
 
   onChooseFilter(selection: number) {
@@ -186,6 +201,7 @@ export class LedgerComponent implements OnInit {
         break;
       }
     }
+    localStorage.setItem('inout', this.inoutParameter.toString());
 
     this.fetchEntries();
   }
@@ -268,41 +284,39 @@ export class LedgerComponent implements OnInit {
       this.newEntryPieceNo = entryNumber.value + 1;
     });
 
-    this.addressList$ = this.addressService.getAddresses(this.newEntryInOut === 1 ? '-1' : '1');
-    this.addressList$.subscribe((addresses) => {
+    this.addressService.getAddresses(this.newEntryInOut === 1 ? '-1' : '1').subscribe((addresses) => {
       this.addressList = addresses;
       this.newEntryAddress = addresses[0];
-    });
 
-    this.categoryList$ = this.categoryService.getCategories(this.newEntryInOut === 1 ? '-1' : '1');
-    this.categoryList$.subscribe((categories) => {
-      this.categoryList = categories;
-      this.newEntryItems = [
-        {
-          amount: '',
-          category: this.categoryList[0]
-        }
-      ];
+      this.categoryList$ = this.categoryService.getCategories(this.newEntryInOut === 1 ? '-1' : '1');
+      this.categoryList$.subscribe((categories) => {
+        this.categoryList = categories;
+        this.newEntryItems = [
+          {
+            amount: '',
+            category: this.newEntryAddress.category
+          }
+        ];
+      });
     });
   }
 
   onChangeNewEntryInOut(inOut: number) {
     this.newEntryInOut = inOut;
-    this.addressList$ = this.addressService.getAddresses(this.newEntryInOut === 1 ? '-1' : '1');
-    this.addressList$.subscribe((addresses) => {
+    this.addressService.getAddresses(this.newEntryInOut === 1 ? '-1' : '1').subscribe((addresses) => {
       this.addressList = addresses;
       this.newEntryAddress = addresses[0];
-    });
 
-    this.categoryList$ = this.categoryService.getCategories(this.newEntryInOut === 1 ? '-1' : '1');
-    this.categoryList$.subscribe((categories) => {
-      this.categoryList = categories;
-      this.newEntryItems = [
-        {
-          amount: '',
-          category: this.categoryList[0]
-        }
-      ];
+      this.categoryList$ = this.categoryService.getCategories(this.newEntryInOut === 1 ? '-1' : '1');
+      this.categoryList$.subscribe((categories) => {
+        this.categoryList = categories;
+        this.newEntryItems = [
+          {
+            amount: '',
+            category: this.newEntryAddress.category
+          }
+        ];
+      });
     });
   }
 
@@ -327,6 +341,11 @@ export class LedgerComponent implements OnInit {
   onChangeItemCategory(args: any, itemIndex: number) {
     const newCategory: Category = args.itemData;
     this.newEntryItems[itemIndex].category = newCategory;
+  }
+
+  onChangeItemEditCategory(args: any, itemIndex: number) {
+    const newCategory: Category = args.itemData;
+    this.editEntryItems[itemIndex].category = newCategory;
   }
 
   onRemoveNewEntryItem(itemIndex: number) {
@@ -405,7 +424,7 @@ export class LedgerComponent implements OnInit {
       this.newEntryErrors = true;
       setTimeout(() => {
         this.newEntryErrors = false;
-      }, 3000);
+      }, 4000);
     }
   }
 
@@ -414,37 +433,31 @@ export class LedgerComponent implements OnInit {
       this.selectedEditEntry = argEntry;
       this.editEntryInOut = this.selectedEditEntry.inout;
       this.editEntryDate = this.selectedEditEntry.entryDate;
-
-      this.addressList$ = this.addressService.getAddresses(this.selectedEditEntry.inout.toString());
-      this.addressList$.subscribe((addresses) => {
-        this.addressList = addresses;
-        this.editEntryAddress = addresses[0];
-      });
+      this.editEntryAddress = this.selectedEditEntry.address;
+      this.editEntryAddress.id = this.editEntryAddress._id;
 
       this.editEntryItems = new Array<{
         amount: string;
         category: Category;
       }>();
 
-      this.categoryList$ = this.categoryService.getCategories(this.selectedEditEntry.inout.toString());
-      this.categoryList$.subscribe((categories) => {
-        this.categoryList = categories;
-        this.selectedEditEntry.entryitems.forEach((item) => {
-          this.editEntryItems.push({
-            amount: item.amount.toString(),
-            category: item.category
-          });
-        });
-        this.recalculateEditEntryTotal();
-        // this.editEntryItems = [
-        //   {
-        //     amount: '',
-        //     category: this.categoryList[0]
-        //   }
-        // ];
-      });
+      this.addressList$ = this.addressService.getAddresses(this.selectedEditEntry.inout.toString());
+      this.addressList$.subscribe((addresses) => {
+        this.addressList = addresses;
 
-      this.showEditModal = true;
+        this.categoryList$ = this.categoryService.getCategories(this.selectedEditEntry.inout.toString());
+        this.categoryList$.subscribe((categories) => {
+          this.categoryList = categories;
+          this.selectedEditEntry.entryitems.forEach((item) => {
+            this.editEntryItems.push({
+              amount: item.amount.toString(),
+              category: item.category
+            });
+          });
+          this.recalculateEditEntryTotal();
+          this.showEditModal = true;
+        });
+      });
     }
   }
 
@@ -454,8 +467,8 @@ export class LedgerComponent implements OnInit {
 
   onEditAddressChange(args: any) {
     const newAddress: Address = args.itemData;
-    this.editEntryAddress = newAddress;
     if (newAddress && newAddress.category) {
+      this.editEntryAddress = newAddress;
       const addressCategory = newAddress.category;
       this.selectedEditAddressCategory = addressCategory;
       this.editEntryItems.map((item) => (addressCategory ? (item.category = addressCategory) : (item.category = this.categoryList[0])));

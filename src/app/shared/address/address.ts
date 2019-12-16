@@ -9,4 +9,5 @@ export interface Address {
   category: Category;
   inout: number;
   accNo: number;
+  _id?: string;
 }

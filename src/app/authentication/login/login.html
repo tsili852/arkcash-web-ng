@@ -6,23 +6,24 @@
         LOGIN
       </div>
       <div class="relative my-4 border-b border-navy label-floating md:w-88 w-64">
-        <input class="w-full py-2 px-3 text-navy leading-normal outline-none" id="email" type="text"
-          placeholder="Username" [(ngModel)]="user.username">
+        <input class="w-full py-2 px-3 text-navy leading-normal outline-none lowercase" id="email" type="text"
+          placeholder="Nom d'utilisateur" [(ngModel)]="user.username">
       </div>
       <div class="relative my-4 border-b border-navy label-floating md:w-88 w-64">
-        <input (keyup.enter)="onLogin()" class="w-full py-2 px-3 text-navy leading-normal outline-none" id="password" type="password"
-          placeholder="Password" [(ngModel)]="user.password">
+        <input (keyup.enter)="onLogin()" class="w-full py-2 px-3 text-navy leading-normal outline-none" id="password"
+          type="password" placeholder="mot de passe" [(ngModel)]="user.password">
       </div>
-      <button (keyup.enter)="onLogin()" class="mt-4 bg-transparent text-navy py-4 px-8 text-navy border border-navy focus:outline-none rounded-xl shadow hover:shadow-md"
+      <button (keyup.enter)="onLogin()"
+        class="mt-4 bg-transparent text-navy py-4 px-8 text-navy border border-navy focus:outline-none rounded-xl shadow hover:shadow-md"
         (click)="onLogin()">
         Login
       </button>
-      <a class="text-navy-darker cursor-pointer underline text-xs mt-3">
+      <!-- <a class="text-navy-darker cursor-pointer underline text-xs mt-3">
         Forgot Password
-      </a>
+      </a> -->
       <div *ngIf="loginError || usernameWrong || usernamePasswordEmpty"
         class="error-container py-3 rounded-lg text-red-700 px-5 mt-6 border-2 border-red-700 text-sm">
-        Username or Password wrong
+        Nom d'utilisateur ou mot de passe incorrect
       </div>
     </div>
   </div>

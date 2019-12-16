@@ -1,4 +1,4 @@
-<nav class="bg-gray-300 px-2 py-2 shadow hidden md:block">
+<nav class="bg-gray-300 px-2 py-2 shadow hidden md:block" style="height: 6%;">
   <div class="flex justify-between items-center">
     <div class="breadcrumbs flex items-center">
       <div class="text-lg">
@@ -158,15 +158,15 @@
     </tbody>
   </table>
 </div>
-<div class="hidden md:flex flex-row w-full" style="height: 95%;">
+<div class="hidden md:flex flex-row w-full" style="height: 94%;">
   <div class="flex sidebar w-2/12 bg-gray-700 flex-col justify-start items-center">
     <div [ngClass]="selectedMode === 1 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base text-white flex justify-center items-center py-3 px-3 mt-10 w-full cursor-pointer"
+      class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 mt-10 w-full cursor-pointer"
       (click)="onSelectMode(1)">
       <div>Saisie adresses entrées</div>
     </div>
     <div [ngClass]="selectedMode === 2 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
+      class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
       (click)="onSelectMode(2)">
       <div>Saisie adresses sorties</div>
     </div>
@@ -174,12 +174,12 @@
     </div>
     <div *ngIf="logedinUser.isAdmin"
       [ngClass]="selectedMode === 3 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
+      class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
       (click)="onSelectMode(3)">
       <div>Consultation categories entrées</div>
     </div>
     <div *ngIf="logedinUser.isAdmin" [ngClass]="selectedMode === 4 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
-      class="text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
+      class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
       (click)="onSelectMode(4)">
       <div>Consultation categories sorties</div>
     </div>
@@ -188,7 +188,7 @@
     <div class="flex flex-col pt-1 md:pt-8 px-2" *ngIf="selectedMode === 1 || selectedMode === 2">
       <div class="flex justify-between items-center py-2 px-2 md:px-10">
         <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-72 md:w-3/12">
-          <input [(ngModel)]="searchTextAddresses"
+          <input [(ngModel)]="searchTextAddresses" (ngModelChange)="searchTextChange($event)"
             class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-500 text-gray-600"
             type="text" placeholder="Recherche" aria-label="Search">
         </div>
@@ -197,11 +197,11 @@
         </div>
       </div>
       <div class="table-container mt-3">
-        <ejs-grid #grid [dataSource]="(addresses$ | async) | addressSearch:searchTextAddresses" [allowSorting]='true'
-          [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
-          (rowDataBound)='rowDataBound($event)' [selectionSettings]='selectionOptions'>
+        <ejs-grid #grid [dataSource]="addressesList" [allowSorting]='true' [allowFiltering]='true'
+          [enableVirtualization]='true' [locale]="'fr-CH'" height='600' (rowDataBound)='rowDataBound($event)'
+          [selectionSettings]='selectionOptions'>
           <e-columns>
-            <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
+            <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
             <e-column headerText='Adresse'>
               <ng-template #template let-address>
                 <div (click)="onRowClick(address)">
@@ -223,7 +223,7 @@
     <div class="flex flex-col pt-1 md:pt-8 px-2" *ngIf="selectedMode === 3 || selectedMode === 4">
       <div class="flex justify-between items-center py-2 px-2 md:px-10">
         <div class="border-b border-b-2 hover:border-gray-500 flex items-center ml-2 w-72 md:w-3/12">
-          <input [(ngModel)]="searchTextCategories"
+          <input [(ngModel)]="searchTextCategories" (ngModelChange)="searchCategoryTextChange($event)"
             class="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-500 text-gray-600"
             type="text" placeholder="Recherche" aria-label="Search">
         </div>
@@ -232,11 +232,11 @@
         </div>
       </div>
       <div class="table-container mt-3">
-        <ejs-grid #grid [dataSource]="(categories$ | async) | categorySearch:searchTextCategories" [allowSorting]='true'
-          [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
-          (rowDataBound)='rowDataBoundCategory($event)' [selectionSettings]='selectionOptions'>
+        <ejs-grid #grid [dataSource]="categoriesList" [allowSorting]='true' [allowFiltering]='true'
+          [enableVirtualization]='true' [locale]="'fr-CH'" height='750' (rowDataBound)='rowDataBoundCategory($event)'
+          [selectionSettings]='selectionOptions'>
           <e-columns>
-            <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
+            <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
             <e-column headerText='Catégorie'>
               <ng-template #template let-category>
                 <div (click)="onRowClickCategory(category)">
@@ -274,7 +274,7 @@
       <div class="text-gray-600">Catégorie</div>
       <ejs-dropdownlist *ngIf="selectedEditAddress.category" class="w-80" id='ddEditCategories'
         [dataSource]='categories$ | async' style="margin-top: 1px;" [fields]="categoryListFields"
-        [(value)]="selectedEditAddress.category.id" placeholder="Catégorie">
+        [(value)]="selectedEditAddressCategory.id" placeholder="Catégorie">
       </ejs-dropdownlist>
     </div>
     <div *ngIf="editAddressErrors" class="bg-transparent border border-red-600 p-3 rounded-xl mt-12">
@@ -318,7 +318,7 @@
 <div [class.opacity-100]="showAddModal" [class.pointer-events-auto]="showAddModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
-  <div *ngIf="newAddress" [ngClass]="addAddressInout === 1 ? 'border-green-500' : 'border-red-500'"
+  <div *ngIf="newAddress" [ngClass]="selectedMode === 1 ? 'border-green-500' : 'border-red-500'"
     class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
     <div class="flex flex-col">
       <div class="text-gray-600">Adresse</div>

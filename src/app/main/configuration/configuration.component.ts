@@ -7,6 +7,7 @@ import { Address, AddressService } from '../../shared/address';
 import { Category, CategoryService } from '../../shared/category';
 import { L10n, setCulture } from '@syncfusion/ej2-base';
 import { GridComponent, SelectionSettingsModel } from '@syncfusion/ej2-angular-grids';
+import { AddressSearchPipe, CategorySearchPipe } from '../../utils/pipes';
 
 setCulture('fr-CH');
 
@@ -33,8 +34,11 @@ export class ConfigurationComponent implements OnInit {
   searchTextAddresses = '';
   searchTextCategories = '';
   addresses$: Observable<Address[]>;
+  initialAddressesList: Address[];
+  addressesList: Address[];
   categories$: Observable<Category[]>;
   categoriesList: Category[];
+  initialCategoriesList: Category[];
   addressesCount = 0;
   categoriesCount = 0;
 
@@ -72,7 +76,9 @@ export class ConfigurationComponent implements OnInit {
     private readonly categoryService: CategoryService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly authenticationService: AuthenticationService
+    private readonly authenticationService: AuthenticationService,
+    private readonly addressPipe: AddressSearchPipe,
+    private readonly categoryPipe: CategorySearchPipe
   ) {
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
@@ -107,16 +113,21 @@ export class ConfigurationComponent implements OnInit {
     this.addresses$ = this.addressService.getAddresses(this.selectedInOut.toString());
     this.addresses$.subscribe((addresses) => {
       this.addressesCount = addresses.length;
+      this.addressesList = addresses;
+      this.initialAddressesList = addresses;
     });
     this.categories$ = this.categoryService.getCategories(this.selectedInOut.toString());
     this.categories$.subscribe((categories) => {
       this.categoriesList = categories;
+      this.initialCategoriesList = categories;
       this.categoriesCount = categories.length;
     });
   }
 
   onSelectMode(mode: number) {
     this.selectedMode = mode;
+    this.searchTextAddresses = '';
+    this.searchTextCategories = '';
     if (mode === 1 || mode === 3) {
       this.selectedInOut = -1;
     } else {
@@ -124,6 +135,16 @@ export class ConfigurationComponent implements OnInit {
     }
     this.addAddressInout = mode;
     this.fetchAddresses();
+  }
+
+  searchTextChange(changedText: string) {
+    this.addressesList = this.initialAddressesList;
+    this.addressesList = this.addressPipe.transform(this.addressesList, changedText);
+  }
+
+  searchCategoryTextChange(changedText: string) {
+    this.categoriesList = this.initialCategoriesList;
+    this.categoriesList = this.categoryPipe.transform(this.categoriesList, changedText);
   }
 
   rowDataBound(args: any) {
@@ -146,21 +167,46 @@ export class ConfigurationComponent implements OnInit {
 
   onRowClick(address: Address) {
     this.showEditModal = true;
-    this.selectedEditAddress = address;
-    this.selectedEditAddressCategory = address.category;
+    this.selectedEditAddress = {
+      id: address.id,
+      name: address.name,
+      accNo: address.accNo,
+      category: address.category,
+      client: address.client,
+      inout: address.inout,
+      createdAt: address.createdAt,
+      updateAt: address.updateAt
+    };
+    this.selectedEditAddressCategory = {
+      accNo: address.category.accNo,
+      client: address.category.client,
+      createdAt: null,
+      id: address.category.id,
+      inout: address.category.inout,
+      name: address.category.name,
+      updatedAt: null
+    };
     this.deleteOldAddressConfirm = false;
   }
 
   onRowClickCategory(category: Category) {
     this.showEditCategoryModal = true;
-    this.selectedEditCategory = category;
+    this.selectedEditCategory = {
+      accNo: category.accNo,
+      client: category.client,
+      createdAt: null,
+      id: category.id,
+      inout: category.inout,
+      name: category.name,
+      updatedAt: null
+    };
     this.deleteOldCategoryConfirm = false;
   }
 
   onEditChangeAddressCategory(args: any) {
     const selectedCategory = args.itemData;
     if (selectedCategory) {
-      this.selectedEditAddress.category = selectedCategory;
+      this.selectedEditAddressCategory = selectedCategory;
     }
   }
 
@@ -175,9 +221,10 @@ export class ConfigurationComponent implements OnInit {
   onSaveEditAddress() {
     if (this.selectedEditAddress.name.trim().length > 0) {
       const addressToUpdate = {
-        category: this.selectedEditAddress.category.id,
+        category: this.selectedEditAddressCategory.id,
         name: this.selectedEditAddress.name,
-        id: this.selectedEditAddress.id
+        id: this.selectedEditAddress.id,
+        updateAt: new Date()
       };
 
       this.addressService.updateAddress(addressToUpdate).subscribe(
@@ -234,6 +281,7 @@ export class ConfigurationComponent implements OnInit {
 
   onSaveAddAddress() {
     if (this.newAddress.name.trim().length > 0) {
+      this.showAddModal = false;
       const addressToInsert = {
         category: this.newAddress.category.id,
         name: this.newAddress.name,
@@ -246,7 +294,6 @@ export class ConfigurationComponent implements OnInit {
       this.addressService.addNewAddress(addressToInsert).subscribe(
         (returnAddress) => {
           console.log(returnAddress);
-          this.showAddModal = false;
           setTimeout(() => {
             this.fetchAddresses();
           }, 100);
@@ -265,16 +312,16 @@ export class ConfigurationComponent implements OnInit {
 
   onSaveEditCategory() {
     if (this.selectedEditCategory.name.trim().length > 0) {
+      this.showEditCategoryModal = false;
       const categoryToUpdate = {
         name: this.selectedEditCategory.name,
         accNo: this.selectedEditCategory.accNo,
-        id: this.selectedEditCategory.id
+        id: this.selectedEditCategory.id,
+        updateAt: new Date()
       };
 
       this.categoryService.updateCategory(categoryToUpdate).subscribe(
         () => {
-          this.showEditCategoryModal = false;
-
           setTimeout(() => {
             this.fetchAddresses();
           }, 100);
@@ -324,6 +371,7 @@ export class ConfigurationComponent implements OnInit {
 
   onSaveAddCategory() {
     if (this.newCategory.name.trim().length > 0) {
+      this.showAddCategoryModal = false;
       const categoryToInsert = {
         name: this.newCategory.name,
         accNo: this.newCategory.accNo,
@@ -334,7 +382,6 @@ export class ConfigurationComponent implements OnInit {
 
       this.categoryService.addNewCategory(categoryToInsert).subscribe(
         (returnAddress) => {
-          this.showAddCategoryModal = false;
           setTimeout(() => {
             this.fetchAddresses();
           }, 100);

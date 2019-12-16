@@ -26,7 +26,7 @@
     </div>
     <div class="flex flex-col pt-4 px-4">
       <ejs-dropdownlist *ngIf="editEntryAddress" class="w-full" id='ddAddresses' [dataSource]='addressList'
-        [fields]="addressListFields" [(value)]="editEntryAddress.id" placeholder="Adresse"
+        [fields]="addressListFields" [value]="editEntryAddress.id" placeholder="Adresse"
         (change)="onEditAddressChange($event)">
       </ejs-dropdownlist>
       <div class="flex items-center justify-between my-2">
@@ -64,12 +64,12 @@
       <div *ngFor="let item of editEntryItems; let itemIndex = index"
         class="bg-white flex items-center justify-between my-1 ng-star-inserted px-4 py-2 shadow w-full">
         <ejs-dropdownlist *ngIf="item.category" class="w-1/2" id='ddCategories' [dataSource]='categoryList$ | async'
-          style="margin-top: 1px;" [fields]="categoryListFields" [(value)]="item.category.id"
+          style="margin-top: 1px;" [fields]="categoryListFields" [value]="item.category.id"
           (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
         </ejs-dropdownlist>
         <div class="border-b border-gray-500 flex items-center ml-2 w-1/2 mr-4">
           <input [ngModel]="item.amount" (ngModelChange)="onEditEntryItemAmountChange(item, $event)" inputmode="numeric"
-            type="number"
+            type="number" (mouseup)="$event.target.select()"
             class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right"
             type="text" placeholder="Montant" aria-label="Amount">
         </div>

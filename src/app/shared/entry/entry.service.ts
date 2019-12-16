@@ -15,7 +15,7 @@ export class EntryService {
     let amountTo;
 
     if (searchTerms.amountTo === 0.0) {
-      amountTo = 999999;
+      amountTo = 999999999;
     } else {
       amountTo = searchTerms.amountTo;
     }

@@ -74,7 +74,7 @@ export class AddMobileComponent implements OnInit {
 
     const storedInOut = localStorage.getItem('inout');
     if (storedInOut) {
-      this.selectedMode = +storedInOut;
+      this.selectedMode = +storedInOut === -1 ? 1 : 2;
       this.newEntryInOut = storedInOut;
     }
 

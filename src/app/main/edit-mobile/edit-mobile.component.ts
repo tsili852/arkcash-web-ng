@@ -62,6 +62,9 @@ export class EditMobileComponent implements OnInit {
           this.editEntryItems = this.editEntry.entryitems;
           this.editEntryAddress = this.editEntry.address;
           this.totalAmount = this.editEntry.totalAmount;
+          if (!this.totalAmount || this.totalAmount === 0) {
+            this.recalculateNewEntryTotal();
+          }
           const storedInOut = this.editEntry.inout === -1 ? 1 : 2;
           if (storedInOut) {
             this.selectedMode = storedInOut;
