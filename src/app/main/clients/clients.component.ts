@@ -41,6 +41,7 @@ export class ClientsComponent implements OnInit {
   }[];
 
   showAddModal = false;
+  showAddModalMobile = false;
   usersListFields = { text: 'name', value: 'id' };
   userToCopyCategories: User;
   categoriesToCopy: Category[];
@@ -50,6 +51,7 @@ export class ClientsComponent implements OnInit {
   newDateMinimum: Date = new Date();
 
   showEditModal = false;
+  showEditModalMobile = false;
   editUser: User;
   editUserError = false;
   deleteUserConfirm = false;
@@ -121,6 +123,27 @@ export class ClientsComponent implements OnInit {
     this.showAddModal = true;
   }
 
+  onAddMobile() {
+    this.newUser = {
+      accNo: null,
+      id: '',
+      isActive: true,
+      isAdmin: false,
+      lastExport: null,
+      lastLoginOn: null,
+      name: '',
+      password: '',
+      slug: '',
+      startDate: '',
+      username: '',
+      email: '',
+      phone: ''
+    };
+    this.addUserStartDate = new Date();
+    this.userToCopyCategories = this.usersList[0];
+    this.showAddModalMobile = true;
+  }
+
   onChangeClientToCopy(args: any) {
     this.userToCopyCategories = args.itemData;
     this.categoryService.getClientCategories(this.userToCopyCategories.id).subscribe((categories) => {
@@ -153,7 +176,11 @@ export class ClientsComponent implements OnInit {
                 this.categoriesToCopy.map((category) => (category.client = user.id));
                 this.categoryService.addCategories(this.categoriesToCopy);
 
-                this.showAddModal = false;
+                if (this.showAddModal) {
+                  this.showAddModal = false;
+                } else {
+                  this.showAddModalMobile = false;
+                }
                 this.fetchUsers();
               },
               (error) => {
@@ -181,6 +208,13 @@ export class ClientsComponent implements OnInit {
     this.showEditModal = true;
   }
 
+  onEditMobile(user: User) {
+    this.editUser = user;
+    this.editUser.password = '';
+    this.deleteUserConfirm = false;
+    this.showEditModalMobile = true;
+  }
+
   onSaveEditUser() {
     if (this.editUser.name.trim().length > 0 && this.editUser.username.trim().length > 0 && this.editUser.password.trim().length > 0) {
       const userToUpdate: any = {
@@ -197,7 +231,11 @@ export class ClientsComponent implements OnInit {
 
       this.authenticationService.updateUser(userToUpdate).subscribe(
         () => {
-          this.showEditModal = false;
+          if (this.showEditModal) {
+            this.showEditModal = false;
+          } else {
+            this.showEditModalMobile = false;
+          }
           this.fetchUsers();
         },
         (error) => {
@@ -218,7 +256,11 @@ export class ClientsComponent implements OnInit {
 
   onDeleteConfirmed() {
     this.authenticationService.deleteUser(this.editUser.id).subscribe(() => {
-      this.showEditModal = false;
+      if (this.showEditModal) {
+        this.showEditModal = false;
+      } else {
+        this.showEditModalMobile = false;
+      }
       this.fetchUsers();
     });
   }

@@ -19,16 +19,18 @@
       </div>
     </div>
   </nav>
-  <div class="flex justify-start items-center py-4 md:px-10 px-4">
+  <div class="flex justify-between items-center py-4 md:px-10 px-4">
     <div class="text-lg md:text-xl">
       12
     </div>
-    <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center ml-4 md:ml-8 lg:w-64 w-72">
+    <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center md:ml-8 lg:w-64 w-72">
       <input [(ngModel)]="searchText"
         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
         type="text" placeholder="Recherche" aria-label="Search">
       <img class="w-4 h-4" src="assets/images/search_black.png" alt="Search">
     </div>
+    <img class="w-8 h-auto cursor-pointer block md:hidden" src="assets/images/bt_add.png" alt="Add"
+      (click)="onAddMobile()">
   </div>
   <div class="table-container px-3 hidden lg:block z-0">
     <ejs-grid #grid [dataSource]="(users$ | async) | userSearch:searchText" [allowSorting]='true'
@@ -160,9 +162,10 @@
         <tr class="border-b-2 text-xs" *ngFor="let user of (users$ | async) | userSearch:searchText">
           <td class="px-4 py-2" (click)="onRowClick(user)">{{user.name}}</td>
           <td class="px-4 py-2" (click)="onRowClick(user)">{{user.startDate | date:'dd.MM.yyyy'}}</td>
-          <td class="px-4 py-2 text-right" (click)="onRowClick(user)">2000</td>
+          <td class="px-4 py-2 text-right" (click)="onRowClick(user)">{{getUserTotal(user.id) | number:'0.2-2':'de-CH'}}
+          </td>
           <td class="px-2">
-            <img class="w-4 h-4" src="assets/images/edit.png" alt="Edit">
+            <img class="w-6 h-auto" src="assets/images/edit.png" (click)="onEditMobile(user)" alt="Edit">
           </td>
         </tr>
       </tbody>
@@ -239,6 +242,70 @@
     </div>
   </div>
 </div>
+<div [class.opacity-100]="showAddModalMobile" [class.pointer-events-auto]="showAddModalMobile"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div *ngIf="newUser"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
+    <div class="flex flex-col justify-center items-start mt-2 text-sm">
+      <div [class.e-error]="newUser.name.trim().length === 0" class="e-float-input e-input-group mx-2">
+        <input [(ngModel)]="newUser.name" class="custom-input-mobile" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 12px; color: #464646;">Nom</label>
+      </div>
+      <div [class.e-error]="newUser.username.trim().length === 0" class="e-float-input e-input-group mx-2">
+        <input [(ngModel)]="newUser.username" class="custom-input-mobile" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 12px; color: #464646;">Nom d'utilisateur</label>
+      </div>
+      <div [class.e-error]="newUser.password.trim().length === 0" class="e-float-input e-input-group mx-2">
+        <input [(ngModel)]="newUser.password" class="custom-input-mobile" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 12px; color: #464646;">Mot de passe utilisateur</label>
+      </div>
+      <div class="e-float-input e-input-group mx-2" style="width: 14rem;">
+        <input [(ngModel)]="newUser.phone" class="custom-input-mobile" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 12px; color: #464646;">Téléphone</label>
+      </div>
+      <div class="e-float-input e-input-group mx-2" style="width: 15rem;">
+        <input [(ngModel)]="newUser.email" class="email-input-mobile" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 12px; color: #464646;">Adresse mail</label>
+      </div>
+      <mat-form-field class="ml-2 mt-5">
+        <input class="text-sm" matInput readonly [min]="newDateMinimum" [matDatepicker]="startDatePicker"
+          placeholder="Date de debut" (focus)="startDatePicker.open()" [(ngModel)]="addUserStartDate">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker">
+          <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+      <ejs-dropdownlist *ngIf="userToCopyCategories" class="w-72 ml-2" id='ddAddCategories'
+        [dataSource]='users$ | async' [fields]="usersListFields" [value]="userToCopyCategories.id" floatLabelType="Auto"
+        (change)="onChangeClientToCopy($event)" placeholder="Importer catégories de">
+      </ejs-dropdownlist>
+      <div class="e-float-input e-input-group mx-2" style="width: 11rem;">
+        <input [(ngModel)]="newUser.accNo" class="custom-input-mobile" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 15px; color: #464646;">No. de compte</label>
+      </div>
+    </div>
+    <div *ngIf="addUserError" class="bg-transparent border border-red-600 p-3 rounded-xl mt-2">
+      <span class="text-sm text-red-600">Veuillez remplir les champs requis</span>
+    </div>
+    <div class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveNewUser()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showAddModalMobile = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
+    </div>
+  </div>
+</div>
 <div [class.opacity-100]="showEditModal" [class.pointer-events-auto]="showEditModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
@@ -294,6 +361,77 @@
     </div>
     <div *ngIf="deleteUserConfirm"
       class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow">
+      <div class="text-xl">
+        Êtes-vous sûr ?
+      </div>
+      <div class="flex justify-center items-center mt-2">
+        <div
+          class="bg-red-500 border-gray-600 cursor-pointer flex items-center justify-center py-1 rounded shadow text-white w-12"
+          (click)="onDeleteConfirmed()">
+          Oui
+        </div>
+        <div
+          class="bg-gray-600 border-gray-600 cursor-pointer flex items-center justify-center ml-3 py-1 rounded shadow text-white w-12"
+          (click)="deleteUserConfirm = false">
+          No
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showEditModalMobile" [class.pointer-events-auto]="showEditModalMobile"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div *ngIf="editUser"
+    class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border-2">
+    <div class="flex flex-col justify-center items-start mt-2">
+      <div [class.e-error]="editUser.name.trim().length === 0" class="e-float-input e-input-group mx-2"
+        style="margin-top: 2rem;">
+        <input [(ngModel)]="editUser.name" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 15px; color: #464646;">Nom</label>
+      </div>
+      <div [class.e-error]="editUser.username.trim().length === 0" class="e-float-input e-input-group mx-2"
+        style="margin-top: 2rem;">
+        <input [(ngModel)]="editUser.username" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 15px; color: #464646;">Nom d'utilisateur</label>
+      </div>
+      <div class="e-float-input e-input-group mx-2" style="margin-top: 2rem;">
+        <input [(ngModel)]="editUser.password" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 15px; color: #464646;">Mot de passe utilisateur</label>
+      </div>
+      <div class="e-float-input e-input-group mx-2" style="margin-top: 2rem;">
+        <input [(ngModel)]="editUser.phone" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 15px; color: #464646;">Téléphone</label>
+      </div>
+      <div class="e-float-input e-input-group mx-2" style="width: 15rem; margin-top: 2rem;">
+        <input [(ngModel)]="editUser.email" class="email-input" type="text" required />
+        <span class="e-float-line"></span>
+        <label class="e-float-text" style="font-size: 15px; color: #464646;">Adresse mail</label>
+      </div>
+    </div>
+    <div *ngIf="editUserError" class="bg-transparent border border-red-600 p-3 rounded-xl mt-2">
+      <span class="text-sm text-red-600">Veuillez remplir les champs requis</span>
+    </div>
+    <div *ngIf="!deleteUserConfirm" class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onSaveEditUser()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-red-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="onDeleteUser()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showEditModalMobile = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
+    </div>
+    <div *ngIf="deleteUserConfirm"
+      class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow mt-2">
       <div class="text-xl">
         Êtes-vous sûr ?
       </div>

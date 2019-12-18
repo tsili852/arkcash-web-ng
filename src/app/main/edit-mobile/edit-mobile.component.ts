@@ -72,6 +72,17 @@ export class EditMobileComponent implements OnInit {
           }
 
           this.editEntryPieceNo = this.editEntry.pieceNo;
+
+          this.addressList$ = this.addressService.getAddresses(this.selectedMode === 1 ? '-1' : '1');
+          this.addressList$.subscribe((addresses) => {
+            this.addressList = addresses;
+            this.editEntryAddress = addresses[0];
+          });
+
+          this.categoryList$ = this.categoryService.getCategories(this.selectedMode === 1 ? '-1' : '1');
+          this.categoryList$.subscribe((categories) => {
+            this.categoryList = categories;
+          });
         });
       } else {
         this.router.navigate(['../ledger'], { relativeTo: this.route });
@@ -91,17 +102,6 @@ export class EditMobileComponent implements OnInit {
     }
 
     this.globalService.updateMenuItem(4);
-
-    this.addressList$ = this.addressService.getAddresses(this.selectedMode === 1 ? '-1' : '1');
-    this.addressList$.subscribe((addresses) => {
-      this.addressList = addresses;
-      this.editEntryAddress = addresses[0];
-    });
-
-    this.categoryList$ = this.categoryService.getCategories(this.selectedMode === 1 ? '-1' : '1');
-    this.categoryList$.subscribe((categories) => {
-      this.categoryList = categories;
-    });
   }
 
   ngOnInit(): void {}

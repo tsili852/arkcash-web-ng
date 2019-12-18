@@ -193,7 +193,7 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Catégorie' field="address.category.name">
+        <e-column headerText='Catégorie'>
           <ng-template #template let-entry>
             <div class="flex flex-col" (click)="onRowClick(entry)">
               <span class="font-bold border-b border-gray-600" *ngIf="entry.entryitems.length > 1">Total</span>
@@ -201,7 +201,7 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Montant' textAlign='Right' field="totalAmount">
+        <e-column headerText=' Montant' textAlign='Right' field="totalAmount">
           <ng-template #template let-entry>
             <div class="flex flex-col text-right" (click)="onRowClick(entry)">
               <span *ngIf="entry.entryitems.length > 1"
@@ -264,7 +264,7 @@
     </button>
     <button
       class="bg-transparent hover:bg-navy text-navy hover:text-white py-1 px-4 h-8 mt-4 border border-navy hover:border-transparent rounded w-24"
-      (click)="showSearchModal = false">
+      (click)="onCloseSearchModal()">
       Annuler
     </button>
   </div>

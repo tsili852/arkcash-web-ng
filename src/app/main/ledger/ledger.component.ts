@@ -237,6 +237,11 @@ export class LedgerComponent implements OnInit {
     this.showSearchModal = true;
   }
 
+  onCloseSearchModal() {
+    this.onResetFilters();
+    this.showSearchModal = false;
+  }
+
   onApplySearch() {
     this.searchTerms.exportees = this.exporteesChecked;
     this.showSearchModal = false;
@@ -253,6 +258,7 @@ export class LedgerComponent implements OnInit {
       exportees: false,
       text: ''
     };
+    this.exporteesChecked = false;
 
     this.fetchEntries();
   }

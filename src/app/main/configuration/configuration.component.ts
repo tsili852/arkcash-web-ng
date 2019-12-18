@@ -133,7 +133,7 @@ export class ConfigurationComponent implements OnInit {
     } else {
       this.selectedInOut = 1;
     }
-    this.addAddressInout = mode;
+    this.addAddressInout = this.selectedInOut;
     this.fetchAddresses();
   }
 
