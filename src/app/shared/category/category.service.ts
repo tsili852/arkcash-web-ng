@@ -25,6 +25,10 @@ export class CategoryService {
     return this.httpClient.get<Category>(`${Config.apiURL}category/${id}`);
   }
 
+  getClientCategories(clientId: string): Observable<Category[]> {
+    return this.httpClient.get<Category[]>(`${Config.apiURL}category?client=${clientId}`);
+  }
+
   getAllUsedCategories(): Observable<string[]> {
     const clientId = this.globalService.getSelectedUser().id;
     return this.httpClient.get<string[]>(`${Config.apiURL}category/distinct?client=${clientId}`);
@@ -32,6 +36,10 @@ export class CategoryService {
 
   addNewCategory(category: any): Observable<Category> {
     return this.httpClient.post<Category>(`${Config.apiURL}category`, category);
+  }
+
+  addCategories(categories: any): Observable<Category[]> {
+    return this.httpClient.post<Category[]>(`${Config.apiURL}category`, categories);
   }
 
   updateCategory(category: any): Observable<Category> {

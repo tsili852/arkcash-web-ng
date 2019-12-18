@@ -1,8 +1,11 @@
 <div class="flex flex-col h-full">
   <div class="flex flex-col md:hidden py-2 bg-gray-500 fixed w-full">
-    <div class="flex px-2 pb-1">
+    <div class="flex px-2 pb-1 justify-between px-3">
       <div class="text-gray-200 text-sm underline">
         {{connectedUser.name}}
+      </div>
+      <div class="text-gray-200 text-sm">
+        {{appVersion}}
       </div>
     </div>
     <div class="flex justify-between items-center">
@@ -128,7 +131,7 @@
         <div class="flex ml-6">
           <label class="flex items-center">
             <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox" (change)="onExporteesFilter()">
-            <span class="ml-2">Exportees</span>
+            <span class="ml-2">Exportée(s)</span>
           </label>
         </div>
       </div>
@@ -152,13 +155,13 @@
         [class.border-green-600]="totalArray[0].total >= 0" [class.bg-red-600]="totalArray[0].total < 0"
         [class.border-red-600]="totalArray[0].total < 0"
         class="border px-3 text-white rounded lg:rounded-l-none lg:rounded-r">
-        {{totalArray[0].total | number:'0.2-2'}}
+        {{totalArray[0].total | number:'0.2-2':'de-CH'}}
       </div>
     </div>
   </div>
   <div class="table-container px-3 hidden md:block z-0">
     <ejs-grid #grid [dataSource]="entriesObj" [allowSorting]='true' [allowFiltering]='true'
-      [enableVirtualization]='true' [locale]="'fr-CH'" height='700' (rowDataBound)='rowDataBound($event)'
+      [enableVirtualization]='true' [locale]="'fr-CH'" height='620' (rowDataBound)='rowDataBound($event)'
       [selectionSettings]='selectionOptions'>
       <e-columns>
         <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
@@ -169,13 +172,13 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='N° de pièce' field="pieceNo" width=140>
+        <!-- <e-column headerText='N° de pièce' field="pieceNo" width=140>
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
               <span>{{entry.pieceNo}}</span>
             </div>
           </ng-template>
-        </e-column>
+        </e-column> -->
         <e-column headerText='Date' width=120 field="entryDate">
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
@@ -202,8 +205,8 @@
           <ng-template #template let-entry>
             <div class="flex flex-col text-right" (click)="onRowClick(entry)">
               <span *ngIf="entry.entryitems.length > 1"
-                class="font-bold border-b border-gray-600">{{entry.totalAmount | number:'0.2-2'}}</span>
-              <span *ngFor="let item of entry.entryitems">{{item.amount | number:'0.2-2'}}</span>
+                class="font-bold border-b border-gray-600">{{entry.totalAmount | number:'0.2-2':'de-CH'}}</span>
+              <span *ngFor="let item of entry.entryitems">{{item.amount | number:'0.2-2':'de-CH'}}</span>
             </div>
           </ng-template>
         </e-column>
@@ -252,7 +255,7 @@
     <div class="flex self-start" style="margin-left: 3.3rem;">
       <label class="flex items-center">
         <input type="checkbox" [(ngModel)]="exporteesChecked" class="form-checkbox">
-        <span class="ml-2">Exportees</span>
+        <span class="ml-2">Exportée(s)</span>
       </label>
     </div>
     <div class="text-xl mt-6"></div>

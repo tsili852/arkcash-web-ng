@@ -6,6 +6,7 @@ import { L10n, setCulture } from '@syncfusion/ej2-base';
 import { GridComponent, SelectionSettingsModel, parentsUntil } from '@syncfusion/ej2-angular-grids';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
+import { version as applicationVersion } from '../../../../package.json';
 import { environment } from '../../../environments/environment';
 import { Entry, EntryItem, EntryService } from '../../shared/entry';
 import { SearchTerms } from '../../shared/search-terms/search-terms';
@@ -34,6 +35,7 @@ L10n.load({
 })
 export class LedgerComponent implements OnInit {
   @ViewChild('grid', { static: false }) public grid: GridComponent;
+  appVersion = '';
 
   connectedUser: User;
   logedinUser: User;
@@ -116,6 +118,7 @@ export class LedgerComponent implements OnInit {
     private readonly entryPipe: EntrySearchPipe
   ) {
     this.selectionOptions = { checkboxOnly: true };
+    this.appVersion = applicationVersion;
 
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();

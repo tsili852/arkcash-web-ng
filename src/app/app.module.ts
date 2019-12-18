@@ -10,6 +10,8 @@ import { NgxIziToastModule } from 'ngx-izitoast';
 import localeFrCH from '@angular/common/locales/fr-CH';
 import localeFrCHExtra from '@angular/common/locales/extra/fr-CH';
 
+import localeDeCH from '@angular/common/locales/de-CH';
+
 import { navigatableComponents, routes, authProviders } from './app.routing';
 import { AppComponent } from './app.component';
 
@@ -24,6 +26,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
+registerLocaleData(localeDeCH, 'de-CH');
 
 @NgModule({
   declarations: [AppComponent, ...navigatableComponents],
@@ -46,7 +49,8 @@ registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
     EntryService,
     GlobalService,
     { provide: HTTP_INTERCEPTORS, useClass: TrafficInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: 'fr-CH' }
+    { provide: LOCALE_ID, useValue: 'fr-CH' },
+    { provide: LOCALE_ID, useValue: 'de-CH' }
   ],
   bootstrap: [AppComponent],
   exports: [FormsModule, BrowserModule]

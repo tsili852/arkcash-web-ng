@@ -13,4 +13,8 @@ export class DrawerService {
   getDrawerByClient(): Observable<Drawer> {
     return this.httpClient.get<Drawer>(`${Config.apiURL}drawer?client=${this.globalService.getSelectedUser().id}`);
   }
+
+  createDrawer(drawerBody: any): Observable<Drawer> {
+    return this.httpClient.post<Drawer>(`${Config.apiURL}drawer`, drawerBody);
+  }
 }

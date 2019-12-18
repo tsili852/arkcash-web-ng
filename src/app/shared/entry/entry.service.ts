@@ -62,6 +62,10 @@ export class EntryService {
     return this.httpClient.get<any>(`${Config.apiURL}entries/total/client/${this.globalService.getSelectedUser().id}`);
   }
 
+  getEntriesTotalAll(): Observable<{ _id: string; total: number }[]> {
+    return this.httpClient.get<{ _id: string; total: number }[]>(`${Config.apiURL}entries/total/client/all`);
+  }
+
   getEntry(id: string): Observable<Entry> {
     return this.httpClient.get<Entry>(`${Config.apiURL}entry/${id}?populate=address,client,drawer,entryitems.category`);
   }

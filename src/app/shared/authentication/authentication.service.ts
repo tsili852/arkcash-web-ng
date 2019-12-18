@@ -68,4 +68,16 @@ export class AuthenticationService {
   getAllUsers(isAdmin: boolean): Observable<User[]> {
     return this.httpClient.get<User[]>(`${Config.apiURL}user?isAdmin=${isAdmin}&sort=slug`);
   }
+
+  createUser(userBody: any): Observable<User> {
+    return this.httpClient.post<User>(`${Config.apiURL}user`, userBody);
+  }
+
+  updateUser(userBody: any): Observable<User> {
+    return this.httpClient.put<User>(`${Config.apiURL}user/${userBody.id}`, userBody);
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.httpClient.delete<any>(`${Config.apiURL}user/${userId}`);
+  }
 }

@@ -961,6 +961,15 @@
     "@syncfusion/ej2-base" "~17.3.27"
     "@syncfusion/ej2-grids" "17.3.29"
 
+"@syncfusion/ej2-angular-inputs@^17.3.29":
+  version "17.3.29"
+  resolved "https://registry.yarnpkg.com/@syncfusion/ej2-angular-inputs/-/ej2-angular-inputs-17.3.29.tgz#c0680b8de76cbe004352659328942f784ef9a313"
+  integrity sha512-B+AHFaNbmTQHQgIvP6tlL+tUN9xWKTxQigCqN+gy3/t3/bf/bRPdtlDCRK2DVEVGIB4ChoOw/b/6+yITnUsVJw==
+  dependencies:
+    "@syncfusion/ej2-angular-base" "~17.3.27"
+    "@syncfusion/ej2-base" "~17.3.27"
+    "@syncfusion/ej2-inputs" "17.3.29"
+
 "@syncfusion/ej2-base@~17.3.27":
   version "17.3.27"
   resolved "https://registry.yarnpkg.com/@syncfusion/ej2-base/-/ej2-base-17.3.27.tgz#9959a331cb6086dbfc6a87e2852a4e4fcf07a410"
@@ -1067,7 +1076,7 @@
   resolved "https://registry.yarnpkg.com/@syncfusion/ej2-icons/-/ej2-icons-17.3.27.tgz#100ecedf7b65593b3f4458dd120083001016986c"
   integrity sha512-0MM+93IrtXCnyXybVLjyRdy8JSJ4diCC0gZagFc1VhBofhZqrpWlCLt3C0SUyfsSvuMyYZUisR41iwqRP84yIQ==
 
-"@syncfusion/ej2-inputs@~17.3.27", "@syncfusion/ej2-inputs@~17.3.28", "@syncfusion/ej2-inputs@~17.3.29":
+"@syncfusion/ej2-inputs@17.3.29", "@syncfusion/ej2-inputs@~17.3.27", "@syncfusion/ej2-inputs@~17.3.28", "@syncfusion/ej2-inputs@~17.3.29":
   version "17.3.29"
   resolved "https://registry.yarnpkg.com/@syncfusion/ej2-inputs/-/ej2-inputs-17.3.29.tgz#f717c92a824660e596ad88cf11fea19a07627765"
   integrity sha512-zr2eRnhZ7t54I+dcORsFhjv2lyFfkxk1RRl4cUkNGeyera8hBDbVNERMNgIDgOH31SLHhtwQacZ3NOXCVfj2GQ==

@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     if (this.user.username && this.user.username.trim().length > 0 && this.user.password && this.user.password.trim().length > 0) {
+      this.user.username = this.user.username.toLowerCase();
       this.authenticationService.login(this.user).subscribe(
         (res) => {
           this.authenticationService.setToken(res.token);
