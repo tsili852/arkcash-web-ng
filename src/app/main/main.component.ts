@@ -72,6 +72,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
       this.promptEvent = event;
+      console.log(`Before install prompt`);
 
       if (!this.userCancelInstall) {
         this.showInstallPopUp = true;
