@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   exports: [
@@ -35,7 +36,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     // MatMenuModule,
     MatNativeDateModule,
     // MatPaginatorModule,
-    // MatProgressBarModule,
+    MatProgressBarModule,
     // MatProgressSpinnerModule,
     // MatRadioModule,
     MatRippleModule,

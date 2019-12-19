@@ -26,6 +26,9 @@ L10n.load({
 export class ConfigurationComponent implements OnInit {
   @ViewChild('grid', { static: false }) public grid: GridComponent;
 
+  windowRatio = 1.47;
+  gridHeight = 0;
+
   connectedUser: User;
   logedinUser: User;
 
@@ -106,6 +109,9 @@ export class ConfigurationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const windowHeight = window.innerHeight;
+    this.gridHeight = windowHeight / this.windowRatio;
+
     this.fetchAddresses();
   }
 

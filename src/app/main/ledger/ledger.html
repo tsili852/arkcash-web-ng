@@ -77,8 +77,8 @@
       <div class="icons-container flex">
         <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onShowAddModal()">
         <img *ngIf="logedinUser.isAdmin" class="w-8 h-8 cursor-pointer mr-2" src="assets/images/export-xls.png"
-          alt="Export">
-        <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete">
+          alt="Export" (click)="onExportToExcel()">
+        <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete" (click)="onDeleteMultiple()">
       </div>
     </div>
   </nav>
@@ -160,8 +160,8 @@
     </div>
   </div>
   <div class="table-container px-3 hidden md:block z-0">
-    <ejs-grid #grid [dataSource]="entriesObj" [allowSorting]='true' [allowFiltering]='true'
-      [enableVirtualization]='true' [locale]="'fr-CH'" height='620' (rowDataBound)='rowDataBound($event)'
+    <ejs-grid #grid [dataSource]="entriesObj" [allowSorting]='true' [allowFiltering]='true' [allowExcelExport]='true'
+      [enableVirtualization]='true' [locale]="'fr-CH'" [height]='gridHeight' (rowDataBound)='rowDataBound($event)'
       [selectionSettings]='selectionOptions'>
       <e-columns>
         <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
@@ -439,6 +439,30 @@
           (click)="deleteOldEntryConfirm = false">
           No
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showDeleteMultiple" [class.pointer-events-auto]="showDeleteMultiple"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 border">
+    <div class="text-lg">
+      Voulez-vous supprimer {{deleteCount}} élément(s) ?
+    </div>
+    <div *ngIf="deleting" class="w-full mt-6">
+      <mat-progress-bar color="accent" mode="determinate" [value]="deleteProgress"></mat-progress-bar>
+    </div>
+    <div *ngIf="!deleting" class="flex justify-center items-center mt-6">
+      <div
+        class="bg-red-500 border-gray-600 cursor-pointer flex items-center justify-center py-1 rounded shadow text-white w-12"
+        (click)="onDeleteMultipleConfirmed()">
+        Oui
+      </div>
+      <div
+        class="bg-gray-600 border-gray-600 cursor-pointer flex items-center justify-center ml-3 py-1 rounded shadow text-white w-12"
+        (click)="showDeleteMultiple = false">
+        No
       </div>
     </div>
   </div>

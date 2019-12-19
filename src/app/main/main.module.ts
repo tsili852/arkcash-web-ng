@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from './material.module';
 import { MainComponent } from './main.component';
 import { FormsModule } from '@angular/forms';
-import { GridModule, SortService, VirtualScrollService } from '@syncfusion/ej2-angular-grids';
+import { GridModule, SortService, VirtualScrollService, ExcelExportService } from '@syncfusion/ej2-angular-grids';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe } from '../utils/pipes';
@@ -13,7 +13,7 @@ import { EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe 
 @NgModule({
   declarations: [MainComponent, EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe, ...navigatableComponents],
   imports: [CommonModule, RouterModule.forChild(routes), NgScrollbarModule, MaterialModule, FormsModule, GridModule, DropDownListModule],
-  providers: [SortService, VirtualScrollService, AddressSearchPipe, CategorySearchPipe, EntrySearchPipe],
+  providers: [SortService, VirtualScrollService, AddressSearchPipe, CategorySearchPipe, EntrySearchPipe, ExcelExportService],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class MainModule {}

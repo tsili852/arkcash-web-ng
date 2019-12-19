@@ -25,8 +25,12 @@ L10n.load({
   styleUrls: ['./clients.scss']
 })
 export class ClientsComponent implements OnInit {
-  @ViewChild('grid', { static: false }) public grid: GridComponent;
+  @ViewChild('grid', { static: false })
+  public grid: GridComponent;
   selectionOptions: SelectionSettingsModel;
+
+  windowRatio = 1.47;
+  gridHeight = 0;
 
   connectedUser: User;
   searchText = '';
@@ -76,6 +80,9 @@ export class ClientsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const windowHeight = window.innerHeight;
+    this.gridHeight = windowHeight / this.windowRatio;
+
     this.fetchUsers();
   }
 

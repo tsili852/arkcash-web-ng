@@ -35,6 +35,9 @@ L10n.load({
 })
 export class LedgerComponent implements OnInit {
   @ViewChild('grid', { static: false }) public grid: GridComponent;
+
+  windowRatio = 1.47;
+  gridHeight = 0;
   appVersion = '';
 
   connectedUser: User;
@@ -104,6 +107,12 @@ export class LedgerComponent implements OnInit {
 
   deleteOldEntryConfirm = false;
 
+  showDeleteMultiple = false;
+  deleteCount = 0;
+  deleting = false;
+  deletedCount = 0;
+  deleteProgress = 0;
+
   constructor(
     private readonly entryService: EntryService,
     private readonly router: Router,
@@ -147,6 +156,9 @@ export class LedgerComponent implements OnInit {
     }
 
     this.searchTerms = new SearchTerms(null, new Date(), 0, 0, '', this.exporteesChecked);
+    if (this.connectedUser.lastExport) {
+      this.searchTerms.dateFrom = new Date(this.connectedUser.lastExport);
+    }
 
     const storedInOut = localStorage.getItem('inout');
     if (storedInOut) {
@@ -162,6 +174,9 @@ export class LedgerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const windowHeight = window.innerHeight;
+    this.gridHeight = windowHeight / this.windowRatio;
+
     this.fetchEntries();
   }
 
@@ -285,6 +300,48 @@ export class LedgerComponent implements OnInit {
     } else {
       return 'Sortie';
     }
+  }
+
+  onDeleteMultiple() {
+    const selectedRecords: Entry[] = this.grid.getSelectedRecords() as Entry[];
+    this.deleteCount = selectedRecords.length;
+    this.showDeleteMultiple = true;
+  }
+
+  onDeleteMultipleConfirmed() {
+    const selectedRecords: Entry[] = this.grid.getSelectedRecords() as Entry[];
+    const progressStep = 100 / selectedRecords.length;
+    this.deleteProgress = progressStep;
+    this.deleting = true;
+
+    let deletedRecords = 0;
+    selectedRecords.forEach((entry) => {
+      this.entryService.deleteEntry(entry).subscribe(
+        () => {
+          deletedRecords++;
+          this.deleteProgress += progressStep;
+          if (deletedRecords === selectedRecords.length) {
+            this.showDeleteMultiple = false;
+            this.deleting = false;
+            this.fetchEntries();
+          }
+        },
+        (error) => {
+          console.log(`Error: ${error.message || error.toString()}`);
+          deletedRecords++;
+          this.deleteProgress += progressStep;
+          if (deletedRecords === selectedRecords.length) {
+            this.showDeleteMultiple = false;
+            this.deleting = false;
+            this.fetchEntries();
+          }
+        }
+      );
+    });
+  }
+
+  onExportToExcel() {
+    this.grid.excelExport();
   }
 
   onShowAddModal() {
