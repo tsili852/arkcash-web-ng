@@ -165,6 +165,6 @@ export class MainComponent implements OnInit, AfterViewInit {
       }
     }
 
-    return true;
+    return false;
   }
 }
