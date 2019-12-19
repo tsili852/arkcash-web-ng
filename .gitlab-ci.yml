@@ -1,5 +1,5 @@
 variables:
-IMAGE_VERSION: "1.2.3"
+  IMAGE_VERSION: "1.2.3"
 
 services:
   - docker:dind
