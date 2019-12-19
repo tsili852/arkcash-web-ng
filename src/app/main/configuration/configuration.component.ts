@@ -72,6 +72,7 @@ export class ConfigurationComponent implements OnInit {
 
   newCategory: Category;
   addCategoryError = false;
+  canceledInstall = false;
 
   constructor(
     private readonly globalService: GlobalService,
@@ -85,6 +86,8 @@ export class ConfigurationComponent implements OnInit {
   ) {
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
+
+    this.canceledInstall = this.globalService.getUserCancelInstall();
 
     this.globalService.updateMenuItem(2);
 
@@ -113,6 +116,11 @@ export class ConfigurationComponent implements OnInit {
     this.gridHeight = windowHeight / this.windowRatio;
 
     this.fetchAddresses();
+  }
+
+  onResetInstall() {
+    this.globalService.resetUserCancelInstall();
+    window.location.reload();
   }
 
   fetchAddresses() {

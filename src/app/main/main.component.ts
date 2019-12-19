@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AuthenticationService, User } from '../shared/authentication';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
@@ -12,14 +12,16 @@ import { LocationStrategy } from '@angular/common';
   templateUrl: './main.html',
   styleUrls: ['./main.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
   promptEvent: any;
   showInstallPopUp = false;
+  showInstallPopUpIos = false;
   connectedUser: User;
   selectedUser: User;
   currentRoute = 0;
   appVersion = '';
   showLogoutConfirmation = false;
+  isIos = false;
 
   userCancelInstall = false;
 
@@ -32,6 +34,8 @@ export class MainComponent implements OnInit {
     private readonly globalService: GlobalService,
     private readonly location: LocationStrategy
   ) {
+    this.isIos = this.isPlatformIos();
+
     this.connectedUser = this.authenticationService.getCurrentUser();
     this.selectedUser = this.globalService.getSelectedUser();
     this.appVersion = applicationVersion;
@@ -91,7 +95,14 @@ export class MainComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.isIos && !this.userCancelInstall) {
+      this.showInstallPopUpIos = true;
+      this.globalService.setUserCancelInstall(true);
+    }
+  }
+
+  ngAfterViewInit(): void {}
 
   onResetInstall() {
     this.globalService.resetUserCancelInstall();
@@ -111,6 +122,10 @@ export class MainComponent implements OnInit {
   onCancel() {
     this.showInstallPopUp = false;
     this.globalService.setUserCancelInstall(true);
+  }
+
+  cancelIosInstall() {
+    this.showInstallPopUpIos = false;
   }
 
   onGoToClients() {
@@ -137,5 +152,19 @@ export class MainComponent implements OnInit {
     this.router.navigate(['add-mobile'], { relativeTo: this.route });
     this.currentRoute = 3;
     // }
+  }
+
+  isPlatformIos() {
+    const iDevices = ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'];
+
+    if (!!navigator.platform) {
+      while (iDevices.length) {
+        if (navigator.platform === iDevices.pop()) {
+          return true;
+        }
+      }
+    }
+
+    return true;
   }
 }

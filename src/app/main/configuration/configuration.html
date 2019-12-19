@@ -20,10 +20,11 @@
     </div>
   </div>
 </nav>
-<div class="flex px-2 md:hidden">
+<div class="flex px-2 md:hidden justify-between">
   <div class="text-sm">
     {{connectedUser.name}}
   </div>
+  <div *ngIf="canceledInstall" class="text-sm underline" (click)="onResetInstall()">Installer</div>
 </div>
 <div class="flex md:hidden justify-between items-center px-2" *ngIf="logedinUser.isAdmin">
   <div class="flex flex-col w-full">
