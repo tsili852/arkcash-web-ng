@@ -33,7 +33,7 @@ export class ConfigurationComponent implements OnInit {
   logedinUser: User;
 
   selectedMode = 1;
-  selectedInOut = -1;
+  selectedInOut = 1;
   searchTextAddresses = '';
   searchTextCategories = '';
   addresses$: Observable<Address[]>;
@@ -58,6 +58,7 @@ export class ConfigurationComponent implements OnInit {
   newAddress: Address;
   addAddressErrors = false;
   addAddressInout = -1;
+  addCategoryInout = -1;
 
   selectionOptions: SelectionSettingsModel;
 
@@ -143,11 +144,12 @@ export class ConfigurationComponent implements OnInit {
     this.searchTextAddresses = '';
     this.searchTextCategories = '';
     if (mode === 1 || mode === 3) {
-      this.selectedInOut = -1;
-    } else {
       this.selectedInOut = 1;
+    } else {
+      this.selectedInOut = -1;
     }
     this.addAddressInout = this.selectedInOut;
+    this.addCategoryInout = this.selectedInOut;
     this.fetchAddresses();
   }
 
@@ -163,7 +165,7 @@ export class ConfigurationComponent implements OnInit {
 
   rowDataBound(args: any) {
     const address: Address = args.data;
-    if (address.inout === -1) {
+    if (address.inout === 1) {
       args.row.classList.add('bg-green-100');
     } else {
       args.row.classList.add('bg-red-100');
@@ -172,7 +174,7 @@ export class ConfigurationComponent implements OnInit {
 
   rowDataBoundCategory(args: any) {
     const category: Category = args.data;
-    if (category.inout === -1) {
+    if (category.inout === 1) {
       args.row.classList.add('bg-green-100');
     } else {
       args.row.classList.add('bg-red-100');
@@ -376,7 +378,7 @@ export class ConfigurationComponent implements OnInit {
       client: this.globalService.getSelectedUser().id,
       createdAt: new Date(),
       id: '',
-      inout: this.addAddressInout,
+      inout: this.addCategoryInout,
       name: '',
       updatedAt: null
     };
@@ -390,7 +392,7 @@ export class ConfigurationComponent implements OnInit {
         name: this.newCategory.name,
         accNo: this.newCategory.accNo,
         client: this.newCategory.client,
-        inout: this.addAddressInout,
+        inout: this.addCategoryInout,
         createdAt: new Date()
       };
 

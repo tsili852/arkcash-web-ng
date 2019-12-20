@@ -2,19 +2,19 @@
   <div class="flex flex-col">
     <div class="flex justify-start items-center w-full bg-gray-800 pt-2">
       <div class="flex justify-start items-center w-full">
-        <div [ngClass]="selectedMode === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
-          class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(1)">
-          <img *ngIf="selectedMode !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
+        <div [ngClass]="selectedMode === 2 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
+          class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(2)">
+          <img *ngIf="selectedMode !== 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees_gris.png"
             alt="Entrees">
-          <img *ngIf="selectedMode === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
+          <img *ngIf="selectedMode === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
             alt="Entrees">
           <span class="text-xl">Entrée</span>
         </div>
-        <div [ngClass]="selectedMode === 2 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
-          class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(2)">
-          <img *ngIf="selectedMode !== 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
+        <div [ngClass]="selectedMode === 1 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
+          class="py-2 w-32 flex justify-center items-center h-full w-1/2" (click)="onSelectMode(1)">
+          <img *ngIf="selectedMode !== 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties_gris.png"
             alt="Sorties">
-          <img *ngIf="selectedMode === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
+          <img *ngIf="selectedMode === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
             alt="Sorties">
           <span class="text-xl">Sortie</span>
         </div>

@@ -61,6 +61,8 @@ export class LedgerComponent implements OnInit {
   exporteesChecked = false;
   isTest = false;
 
+  clientLastExportDate: Date;
+
   entriesCount = 0;
 
   connectedClientId = '';
@@ -82,7 +84,7 @@ export class LedgerComponent implements OnInit {
   categoryListFields = { text: 'name', value: 'id' };
 
   newEntryDate: Date;
-  newEntryInOut = 1;
+  newEntryInOut = 2;
   newEntryItems: {
     category: Category;
     amount: string;
@@ -132,6 +134,12 @@ export class LedgerComponent implements OnInit {
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
 
+    if (this.connectedUser && this.connectedUser.lastExport) {
+      this.clientLastExportDate = new Date(this.connectedUser.lastExport);
+    } else {
+      this.clientLastExportDate = null;
+    }
+
     this.globalService.updateMenuItem(1);
 
     if (this.logedinUser.isAdmin) {
@@ -156,15 +164,15 @@ export class LedgerComponent implements OnInit {
     }
 
     this.searchTerms = new SearchTerms(null, new Date(), 0, 0, '', this.exporteesChecked);
-    if (this.connectedUser.lastExport) {
-      this.searchTerms.dateFrom = new Date(this.connectedUser.lastExport);
+    if (this.clientLastExportDate) {
+      this.searchTerms.dateFrom = this.clientLastExportDate;
     }
 
     const storedInOut = localStorage.getItem('inout');
     if (storedInOut) {
       if (storedInOut === '') {
         this.selectedFilter = 0;
-      } else if (storedInOut === '-1') {
+      } else if (storedInOut === '1') {
         this.selectedFilter = 1;
       } else {
         this.selectedFilter = 2;
@@ -211,11 +219,11 @@ export class LedgerComponent implements OnInit {
         break;
       }
       case 1: {
-        this.inoutParameter = '-1';
+        this.inoutParameter = '1';
         break;
       }
       case 2: {
-        this.inoutParameter = '1';
+        this.inoutParameter = '-1';
         break;
       }
     }
@@ -226,25 +234,21 @@ export class LedgerComponent implements OnInit {
 
   onExporteesFilter() {
     this.searchTerms.exportees = this.exporteesChecked;
-    // this.zone.run(() => {
-    if (this.exporteesChecked) {
-      // tslint:disable-next-line: no-string-literal
-      this.grid.columns[7]['visible'] = true;
-    } else {
-      // tslint:disable-next-line: no-string-literal
-      this.grid.columns[7]['visible'] = false;
-    }
-    this.grid.refreshColumns();
-    // });
+
     this.fetchEntries();
   }
 
   rowDataBound(args: any) {
     const entry: Entry = args.data;
-    if (entry.inout === -1) {
+    if (entry.inout === 1) {
       args.row.classList.add('bg-green-100');
     } else {
       args.row.classList.add('bg-red-100');
+    }
+
+    if (entry.exported) {
+      // args.row.getElementsByClassName('e-gridchkbox')[0].classList.add('disabled-checkbox');
+      args.row.getElementsByClassName('e-checkbox-wrapper')[0].classList.add('hide-checkbox');
     }
   }
 
@@ -268,7 +272,7 @@ export class LedgerComponent implements OnInit {
     this.searchTerms = {
       amountFrom: 0,
       amountTo: 0,
-      dateFrom: null,
+      dateFrom: this.clientLastExportDate,
       dateTo: new Date(),
       exportees: false,
       text: ''
@@ -295,7 +299,7 @@ export class LedgerComponent implements OnInit {
   }
 
   getEntryInOutText(entry: Entry) {
-    if (entry.inout === -1) {
+    if (entry.inout === 1) {
       return 'Entrée';
     } else {
       return 'Sortie';
@@ -495,7 +499,7 @@ export class LedgerComponent implements OnInit {
   }
 
   onRowClick(argEntry: Entry) {
-    if (argEntry) {
+    if (argEntry && !argEntry.exported) {
       this.selectedEditEntry = argEntry;
       this.editEntryInOut = this.selectedEditEntry.inout;
       this.editEntryDate = this.selectedEditEntry.entryDate;
@@ -539,26 +543,6 @@ export class LedgerComponent implements OnInit {
       this.selectedEditAddressCategory = addressCategory;
       this.editEntryItems.map((item) => (addressCategory ? (item.category = addressCategory) : (item.category = this.categoryList[0])));
     }
-  }
-
-  onChangeEditEntryInOut(inOut: number) {
-    this.editEntryInOut = inOut;
-    this.addressList$ = this.addressService.getAddresses(this.newEntryInOut === 1 ? '-1' : '1');
-    this.addressList$.subscribe((addresses) => {
-      this.addressList = addresses;
-      this.editEntryAddress = addresses[0];
-    });
-
-    this.categoryList$ = this.categoryService.getCategories(this.newEntryInOut === 1 ? '-1' : '1');
-    this.categoryList$.subscribe((categories) => {
-      this.categoryList = categories;
-      this.editEntryItems = [
-        {
-          amount: '',
-          category: this.categoryList[0]
-        }
-      ];
-    });
   }
 
   onEditChangeItemCategory(args: any, itemIndex: number) {

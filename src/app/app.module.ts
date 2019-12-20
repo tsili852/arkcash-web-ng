@@ -25,8 +25,8 @@ import { TrafficInterceptor } from './utils/interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
-registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
 registerLocaleData(localeDeCH, 'de-CH');
+registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
 
 @NgModule({
   declarations: [AppComponent, ...navigatableComponents],
@@ -49,8 +49,8 @@ registerLocaleData(localeDeCH, 'de-CH');
     EntryService,
     GlobalService,
     { provide: HTTP_INTERCEPTORS, useClass: TrafficInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: 'fr-CH' },
-    { provide: LOCALE_ID, useValue: 'de-CH' }
+    { provide: LOCALE_ID, useValue: 'de-CH' },
+    { provide: LOCALE_ID, useValue: 'fr-CH' }
   ],
   bootstrap: [AppComponent],
   exports: [FormsModule, BrowserModule]

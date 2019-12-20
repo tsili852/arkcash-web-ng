@@ -148,7 +148,8 @@
     </div>
     <div class="flex mt-2 lg:mt-0" *ngIf="(entriesTotal | async) as totalArray">
       <div *ngIf="totalArray[0]" [class.border-green-600]="totalArray[0].total >= 0"
-        [class.border-red-600]="totalArray[0].total < 0" class="border px-3 rounded-l hidden lg:block">
+        [class.border-red-600]="totalArray[0].total < 0"
+        class="border px-3 rounded-l hidden lg:flex items-center text-sm">
         Solde de caisse
       </div>
       <div *ngIf="totalArray[0]" [class.bg-green-600]="totalArray[0].total >= 0"
@@ -164,7 +165,13 @@
       [enableVirtualization]='true' [locale]="'fr-CH'" [height]='gridHeight' (rowDataBound)='rowDataBound($event)'
       [selectionSettings]='selectionOptions'>
       <e-columns>
-        <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
+        <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'>
+          <ng-template #template let-entry>
+            <div class="flex justify-center items-center w-full">
+              <img *ngIf="entry.exported" class="w-4 h-auto" src="assets/images/cadenas_close.png" alt="Cadenas">
+            </div>
+          </ng-template>
+        </e-column>
         <e-column headerText='Entrée/Sortie' field="inout" width=140>
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
@@ -172,13 +179,6 @@
             </div>
           </ng-template>
         </e-column>
-        <!-- <e-column headerText='N° de pièce' field="pieceNo" width=140>
-          <ng-template #template let-entry>
-            <div (click)="onRowClick(entry)">
-              <span>{{entry.pieceNo}}</span>
-            </div>
-          </ng-template>
-        </e-column> -->
         <e-column headerText='Date' width=120 field="entryDate">
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
@@ -201,7 +201,7 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText=' Montant' textAlign='Right' field="totalAmount">
+        <e-column headerText=' Montant' textAlign='Right' field="totalAmount" width=150>
           <ng-template #template let-entry>
             <div class="flex flex-col text-right" (click)="onRowClick(entry)">
               <span *ngIf="entry.entryitems.length > 1"
@@ -210,22 +210,31 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column width="120" textAlign='Center' [visible]="false" headerText='Exportés' field="exported" type="boolean"
-          [displayAsCheckBox]="true">
-        </e-column>
+        <!-- <e-column width="120" textAlign='Center' [visible]="false" headerText='Exporté' field="exported" type="boolean">
+          <ng-template #template let-entry>
+            <div class="flex justify-center items-center w-full">
+              <img *ngIf="entry.exported" class="w-4 h-auto" src="assets/images/cadenas_close.png" alt="Cadenas">
+            </div>
+          </ng-template>
+        </e-column> -->
       </e-columns>
     </ejs-grid>
   </div>
   <div class="table-container block md:hidden" style="margin-top: 7.4rem;">
     <table class="table-auto w-full text-sm">
       <tbody>
-        <tr class="border-b-2 border-white" [class.bg-red-200]="entry.inout === 1"
-          [class.bg-green-200]="entry.inout === -1" *ngFor="let entry of (entries | async) | entrySearch:searchText"
+        <tr class="border-b-2 border-white" [class.bg-red-200]="entry.inout === -1"
+          [class.bg-green-200]="entry.inout === 1" *ngFor="let entry of (entries | async) | entrySearch:searchText"
           (click)="onSelectEntry(entry)">
           <!-- <td class="px-4 py-2">{{entry.pieceNo}}</td> -->
-          <td class="px-4 py-2">{{entry.entryDate | date:'dd.MM.yyyy'}}</td>
-          <td class="px-4 py-2">{{entry.address.name}}</td>
-          <td class="px-4 py-2 text-right">{{entry.totalAmount | number:'0.2-2'}}</td>
+          <td class="px-2 py-2 text-centre" *ngIf="exporteesChecked">
+            <div class="flex justify-center items-center w-full">
+              <img *ngIf="entry.exported" class="w-3 h-auto" src="assets/images/cadenas_close.png" alt="Cadenas">
+            </div>
+          </td>
+          <td class="px-2 py-2">{{entry.entryDate | date:'dd.MM.yy'}}</td>
+          <td class="px-2 py-2">{{entry.address.name}}</td>
+          <td class="px-2 py-2 text-right">{{entry.totalAmount | number:'0.2-2'}}</td>
         </tr>
       </tbody>
     </table>
@@ -272,25 +281,25 @@
 <div [class.opacity-100]="showAddModal" [class.pointer-events-auto]="showAddModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
-  <div [ngClass]="newEntryInOut === 1 ? 'border-green-600' : 'border-red-600'"
+  <div [ngClass]="newEntryInOut === 2 ? 'border-green-600' : 'border-red-600'"
     class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-0 border-4">
-    <div [class.bg-red-600]="newEntryInOut === 2" [class.bg-green-600]="newEntryInOut === 1"
+    <div [class.bg-red-600]="newEntryInOut === 1" [class.bg-green-600]="newEntryInOut === 2"
       class="-mt-3 flex items-center justify-center mb-4 text-white px-5 text-xl font-bold rounded">
       <span>{{newEntryPieceNo}}</span>
     </div>
     <div class="flex w-full items-center justify-start">
-      <div [ngClass]="newEntryInOut === 1 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
-        class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded-lg cursor-pointer"
-        (click)="onChangeNewEntryInOut(1)">
-        <img *ngIf="newEntryInOut !== 1" class="w-6 h-auto" src="assets/images/entrees_gris.png" alt="Entrees">
-        <img *ngIf="newEntryInOut === 1" class="w-6 h-auto" src="assets/images/entrees.png" alt="Entrees">
-        <!-- <span>Entrée</span> -->
-      </div>
-      <div [ngClass]="newEntryInOut === 2 ? 'bg-red-600 text-white' : 'bg-gray-300 text-black'"
+      <div [ngClass]="newEntryInOut === 2 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
         class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded-lg cursor-pointer"
         (click)="onChangeNewEntryInOut(2)">
-        <img *ngIf="newEntryInOut !== 2" class="w-6 h-auto" src="assets/images/sorties_gris.png" alt="Sorties">
-        <img *ngIf="newEntryInOut === 2" class="w-6 h-auto" src="assets/images/sorties.png" alt="Sorties">
+        <img *ngIf="newEntryInOut !== 2" class="w-6 h-auto" src="assets/images/entrees_gris.png" alt="Entrees">
+        <img *ngIf="newEntryInOut === 2" class="w-6 h-auto" src="assets/images/entrees.png" alt="Entrees">
+        <!-- <span>Entrée</span> -->
+      </div>
+      <div [ngClass]="newEntryInOut === 1 ? 'bg-red-600 text-white' : 'bg-gray-300 text-black'"
+        class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow active:shadow-lg rounded-lg cursor-pointer"
+        (click)="onChangeNewEntryInOut(1)">
+        <img *ngIf="newEntryInOut !== 1" class="w-6 h-auto" src="assets/images/sorties_gris.png" alt="Sorties">
+        <img *ngIf="newEntryInOut === 1" class="w-6 h-auto" src="assets/images/sorties.png" alt="Sorties">
         <!-- <span>Sortie</span> -->
       </div>
     </div>
@@ -326,7 +335,8 @@
           (click)="onRemoveNewEntryItem(itemIndex)">
       </div>
       <div class="flex items-center justify-end mt-4 px-2">
-        <div class="text-lg text-green-600 mr-6">{{newEntryItemsTotal | number:'0.2-2'}}</div>
+        <div [ngClass]="newEntryInOut === 1 ? 'text-red-600' : 'text-green-600'" class="text-lg mr-6">
+          {{newEntryItemsTotal | number:'0.2-2'}}</div>
         <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_add.png" alt="Sorties"
           (click)="onAddNewEntryItem()">
       </div>
@@ -349,19 +359,19 @@
 <div [class.opacity-100]="showEditModal" [class.pointer-events-auto]="showEditModal"
   class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
-  <div *ngIf="selectedEditEntry" [ngClass]="editEntryInOut === -1 ? 'border-green-600' : 'border-red-600'"
+  <div *ngIf="selectedEditEntry" [ngClass]="editEntryInOut === 1 ? 'border-green-600' : 'border-red-600'"
     class="absolute bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-0 border-4">
-    <div [class.bg-red-600]="editEntryInOut === 1" [class.bg-green-600]="editEntryInOut === -1"
+    <div [class.bg-red-600]="editEntryInOut === -1" [class.bg-green-600]="editEntryInOut === 1"
       class="-mt-3 flex items-center justify-center mb-4 text-white px-5 text-xl font-bold rounded">
       <span>{{selectedEditEntry.pieceNo}}</span>
     </div>
     <div class="flex w-full items-center justify-start">
-      <div *ngIf="editEntryInOut === -1"
+      <div *ngIf="editEntryInOut === 1"
         class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow rounded-lg bg-green-600 text-white">
         <img class="w-6 h-auto" src="assets/images/entrees.png" alt="Entrees">
         <span class="ml-2">Entrée</span>
       </div>
-      <div *ngIf="editEntryInOut === 1"
+      <div *ngIf="editEntryInOut === -1"
         class="py-2 px-3 flex justify-center items-center h-full mx-2 shadow rounded-lg bg-red-600 text-white">
         <img class="w-6 h-auto" src="assets/images/sorties.png" alt="Entrees">
         <span class="ml-2">Sortie</span>
@@ -399,7 +409,7 @@
           (click)="onRemoveEditEntryItem(itemIndex)">
       </div>
       <div class="flex items-center justify-end mt-4 px-2">
-        <div [ngClass]="editEntryInOut === -1 ? 'text-green-600': 'text-red-600'" class="text-lg mr-6">
+        <div [ngClass]="editEntryInOut === 1 ? 'text-green-600': 'text-red-600'" class="text-lg mr-6">
           {{editEntryItemsTotal | number:'0.2-2'}}</div>
         <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_add.png" alt="Sorties"
           (click)="onAddEditEntryItem()">

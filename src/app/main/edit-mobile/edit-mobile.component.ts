@@ -20,13 +20,13 @@ import { NgScrollbar } from 'ngx-scrollbar';
 export class EditMobileComponent implements OnInit {
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar;
 
-  selectedMode = 1;
+  selectedMode = 2;
 
   connectedUser: User;
   logedinUser: User;
 
   totalAmount = 0.0;
-  editEntryInOut = '-1';
+  editEntryInOut = '1';
   editEntry: Entry;
   editEntryItems: EntryItem[];
   editEntryDate: Date;

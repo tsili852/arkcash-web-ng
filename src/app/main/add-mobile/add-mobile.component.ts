@@ -20,13 +20,13 @@ import { NgScrollbar } from 'ngx-scrollbar';
 export class AddMobileComponent implements OnInit {
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar;
 
-  selectedMode = 1;
+  selectedMode = 2;
 
   connectedUser: User;
   logedinUser: User;
 
   totalAmount = 0.0;
-  newEntryInOut = '-1';
+  newEntryInOut = '1';
   newEntryItems: {
     category: Category;
     amount: string;
@@ -108,7 +108,7 @@ export class AddMobileComponent implements OnInit {
 
   onSelectMode(choice: number) {
     this.selectedMode = choice;
-    if (choice === 1) {
+    if (choice === 2) {
       this.newEntryInOut = '-1';
     } else {
       this.newEntryInOut = '1';
