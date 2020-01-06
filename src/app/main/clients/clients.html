@@ -21,10 +21,10 @@
   </nav>
   <div class="flex justify-between items-center py-4 md:px-10 px-4">
     <div class="text-lg md:text-xl">
-      12
+      {{initialUsersList.length}}
     </div>
     <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center md:ml-8 lg:w-64 w-72">
-      <input [(ngModel)]="searchText"
+      <input [(ngModel)]="searchText" (ngModelChange)="searchTextChange($event)"
         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
         type="text" placeholder="Recherche" aria-label="Search">
       <img class="w-4 h-4" src="assets/images/search_black.png" alt="Search">
@@ -33,47 +33,46 @@
       (click)="onAddMobile()">
   </div>
   <div class="table-container px-3 hidden lg:block z-0">
-    <ejs-grid #grid [dataSource]="(users$ | async) | userSearch:searchText" [allowSorting]='true'
-      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" [height]="gridHeight"
-      [selectionSettings]='selectionOptions'>
+    <ejs-grid #grid [dataSource]="usersList" [allowSorting]='true' [allowFiltering]='true' [enableVirtualization]='true'
+      [locale]="'fr-CH'" [height]="gridHeight" [selectionSettings]='selectionOptions'>
       <e-columns>
-        <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
-        <e-column headerText='Nom' field="inout" width=200>
+        <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
+        <e-column headerText='Nom' field="name" width=200>
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.name}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column class="hidden lg:block" headerText="Nom d'utilisateur" width=140>
+        <e-column class="hidden lg:block" headerText="Nom d'utilisateur" width=150 field="username">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.username}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText="Téléphone">
+        <e-column headerText="Téléphone" field="phone">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.phone}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText="Adresse mail">
+        <e-column headerText="Adresse mail" field="email">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.email}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText="No.de Compte" width=140>
+        <e-column headerText="No.de Compte" width=140 field="accNo">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.accNo}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Date de début' width=140>
+        <e-column headerText='Date de début' width=140 field="startDate">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.startDate | date:'dd.MM.yyyy'}}</span>

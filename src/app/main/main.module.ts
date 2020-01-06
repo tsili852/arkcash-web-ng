@@ -13,7 +13,15 @@ import { EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe 
 @NgModule({
   declarations: [MainComponent, EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe, ...navigatableComponents],
   imports: [CommonModule, RouterModule.forChild(routes), NgScrollbarModule, MaterialModule, FormsModule, GridModule, DropDownListModule],
-  providers: [SortService, VirtualScrollService, AddressSearchPipe, CategorySearchPipe, EntrySearchPipe, ExcelExportService],
+  providers: [
+    SortService,
+    VirtualScrollService,
+    AddressSearchPipe,
+    CategorySearchPipe,
+    EntrySearchPipe,
+    ExcelExportService,
+    UserSearchPipe
+  ],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class MainModule {}

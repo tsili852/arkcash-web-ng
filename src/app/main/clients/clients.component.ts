@@ -9,6 +9,7 @@ import { GlobalService } from '../../shared/global.service';
 import { EntryService } from '../../shared/entry';
 import { DrawerService } from '../../shared/drawer';
 import { Category, CategoryService } from '../../shared/category';
+import { UserSearchPipe } from '../../utils/pipes';
 
 setCulture('fr-CH');
 
@@ -37,6 +38,7 @@ export class ClientsComponent implements OnInit {
 
   users$: Observable<User[]>;
   usersList: User[];
+  initialUsersList: User[];
   totalUsers = 0;
 
   clientsTotal: {
@@ -67,7 +69,8 @@ export class ClientsComponent implements OnInit {
     private readonly globalService: GlobalService,
     private readonly entryService: EntryService,
     private readonly drawerService: DrawerService,
-    private readonly categoryService: CategoryService
+    private readonly categoryService: CategoryService,
+    private readonly userSearch: UserSearchPipe
   ) {
     this.selectionOptions = { checkboxOnly: true };
     this.globalService.updateMenuItem(0);
@@ -90,7 +93,13 @@ export class ClientsComponent implements OnInit {
     this.users$ = this.authenticationService.getAllUsers(false);
     this.users$.subscribe((users) => {
       this.usersList = users;
+      this.initialUsersList = users;
     });
+  }
+
+  searchTextChange(changedText: string) {
+    this.usersList = this.initialUsersList;
+    this.usersList = this.userSearch.transform(this.usersList, changedText);
   }
 
   getUserTotal(userId: string): number {
@@ -223,7 +232,7 @@ export class ClientsComponent implements OnInit {
   }
 
   onSaveEditUser() {
-    if (this.editUser.name.trim().length > 0 && this.editUser.username.trim().length > 0 && this.editUser.password.trim().length > 0) {
+    if (this.editUser.name.trim().length > 0 && this.editUser.username.trim().length > 0) {
       const userToUpdate: any = {
         name: this.editUser.name,
         username: this.editUser.username,

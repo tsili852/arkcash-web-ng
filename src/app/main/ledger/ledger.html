@@ -172,7 +172,7 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Entrée/Sortie' field="inout" width=140>
+        <e-column headerText='↓ / ↑' field="inout" width=100>
           <ng-template #template let-entry>
             <div (click)="onRowClick(entry)">
               <span id="Emptext">{{getEntryInOutText(entry)}}</span>
@@ -201,7 +201,7 @@
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText=' Montant' textAlign='Right' field="totalAmount" width=150>
+        <e-column headerText=' Montant' textAlign='Right' field="totalAmount" width=140>
           <ng-template #template let-entry>
             <div class="flex flex-col text-right" (click)="onRowClick(entry)">
               <span *ngIf="entry.entryitems.length > 1"
