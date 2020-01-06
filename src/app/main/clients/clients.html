@@ -20,10 +20,11 @@
     </div>
   </nav>
   <div class="flex justify-between items-center py-4 md:px-10 px-4">
-    <div class="text-lg md:text-xl">
+    <div class="text-lg md:text-xl" *ngIf="initialUsersList">
       {{initialUsersList.length}}
     </div>
-    <div class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center md:ml-8 lg:w-64 w-72">
+    <div
+      class="border-b border-b-2 border-gray-700 hover:border-pink-600 flex items-center md:ml-8 lg:w-64 w-72 mx-4 md:mx-0">
       <input [(ngModel)]="searchText" (ngModelChange)="searchTextChange($event)"
         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
         type="text" placeholder="Recherche" aria-label="Search">
@@ -164,7 +165,7 @@
           <td class="px-4 py-2 text-right" (click)="onRowClick(user)">{{getUserTotal(user.id) | number:'0.2-2':'de-CH'}}
           </td>
           <td class="px-2">
-            <img class="w-6 h-auto" src="assets/images/edit.png" (click)="onEditMobile(user)" alt="Edit">
+            <img class="w-10 h-auto" src="assets/images/edit.png" (click)="onEditMobile(user)" alt="Edit">
           </td>
         </tr>
       </tbody>

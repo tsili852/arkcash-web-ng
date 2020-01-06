@@ -1,6 +1,6 @@
 <div class="flex flex-col h-full">
   <div class="flex flex-col" *ngIf="editEntry">
-    <div class="flex justify-start items-center w-full bg-gray-800 pt-2">
+    <div class="flex justify-start items-center w-full bg-gray-800">
       <div class="flex justify-start items-center w-full">
         <div [ngClass]="selectedMode === 2 ? 'bg-green-600 text-white' : 'bg-gray-300 text-black'"
           class="py-2 w-32 flex justify-center items-center h-full w-1/2">
@@ -8,7 +8,7 @@
             alt="Entrees">
           <img *ngIf="selectedMode === 2" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
             alt="Entrees">
-          <span class="text-xl">Entrée</span>
+          <span>Entrée</span>
         </div>
         <div [ngClass]="selectedMode === 1 ? 'bg-red-500 text-white' : 'bg-gray-300 text-black'"
           class="py-2 w-32 flex justify-center items-center h-full w-1/2">
@@ -16,7 +16,7 @@
             alt="Sorties">
           <img *ngIf="selectedMode === 1" class="w-6 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
             alt="Sorties">
-          <span class="text-xl">Sortie</span>
+          <span>Sortie</span>
         </div>
       </div>
       <div class="flex justify-center items-center px-6">
@@ -46,20 +46,8 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-center items-center shadow h-full">
-      <div class="flex justify-start items-center w-full h-full">
-        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onAddEntryItem()">
-          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add">
-          <span>Ajouter entrée</span>
-        </div>
-        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onSaveEditEntry()">
-          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_save.png" alt="Save">
-          <span>Enregistrer</span>
-        </div>
-      </div>
-    </div>
   </div>
-  <div class="flex flex-col bg-gray-200 mt-1 overflow-y-auto pb-6 h-full px-1">
+  <div class="flex flex-col bg-gray-200 mt-1 overflow-y-auto pb-12 h-full px-1">
     <ng-scrollbar>
       <div *ngFor="let item of editEntryItems; let itemIndex = index"
         class="bg-white flex items-center justify-between my-1 ng-star-inserted px-4 py-2 shadow w-full">
@@ -77,5 +65,19 @@
           (click)="onRemoveEditEntryItem(itemIndex)">
       </div>
     </ng-scrollbar>
+  </div>
+  <div class="absolute bottom-0 mb-12 w-full">
+    <div class="flex justify-center items-center shadow bottom-0 bg-white">
+      <div class="flex justify-start items-center w-full h-full">
+        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onAddEntryItem()">
+          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add">
+          <span>Ajouter entrée</span>
+        </div>
+        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onSaveEditEntry()">
+          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_save.png" alt="Save">
+          <span>Enregistrer</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
