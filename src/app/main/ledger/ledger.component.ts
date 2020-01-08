@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { L10n, setCulture } from '@syncfusion/ej2-base';
 import { GridComponent, SelectionSettingsModel, parentsUntil } from '@syncfusion/ej2-angular-grids';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { ExportToCsv } from 'export-to-csv';
 
 import { version as applicationVersion } from '../../../../package.json';
 import { environment } from '../../../environments/environment';
@@ -114,6 +115,12 @@ export class LedgerComponent implements OnInit {
   deleting = false;
   deletedCount = 0;
   deleteProgress = 0;
+
+  showExportModal = false;
+  exportDate: Date = new Date();
+  exportEntriesCount = 0;
+  exportFileName = '';
+  entriesToExport: Entry[];
 
   constructor(
     private readonly entryService: EntryService,
@@ -344,8 +351,38 @@ export class LedgerComponent implements OnInit {
     });
   }
 
-  onExportToExcel() {
-    this.grid.excelExport();
+  onShowExportModal() {
+    this.showExportModal = true;
+    this.exportDate = new Date();
+    this.exportDate.setDate(this.exportDate.getDate() - 1);
+    this.filterEntriesToExport();
+  }
+
+  changeExportDate(args: MatDatepickerInputEvent<Date>) {
+    if (args.value) {
+      this.exportDate = args.value;
+      this.filterEntriesToExport();
+    }
+  }
+
+  filterEntriesToExport() {
+    this.exportFileName = `${this.connectedUser.name}-${this.datePipe.transform(this.exportDate, 'yyyy-MM-dd')}`;
+    this.entriesToExport = this.entriesObj.filter((entry) => {
+      const entryDate = new Date(entry.entryDate);
+      entryDate.setHours(0, 0, 0, 0);
+      this.exportDate.setHours(0, 0, 0, 0);
+      if (entryDate <= this.exportDate) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    this.exportEntriesCount = this.entriesToExport.length;
+    this.entriesToExport.sort((first, second) => first.pieceNo - second.pieceNo);
+  }
+
+  onExport() {
+    this.generateCSV();
   }
 
   onShowAddModal() {
@@ -633,6 +670,163 @@ export class LedgerComponent implements OnInit {
       },
       (error) => {
         console.log(`Error: ${error}`);
+      }
+    );
+  }
+
+  generateCSV() {
+    const exportOptions = {
+      fieldSeparator: ';',
+      quoteStrings: '',
+      decimalSeparator: '.',
+      showLabels: true,
+      showTitle: false,
+      title: this.exportFileName,
+      filename: this.exportFileName,
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true
+    };
+
+    const csvExporter = new ExportToCsv(exportOptions);
+
+    const exportData: Array<any> = new Array<any>();
+
+    this.entriesToExport.forEach((entry) => {
+      let entryName = '';
+      let debitAccount = '';
+      let creditAccount = '';
+      let entryJournal = '';
+      let entryAmount = 0;
+
+      if (entry.entryitems.length === 1) {
+        const entryItem = entry.entryitems[0];
+        entryName = `${entry.address.name}-${entryItem.category.name}`;
+
+        if (entry.inout === 1) {
+          debitAccount = '1000';
+          creditAccount = entryItem.category.accNo || '';
+          entryJournal = 'v';
+        } else {
+          creditAccount = '1000';
+          debitAccount = entryItem.category.accNo || '';
+          entryJournal = 'a';
+        }
+
+        entryAmount = entryItem.amount;
+
+        exportData.push({
+          Date: this.datePipe.transform(entry.entryDate, 'dd.MM.yyyy'),
+          Piece: entry.pieceNo,
+          Libelle: entryName,
+          Cpt_debit: debitAccount,
+          Cpt_credit: creditAccount,
+          Montant: entryAmount,
+          Journal: entryJournal,
+          ME_cours: '',
+          ME_mnt: '',
+          TVA_taux: '',
+          TVA_mnt: '',
+          TVA_cpt: '',
+          TVA_typ: '',
+          TVA_meth: '',
+          TVA_soum: '',
+          Ecr_monnai: '',
+          Ecr_monqte: '',
+          Comment: '',
+          Ecr_ana: '',
+          Ecr_vtcode: ''
+        });
+      } else {
+        entryName = `Divers-${entry.address.name}`;
+        entryAmount = entry.totalAmount;
+        if (entry.inout === 1) {
+          debitAccount = '1000';
+          creditAccount = '';
+          entryJournal = 'v';
+        } else {
+          creditAccount = '1000';
+          debitAccount = '';
+          entryJournal = 'a';
+        }
+
+        exportData.push({
+          Date: this.datePipe.transform(entry.entryDate, 'dd.MM.yyyy'),
+          Piece: entry.pieceNo,
+          Libelle: entryName,
+          Cpt_debit: debitAccount,
+          Cpt_credit: creditAccount,
+          Montant: entryAmount,
+          Journal: entryJournal,
+          ME_cours: '',
+          ME_mnt: '',
+          TVA_taux: '',
+          TVA_mnt: '',
+          TVA_cpt: '',
+          TVA_typ: '',
+          TVA_meth: '',
+          TVA_soum: '',
+          Ecr_monnai: '',
+          Ecr_monqte: '',
+          Comment: '',
+          Ecr_ana: '',
+          Ecr_vtcode: ''
+        });
+
+        entry.entryitems.forEach((item) => {
+          entryName = '';
+          debitAccount = '';
+          creditAccount = '';
+          entryJournal = '';
+          entryAmount = 0;
+
+          entryName = `${entry.address.name}-${item.category.name}`;
+          entryAmount = item.amount;
+
+          if (entry.inout === 1) {
+            creditAccount = item.category.accNo;
+            entryJournal = 'v';
+          } else {
+            debitAccount = item.category.accNo;
+            entryJournal = 'a';
+          }
+
+          exportData.push({
+            Date: this.datePipe.transform(entry.entryDate, 'dd.MM.yyyy'),
+            Piece: entry.pieceNo,
+            Libelle: entryName,
+            Cpt_debit: debitAccount,
+            Cpt_credit: creditAccount,
+            Montant: entryAmount,
+            Journal: entryJournal,
+            ME_cours: '',
+            ME_mnt: '',
+            TVA_taux: '',
+            TVA_mnt: '',
+            TVA_cpt: '',
+            TVA_typ: '',
+            TVA_meth: '',
+            TVA_soum: '',
+            Ecr_monnai: '',
+            Ecr_monqte: '',
+            Comment: '',
+            Ecr_ana: '',
+            Ecr_vtcode: ''
+          });
+        });
+      }
+    });
+
+    csvExporter.generateCsv(exportData);
+    this.showExportModal = false;
+
+    this.entryService.updateList(this.exportDate.toISOString()).subscribe(
+      (data) => {
+        console.log(`Exported Updated: ${JSON.stringify(data, null, 2)}`);
+        this.fetchEntries();
+      },
+      (error) => {
+        console.log(`Update exported error: ${error.message || error.toString()}`);
       }
     );
   }

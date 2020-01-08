@@ -77,7 +77,7 @@
       <div class="icons-container flex">
         <img class="w-8 h-8 cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add" (click)="onShowAddModal()">
         <img *ngIf="logedinUser.isAdmin" class="w-8 h-8 cursor-pointer mr-2" src="assets/images/export-xls.png"
-          alt="Export" (click)="onExportToExcel()">
+          alt="Export" (click)="onShowExportModal()">
         <img class="w-8 h-8 cursor-pointer" src="assets/images/bt_delete.png" alt="Delete" (click)="onDeleteMultiple()">
       </div>
     </div>
@@ -474,6 +474,45 @@
         (click)="showDeleteMultiple = false">
         No
       </div>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showExportModal" [class.pointer-events-auto]="showExportModal"
+  class="z-20 opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div class="absolute bg-white rounded-lg shadow-lg flex flex-col items-start justify-start p-5 border">
+    <mat-form-field>
+      <input readonly matInput [matDatepicker]="exportPicker" placeholder="Date d'exportation"
+        (focus)="exportPicker.open()" [(ngModel)]="exportDate" (dateChange)="changeExportDate($event)">
+      <mat-datepicker-toggle matSuffix [for]="exportPicker">
+        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #exportPicker></mat-datepicker>
+    </mat-form-field>
+    <div *ngIf="deleting" class="w-full mt-6">
+      <mat-progress-bar color="accent" mode="determinate" [value]="deleteProgress"></mat-progress-bar>
+    </div>
+    <div *ngIf="exportEntriesCount > 0" class="flex justify-start mb-4 text-sm">
+      <div>Nombre d'élément(s) trouvé(s) pour export: </div>
+      <div class="font-bold text-green-700 ml-2">{{exportEntriesCount}}</div>
+    </div>
+    <div class="flex flex-col text-sm">
+      <div class="text-gray-600">Nom du fichier</div>
+      <div class="border-b border-b-2 hover:border-gray-500 flex items-center w-80">
+        <input [(ngModel)]="exportFileName"
+          class="appearance-none bg-transparent border-none w-full mr-3 py-1 leading-tight focus:outline-none placeholder-gray-500"
+          type="text" placeholder="" aria-label="File Name">
+      </div>
+    </div>
+    <div class="flex w-full justify-center items-center mt-5">
+      <button class="hover:bg-green-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew"
+        (click)="onExport()">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/save.png" alt="Sorties">
+      </button>
+      <button class="hover:bg-gray-200 focus:outline-none hover:shadow-lg p-2 rounded-full shadow text-whitew ml-4"
+        (click)="showExportModal = false">
+        <img class="w-10 h-auto cursor-pointer" src="assets/images/bt_cancel.png" alt="Sorties">
+      </button>
     </div>
   </div>
 </div>

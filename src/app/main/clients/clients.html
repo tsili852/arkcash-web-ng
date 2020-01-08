@@ -102,7 +102,7 @@
       [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
       [selectionSettings]='selectionOptions'>
       <e-columns>
-        <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column>
+        <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
         <e-column headerText='Nom' field="inout" width=200>
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">

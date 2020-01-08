@@ -85,4 +85,14 @@ export class EntryService {
   deleteEntry(entry: any): Observable<any> {
     return this.httpClient.delete<any>(`${Config.apiURL}entry/${entry.id}`);
   }
+
+  updateList(stringDate: string): Observable<any> {
+    const body = {
+      exported: true
+    };
+    return this.httpClient.put(
+      `${Config.apiURL}entries/updatelist?dateto=${stringDate}&client=${this.globalService.getSelectedUser().id}`,
+      body
+    );
+  }
 }
