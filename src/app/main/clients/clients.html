@@ -216,7 +216,7 @@
           </mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>
         </mat-form-field>
-        <div class="e-float-input e-input-group mx-2" style="width: 11rem;">
+        <div [class.e-error]="newUser.accNo === null" class="e-float-input e-input-group mx-2" style="width: 11rem;">
           <input [(ngModel)]="newUser.accNo" class="custom-input" type="text" required />
           <span class="e-float-line"></span>
           <label class="e-float-text" style="font-size: 15px; color: #464646;">No. de compte</label>

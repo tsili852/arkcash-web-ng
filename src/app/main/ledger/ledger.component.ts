@@ -84,7 +84,7 @@ export class LedgerComponent implements OnInit {
   categoryList$: Observable<Category[]>;
   categoryListFields = { text: 'name', value: 'id' };
 
-  newEntryDate: Date;
+  newEntryDate: Date = new Date();
   newEntryInOut = 2;
   newEntryItems: {
     category: Category;
@@ -494,6 +494,8 @@ export class LedgerComponent implements OnInit {
     const itemsToUpdate: any[] = new Array<any>();
 
     if (validItems.length > 0 && this.newEntryAddress.id && this.newEntryDate) {
+      this.showAddModal = false;
+
       validItems.forEach((item) => {
         itemsToUpdate.push({
           amount: item.amount,
@@ -517,7 +519,6 @@ export class LedgerComponent implements OnInit {
 
         this.entryService.addNewEntry(newEntry).subscribe(
           () => {
-            this.showAddModal = false;
             setTimeout(() => {
               this.fetchEntries();
             }, 100);

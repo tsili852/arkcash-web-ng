@@ -168,7 +168,7 @@ export class ClientsComponent implements OnInit {
   }
 
   onSaveNewUser() {
-    if (this.newUser.name.trim().length > 0 && this.newUser.username.trim().length > 0 && this.newUser.password.trim().length > 0) {
+    if (this.newUser.name.trim().length > 0 && this.newUser.username.trim().length > 0 && this.newUser.password.trim().length > 0 && this.newUser.accNo) {
       const userToCreate = {
         name: this.newUser.name,
         username: this.newUser.username,

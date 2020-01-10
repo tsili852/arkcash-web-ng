@@ -203,14 +203,14 @@
           [selectionSettings]='selectionOptions'>
           <e-columns>
             <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
-            <e-column headerText='Adresse'>
+            <e-column headerText='Adresse' field="address.name">
               <ng-template #template let-address>
                 <div (click)="onRowClick(address)">
                   <span id="Emptext">{{address.name}}</span>
                 </div>
               </ng-template>
             </e-column>
-            <e-column headerText='Catégorie'>
+            <e-column headerText='Catégorie' field="address.category.name">
               <ng-template #template let-address>
                 <div (click)="onRowClick(address)">
                   <span>{{address.category.name}}</span>
@@ -238,14 +238,14 @@
           (rowDataBound)='rowDataBoundCategory($event)' [selectionSettings]='selectionOptions'>
           <e-columns>
             <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
-            <e-column headerText='Catégorie'>
+            <e-column headerText='Catégorie' field="category.name">
               <ng-template #template let-category>
                 <div (click)="onRowClickCategory(category)">
                   <span id="Emptext">{{category.name}}</span>
                 </div>
               </ng-template>
             </e-column>
-            <e-column headerText='No de Compte'>
+            <e-column headerText='No de Compte' field="category.accNo">
               <ng-template #template let-category>
                 <div (click)="onRowClickCategory(category)">
                   <span>{{category.accNo}}</span>
