@@ -55,7 +55,7 @@
       <div class="flex mt-2" *ngIf="(entriesTotal | async) as totalArray">
         <div *ngIf="totalArray[0]" [class.bg-green-600]="totalArray[0].total >= 0"
           [class.bg-red-600]="totalArray[0].total < 0" class="shadow px-3 text-white rounded text-sm">
-          {{totalArray[0].total | number:'0.2-2'}}
+          {{totalArray[0].total | number:'0.2-2':'de-CH'}}
         </div>
       </div>
     </div>
@@ -237,7 +237,7 @@
           <td class="px-2 py-2">{{entry.entryDate | date:'dd.MM.yy'}}</td>
           <td class="px-2 py-2">{{entry.address.name}}</td>
           <td class="px-2 py-2 text-right">
-            {{entry.totalAmount | number:'0.2-2'}}
+            {{entry.totalAmount | number:'0.2-2':'de-CH'}}
           </td>
         </tr>
       </tbody>
@@ -338,7 +338,7 @@
       </div>
       <div class="flex items-center justify-end mt-4 px-2">
         <div [ngClass]="newEntryInOut === 1 ? 'text-red-600' : 'text-green-600'" class="text-lg mr-6">
-          {{newEntryItemsTotal | number:'0.2-2'}}
+          {{newEntryItemsTotal | number:'0.2-2':'de-CH'}}
         </div>
         <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_add.png" alt="Sorties"
           (click)="onAddNewEntryItem()" />
@@ -411,7 +411,7 @@
       </div>
       <div class="flex items-center justify-end mt-4 px-2">
         <div [ngClass]="editEntryInOut === 1 ? 'text-green-600': 'text-red-600'" class="text-lg mr-6">
-          {{editEntryItemsTotal | number:'0.2-2'}}
+          {{editEntryItemsTotal | number:'0.2-2':'de-CH'}}
         </div>
         <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_add.png" alt="Sorties"
           (click)="onAddEditEntryItem()" />

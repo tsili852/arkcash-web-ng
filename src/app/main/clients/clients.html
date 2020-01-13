@@ -98,33 +98,32 @@
     </ejs-grid>
   </div>
   <div class="table-container px-3 hidden md:block lg:hidden z-0">
-    <ejs-grid #grid [dataSource]="(users$ | async) | userSearch:searchText" [allowSorting]='true'
-      [allowFiltering]='true' [enableVirtualization]='true' [locale]="'fr-CH'" height='750'
-      [selectionSettings]='selectionOptions'>
+    <ejs-grid #grid [dataSource]="usersList" [allowSorting]='true' [allowFiltering]='true' [enableVirtualization]='true'
+      [locale]="'fr-CH'" [height]="gridHeight" [selectionSettings]='selectionOptions'>
       <e-columns>
         <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
-        <e-column headerText='Nom' field="inout" width=200>
+        <e-column headerText='Nom' field="name" width=200>
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.name}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column class="hidden lg:block" headerText="Nom d'utilisateur">
+        <e-column class="hidden lg:block" headerText="Nom d'utilisateur" field="username">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.username}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText="No.de Compte">
+        <e-column headerText="No.de Compte" field="accNo">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.accNo}}</span>
             </div>
           </ng-template>
         </e-column>
-        <e-column headerText='Date de début'>
+        <e-column headerText='Date de début' field="startDate">
           <ng-template #template let-user>
             <div (click)="onRowClick(user)">
               <span>{{user.startDate | date:'dd.MM.yyyy'}}</span>

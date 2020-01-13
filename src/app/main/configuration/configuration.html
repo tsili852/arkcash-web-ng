@@ -45,7 +45,7 @@
           alt="Entrees">
         <img *ngIf="selectedMode === 3" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/entrees.png"
           alt="Entrees">
-        <span>Categories</span>
+        <span>Catégories</span>
       </div>
     </div>
     <div class="flex justify-start items-center text-sm my-2">
@@ -65,7 +65,7 @@
           alt="Entrees">
         <img *ngIf="selectedMode === 4" class="w-4 h-auto cursor-pointer mr-2" src="assets/images/sorties.png"
           alt="Entrees">
-        <span>Categories</span>
+        <span>Catégories</span>
       </div>
     </div>
   </div>
@@ -177,12 +177,12 @@
       [ngClass]="selectedMode === 3 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
       class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
       (click)="onSelectMode(3)">
-      <div>Cons. categories entrées</div>
+      <div>Cons. catégories entrées</div>
     </div>
     <div *ngIf="logedinUser.isAdmin" [ngClass]="selectedMode === 4 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
       class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
       (click)="onSelectMode(4)">
-      <div>Cons. categories sorties</div>
+      <div>Cons. catégories sorties</div>
     </div>
   </div>
   <div class="main-content w-full md:w-10/12">
