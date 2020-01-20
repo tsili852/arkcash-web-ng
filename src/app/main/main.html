@@ -44,32 +44,34 @@
     </div>
   </nav>
   <nav
+    class="bg-gray-900 shadow pt-1 md:pt-1 pb-1 px-1 mt-0 h-auto w-full z-20 bottom-0 md:hidden flex flex-col justify-center">
+    <!-- <nav
     class="bg-gray-900 shadow pt-1 md:pt-1 pb-1 px-1 mt-0 h-auto w-full z-20 bottom-0 md:hidden flex flex-col justify-center"
-    style="height: 7%;">
+    style="height: 7%;"> -->
     <div class="flex flex-row justify-between items-center px-2">
       <div class="w-full flex justify-center border-r" (click)="showLogoutConfirmation = true">
-        <img class="nav-icon h-auto cursor-pointer" src="assets/images/deconnecter.png" alt="LogOut">
+        <img class="nav-icon cursor-pointer" src="assets/images/deconnecter.png" alt="LogOut">
       </div>
       <div *ngIf="connectedUser.isAdmin" class="w-full flex justify-center border-r" (click)="onGoToClients()">
-        <img class="nav-icon h-auto cursor-pointer"
+        <img class="nav-icon cursor-pointer"
           [src]="currentRoute === 0 ? 'assets/images/user_rose.png' : 'assets/images/user_blanc.png'" alt="Clients">
       </div>
       <div class="w-full flex justify-center border-r" (click)="onGoToConfiguration()">
-        <img class="nav-icon h-auto cursor-pointer"
+        <img class="nav-icon cursor-pointer"
           [src]="currentRoute === 2 ? 'assets/images/config_rose.png' : 'assets/images/config_blanc.png'"
           alt="Settings">
       </div>
       <div class="w-full flex justify-center border-r" (click)="onGoToLedger()">
-        <img class="nav-icon h-auto cursor-pointer"
+        <img class="nav-icon cursor-pointer"
           [src]="currentRoute === 1 ? 'assets/images/journal_rose.png' : 'assets/images/journal_blanc.png'"
           alt="Journal">
       </div>
       <div *ngIf="currentRoute !== 4" class="w-full flex justify-center" (click)="onGoToAddMobile()">
-        <img class="nav-icon h-auto cursor-pointer"
+        <img class="nav-icon cursor-pointer"
           [src]="currentRoute === 3 ? 'assets/images/add_small_rose.png' : 'assets/images/add_small.png'" alt="Add">
       </div>
       <div *ngIf="currentRoute === 4" class="w-full flex justify-center">
-        <img class="nav-icon h-auto cursor-pointer" src="assets/images/edit_rose.png" alt="Add">
+        <img class="nav-icon cursor-pointer" src="assets/images/edit_rose.png" alt="Add">
       </div>
     </div>
   </nav>
