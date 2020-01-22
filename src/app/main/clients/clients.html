@@ -34,8 +34,8 @@
       (click)="onAddMobile()">
   </div>
   <div class="table-container px-3 hidden lg:block z-0">
-    <ejs-grid #grid [dataSource]="usersList" [allowSorting]='true' [allowFiltering]='true' [enableVirtualization]='true'
-      [locale]="'fr-CH'" [height]="gridHeight" [selectionSettings]='selectionOptions'>
+    <ejs-grid #grid [dataSource]="usersList" [allowSorting]='true' [allowFiltering]='true' [locale]="'fr-CH'"
+      [height]="gridHeight" [selectionSettings]='selectionOptions'>
       <e-columns>
         <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
         <e-column headerText='Nom' field="name" width=200>
@@ -98,8 +98,8 @@
     </ejs-grid>
   </div>
   <div class="table-container px-3 hidden md:block lg:hidden z-0">
-    <ejs-grid #grid [dataSource]="usersList" [allowSorting]='true' [allowFiltering]='true' [enableVirtualization]='true'
-      [locale]="'fr-CH'" [height]="gridHeight" [selectionSettings]='selectionOptions'>
+    <ejs-grid #grid [dataSource]="usersList" [allowSorting]='true' [allowFiltering]='true' [locale]="'fr-CH'"
+      [height]="gridHeight" [selectionSettings]='selectionOptions'>
       <e-columns>
         <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
         <e-column headerText='Nom' field="name" width=200>

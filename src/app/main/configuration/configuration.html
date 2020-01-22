@@ -198,9 +198,8 @@
         </div>
       </div>
       <div class="table-container mt-3">
-        <ejs-grid #grid [dataSource]="addressesList" [allowSorting]='true' [allowFiltering]='true'
-          [enableVirtualization]='true' [locale]="'fr-CH'" [height]="gridHeight" (rowDataBound)='rowDataBound($event)'
-          [selectionSettings]='selectionOptions'>
+        <ejs-grid #grid [dataSource]="addressesList" [allowSorting]='true' [allowFiltering]='true' [locale]="'fr-CH'"
+          [height]="gridHeight" (rowDataBound)='rowDataBound($event)' [selectionSettings]='selectionOptions'>
           <e-columns>
             <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
             <e-column headerText='Adresse' field="address.name">
@@ -233,9 +232,8 @@
         </div>
       </div>
       <div class="table-container mt-3">
-        <ejs-grid #grid [dataSource]="categoriesList" [allowSorting]='true' [allowFiltering]='true'
-          [enableVirtualization]='true' [locale]="'fr-CH'" [height]="gridHeight"
-          (rowDataBound)='rowDataBoundCategory($event)' [selectionSettings]='selectionOptions'>
+        <ejs-grid #grid [dataSource]="categoriesList" [allowSorting]='true' [allowFiltering]='true' [locale]="'fr-CH'"
+          [height]="gridHeight" (rowDataBound)='rowDataBoundCategory($event)' [selectionSettings]='selectionOptions'>
           <e-columns>
             <!-- <e-column type='checkbox' [allowFiltering]='false' [allowSorting]='false' width='60'></e-column> -->
             <e-column headerText='Catégorie' field="category.name">
