@@ -84,6 +84,7 @@ export class LedgerComponent implements OnInit {
   categoryList$: Observable<Category[]>;
   categoryListFields = { text: 'name', value: 'id' };
 
+  newEntryMinDate: Date;
   newEntryDate: Date = new Date();
   newEntryInOut = 2;
   newEntryItems: {
@@ -141,6 +142,14 @@ export class LedgerComponent implements OnInit {
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
 
+    if (this.connectedUser) {
+      if (this.connectedUser.lastExport) {
+        this.newEntryMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
+      } else {
+        this.newEntryMinDate = new Date(this.connectedUser.startDate);
+      }
+    }
+
     if (this.connectedUser && this.connectedUser.lastExport) {
       this.clientLastExportDate = new Date(this.connectedUser.lastExport);
     } else {
@@ -196,13 +205,7 @@ export class LedgerComponent implements OnInit {
   }
 
   fetchEntries() {
-    this.entries = this.entryService.getEntries(
-      this.skipEntries,
-      this.amountEntries,
-      this.inoutParameter,
-      this.searchTerms,
-      this.connectedClientId
-    );
+    this.entries = this.entryService.getEntries(this.skipEntries, this.amountEntries, this.inoutParameter, this.searchTerms, this.connectedClientId);
 
     this.entries.subscribe((entries: Entry[]) => {
       this.entriesObj = entries;

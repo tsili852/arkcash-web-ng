@@ -313,7 +313,7 @@
         placeholder="Adresse"></ejs-dropdownlist>
       <mat-form-field class="ml-6" style="padding-top: 6px">
         <input matInput readonly [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
-          [(ngModel)]="newEntryDate" />
+          [min]="newEntryMinDate" [(ngModel)]="newEntryDate" />
         <mat-datepicker-toggle matSuffix [for]="newEntryPicker">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
         </mat-datepicker-toggle>

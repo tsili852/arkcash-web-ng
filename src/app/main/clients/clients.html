@@ -208,8 +208,8 @@
       </div>
       <div class="flex justify-start items-center w-full pl-2">
         <mat-form-field class="mr-2 mt-5">
-          <input class="text-sm" matInput readonly [min]="newDateMinimum" [matDatepicker]="startDatePicker"
-            placeholder="Date de debut" (focus)="startDatePicker.open()" [(ngModel)]="addUserStartDate">
+          <input class="text-sm" matInput readonly [matDatepicker]="startDatePicker" placeholder="Date de debut"
+            (focus)="startDatePicker.open()" [(ngModel)]="addUserStartDate">
           <mat-datepicker-toggle matSuffix [for]="startDatePicker">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
           </mat-datepicker-toggle>

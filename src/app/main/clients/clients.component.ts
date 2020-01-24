@@ -190,7 +190,12 @@ export class ClientsComponent implements OnInit {
             this.drawerService.createDrawer(drawerToCreate).subscribe(
               () => {
                 this.categoriesToCopy.map((category) => (category.client = user.id));
-                this.categoryService.addCategories(this.categoriesToCopy);
+                this.categoryService.addCategories(this.categoriesToCopy).subscribe(
+                  (cats) => {},
+                  (error) => {
+                    console.log(`Error: ${error.message || error.toString()}`);
+                  }
+                );
 
                 if (this.showAddModal) {
                   this.showAddModal = false;

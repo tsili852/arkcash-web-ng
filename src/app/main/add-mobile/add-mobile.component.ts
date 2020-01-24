@@ -31,6 +31,7 @@ export class AddMobileComponent implements OnInit {
     category: Category;
     amount: string;
   }[];
+  newEntryMinDate: Date;
   newEntryDate: Date;
   newEntryPieceNo = 0;
   newEntryAddress: Address;
@@ -60,6 +61,14 @@ export class AddMobileComponent implements OnInit {
 
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
+
+    if (this.connectedUser) {
+      if (this.connectedUser.lastExport) {
+        this.newEntryMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
+      } else {
+        this.newEntryMinDate = new Date(this.connectedUser.startDate);
+      }
+    }
 
     if (this.logedinUser.isAdmin) {
       if (!this.connectedUser) {
