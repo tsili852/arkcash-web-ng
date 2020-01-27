@@ -84,6 +84,7 @@ export class LedgerComponent implements OnInit {
   categoryList$: Observable<Category[]>;
   categoryListFields = { text: 'name', value: 'id' };
 
+  dateFromMinDate: Date;
   newEntryMinDate: Date;
   newEntryDate: Date = new Date();
   newEntryInOut = 2;
@@ -148,6 +149,8 @@ export class LedgerComponent implements OnInit {
       } else {
         this.newEntryMinDate = new Date(this.connectedUser.startDate);
       }
+
+      this.dateFromMinDate = new Date(this.connectedUser.startDate);
     }
 
     if (this.connectedUser && this.connectedUser.lastExport) {
@@ -182,6 +185,8 @@ export class LedgerComponent implements OnInit {
     this.searchTerms = new SearchTerms(null, new Date(), 0, 0, '', this.exporteesChecked);
     if (this.clientLastExportDate) {
       this.searchTerms.dateFrom = this.clientLastExportDate;
+    } else {
+      this.searchTerms.dateFrom = new Date(this.connectedUser.startDate);
     }
 
     const storedInOut = localStorage.getItem('inout');
