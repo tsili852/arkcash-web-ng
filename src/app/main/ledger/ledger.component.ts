@@ -292,6 +292,11 @@ export class LedgerComponent implements OnInit {
       exportees: false,
       text: ''
     };
+    if (this.clientLastExportDate) {
+      this.searchTerms.dateFrom = this.clientLastExportDate;
+    } else {
+      this.searchTerms.dateFrom = new Date(this.connectedUser.startDate);
+    }
     this.exporteesChecked = false;
 
     this.fetchEntries();
