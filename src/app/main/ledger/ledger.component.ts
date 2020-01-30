@@ -143,6 +143,8 @@ export class LedgerComponent implements OnInit {
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
 
+    console.log(`Connected user: ${JSON.stringify(this.connectedUser, null, 2)}`);
+
     if (this.connectedUser) {
       if (this.connectedUser.lastExport) {
         this.newEntryMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
@@ -367,7 +369,7 @@ export class LedgerComponent implements OnInit {
   onShowExportModal() {
     this.showExportModal = true;
     this.exportDate = new Date();
-    this.exportDate.setDate(this.exportDate.getDate() - 1);
+    // this.exportDate.setDate(this.exportDate.getDate() - 1);
     this.filterEntriesToExport();
   }
 
