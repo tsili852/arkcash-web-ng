@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
-import { DatePipe, registerLocaleData } from '@angular/common';
+import { DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -41,6 +41,7 @@ registerLocaleData(localeFrCH, 'fr-CH', localeFrCHExtra);
   ],
   providers: [
     DatePipe,
+    DecimalPipe,
     authProviders,
     AuthenticationService,
     CategoryService,

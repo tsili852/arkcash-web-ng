@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { L10n, setCulture } from '@syncfusion/ej2-base';
@@ -132,6 +132,7 @@ export class LedgerComponent implements OnInit {
     private readonly addressService: AddressService,
     private readonly categoryService: CategoryService,
     private readonly datePipe: DatePipe,
+    private readonly decimalPipe: DecimalPipe,
     private readonly globalService: GlobalService,
     private readonly route: ActivatedRoute,
     private readonly authenticationService: AuthenticationService,
@@ -386,7 +387,7 @@ export class LedgerComponent implements OnInit {
       const entryDate = new Date(entry.entryDate);
       entryDate.setHours(0, 0, 0, 0);
       this.exportDate.setHours(0, 0, 0, 0);
-      if (entryDate <= this.exportDate) {
+      if (entryDate <= this.exportDate && !entry.exported) {
         return true;
       } else {
         return false;
@@ -585,7 +586,9 @@ export class LedgerComponent implements OnInit {
   }
 
   onSelectEntry(entry: Entry) {
-    this.router.navigate(['../edit-mobile'], { relativeTo: this.route, queryParams: { entryId: entry.id } });
+    if (!entry.exported) {
+      this.router.navigate(['../edit-mobile'], { relativeTo: this.route, queryParams: { entryId: entry.id } });
+    }
   }
 
   onEditAddressChange(args: any) {
@@ -737,7 +740,8 @@ export class LedgerComponent implements OnInit {
           Libelle: entryName,
           Cpt_debit: debitAccount,
           Cpt_credit: creditAccount,
-          Montant: entryAmount,
+          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'fr-CH'),
+          // Montant: entryAmount,
           Journal: entryJournal,
           ME_cours: '',
           ME_mnt: '',
@@ -772,7 +776,7 @@ export class LedgerComponent implements OnInit {
           Libelle: entryName,
           Cpt_debit: debitAccount,
           Cpt_credit: creditAccount,
-          Montant: entryAmount,
+          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'fr-CH'),
           Journal: entryJournal,
           ME_cours: '',
           ME_mnt: '',
@@ -835,6 +839,8 @@ export class LedgerComponent implements OnInit {
 
     csvExporter.generateCsv(exportData);
     this.showExportModal = false;
+
+    this.exportDate.setHours(14);
 
     this.entryService.updateList(this.exportDate.toISOString()).subscribe(
       (data) => {
