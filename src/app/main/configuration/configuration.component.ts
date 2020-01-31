@@ -57,8 +57,8 @@ export class ConfigurationComponent implements OnInit {
   showAddModal = false;
   newAddress: Address;
   addAddressErrors = false;
-  addAddressInout = -1;
-  addCategoryInout = -1;
+  addAddressInout = 1;
+  addCategoryInout = 1;
 
   selectionOptions: SelectionSettingsModel;
 

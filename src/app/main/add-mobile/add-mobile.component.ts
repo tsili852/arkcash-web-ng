@@ -109,7 +109,7 @@ export class AddMobileComponent implements OnInit {
       this.newEntryItems = [
         {
           amount: '',
-          category: this.categoryList[0]
+          category: this.categoryList.find((category) => category.id === this.newEntryAddress.category.id)
         }
       ];
     });
@@ -151,7 +151,7 @@ export class AddMobileComponent implements OnInit {
   onAddNewEntryItem() {
     this.newEntryItems.push({
       amount: '',
-      category: this.selectedAddressCategory || this.categoryList[0]
+      category: this.selectedAddressCategory || this.categoryList.find((category) => category.id === this.newEntryAddress.category.id)
     });
 
     setTimeout(() => {
