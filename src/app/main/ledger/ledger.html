@@ -111,7 +111,7 @@
       </div>
       <div class="hidden lg:flex items-center">
         <mat-form-field>
-          <input readonly matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()"
+          <input readonly matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()" [class.date-error]="datesError"
             [min]="dateFromMinDate" [(ngModel)]="searchTerms.dateFrom" (dateChange)="changeDateFrom($event)" />
           <mat-datepicker-toggle matSuffix [for]="picker">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
@@ -122,7 +122,7 @@
           -
         </div>
         <mat-form-field>
-          <input readonly matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()"
+          <input readonly matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()" [class.date-error]="datesError"
             [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)" />
           <mat-datepicker-toggle matSuffix [for]="pickerTo">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>

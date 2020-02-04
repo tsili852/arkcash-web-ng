@@ -101,17 +101,16 @@ export class AddMobileComponent implements OnInit {
     this.addressList$.subscribe((addresses) => {
       this.addressList = addresses;
       this.newEntryAddress = addresses[0];
-    });
-
-    this.categoryList$ = this.categoryService.getCategories(this.selectedMode === 1 ? '-1' : '1');
-    this.categoryList$.subscribe((categories) => {
-      this.categoryList = categories;
-      this.newEntryItems = [
-        {
-          amount: '',
-          category: this.categoryList.find((category) => category.id === this.newEntryAddress.category.id)
-        }
-      ];
+      this.categoryList$ = this.categoryService.getCategories(this.selectedMode === 1 ? '-1' : '1');
+      this.categoryList$.subscribe((categories) => {
+        this.categoryList = categories;
+        this.newEntryItems = [
+          {
+            amount: '',
+            category: this.categoryList.find((category) => category.id === this.newEntryAddress.category.id)
+          }
+        ];
+      });
     });
   }
 

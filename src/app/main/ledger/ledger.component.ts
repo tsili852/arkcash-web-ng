@@ -61,6 +61,7 @@ export class LedgerComponent implements OnInit {
   searchTerms: SearchTerms;
   exporteesChecked = false;
   isTest = false;
+  datesError = false;
 
   clientLastExportDate: Date;
 
@@ -308,13 +309,31 @@ export class LedgerComponent implements OnInit {
   changeDateFrom(args: MatDatepickerInputEvent<Date>) {
     const dateFrom = args.value;
     this.searchTerms.dateFrom = dateFrom;
-    this.fetchEntries();
+    this.validateDates();
+    if (!this.datesError) {
+      this.fetchEntries();
+    }
   }
 
   changeDateTo(args: MatDatepickerInputEvent<Date>) {
     const dateTo = args.value;
     this.searchTerms.dateTo = dateTo;
-    this.fetchEntries();
+    this.validateDates();
+    if (!this.datesError) {
+      this.fetchEntries();
+    }
+  }
+
+  validateDates() {
+    const dateFrom = new Date(this.searchTerms.dateFrom);
+    const dateTo = new Date(this.searchTerms.dateTo);
+    dateFrom.setHours(0, 0, 0, 0);
+    dateTo.setHours(0, 0, 0, 0);
+    if (dateFrom > dateTo) {
+      this.datesError = true;
+    } else {
+      this.datesError = false;
+    }
   }
 
   onDataBound(args: any) {
