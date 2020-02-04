@@ -33,9 +33,17 @@
         <div class="text-base">
           {{editEntryPieceNo}}
         </div>
-        <div class="text-base">
+        <mat-form-field class="ml-6" style="padding-top: 6px">
+          <input matInput readonly [matDatepicker]="editEntryPicker" placeholder="Date" (focus)="editEntryPicker.open()"
+            [min]="editEntryMinDate" (click)="editEntryPicker.open()" [(ngModel)]="editEntryDate">
+          <mat-datepicker-toggle matSuffix [for]="editEntryPicker">
+            <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker touchUi #editEntryPicker></mat-datepicker>
+        </mat-form-field>
+        <!-- <div class="text-base">
           {{editEntry.entryDate | date:'dd.MM.yyyy'}}
-        </div>
+        </div> -->
         <div class="flex items-center justify-center">
           <div class="text-base">
             {{totalAmount | number:'0.2-2':'de-CH'}}
@@ -66,17 +74,41 @@
       </div>
     </ng-scrollbar>
   </div>
-  <div class="absolute bottom-0 mb-12 w-full">
+  <div class="absolute bottom-0 mb-10 w-full">
     <div class="flex justify-center items-center shadow bottom-0 bg-white">
       <div class="flex justify-start items-center w-full h-full">
-        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onAddEntryItem()">
+        <div class="py-2 flex justify-center items-center h-full shadow w-2/5" (click)="onAddEntryItem()">
           <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_add.png" alt="Add">
           <span>Ajouter entrée</span>
         </div>
-        <div class="py-2 flex justify-center items-center h-full w-full shadow" (click)="onSaveEditEntry()">
-          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_save.png" alt="Save">
+        <div class="py-2 flex justify-center items-center h-full shadow w-1/5" (click)="onDeleteEntry()">
+          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_delete.png" alt="Add">
+        </div>
+        <div class="py-2 flex justify-center items-center h-full shadow w-2/5" (click)="onSaveEditEntry()">
+          <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_save.png" alt="Save">
           <span>Enregistrer</span>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div [class.opacity-100]="showDeleteConfirmation" [class.pointer-events-auto]="showDeleteConfirmation"
+  class="opacity-0 pointer-events-none modal absolute w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
+  <div class="border border-gray-500 flex flex-col ng-star-inserted py-2 px-6 rounded-lg shadow z-30 bg-white">
+    <div class="text-xl">
+      Êtes-vous sûr ?
+    </div>
+    <div class="flex justify-center items-center mt-2">
+      <div
+        class="bg-gray-600 border-gray-600 cursor-pointer flex items-center justify-center py-1 rounded shadow text-white w-12"
+        (click)="onDelete()">
+        Oui
+      </div>
+      <div
+        class="border border-gray-600 cursor-pointer flex items-center justify-center ml-3 py-1 rounded shadow text-gray-600 w-12"
+        (click)="showDeleteConfirmation = false">
+        Non
       </div>
     </div>
   </div>

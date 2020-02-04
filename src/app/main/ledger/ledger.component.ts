@@ -420,6 +420,7 @@ export class LedgerComponent implements OnInit {
             category: this.newEntryAddress.category
           }
         ];
+        this.recalculateNewEntryTotal();
       });
     });
   }
@@ -588,6 +589,8 @@ export class LedgerComponent implements OnInit {
   onSelectEntry(entry: Entry) {
     if (!entry.exported) {
       this.router.navigate(['../edit-mobile'], { relativeTo: this.route, queryParams: { entryId: entry.id } });
+    } else {
+      this.router.navigate(['../display-mobile'], { relativeTo: this.route, queryParams: { entryId: entry.id } });
     }
   }
 

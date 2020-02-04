@@ -29,6 +29,7 @@ export class EditMobileComponent implements OnInit {
   editEntryInOut = '1';
   editEntry: Entry;
   editEntryItems: EntryItem[];
+  editEntryMinDate: Date;
   editEntryDate: Date;
   editEntryPieceNo = 0;
   editEntryAddress: Address;
@@ -42,6 +43,8 @@ export class EditMobileComponent implements OnInit {
   categoryList: Category[];
   categoryList$: Observable<Category[]>;
   categoryListFields = { text: 'name', value: 'id' };
+
+  showDeleteConfirmation = false;
 
   constructor(
     private readonly entryService: EntryService,
@@ -62,6 +65,7 @@ export class EditMobileComponent implements OnInit {
           this.editEntryItems = this.editEntry.entryitems;
           this.editEntryAddress = this.editEntry.address;
           this.totalAmount = this.editEntry.totalAmount;
+          this.editEntryDate = entry.entryDate;
           if (!this.totalAmount || this.totalAmount === 0) {
             this.recalculateNewEntryTotal();
           }
@@ -99,6 +103,14 @@ export class EditMobileComponent implements OnInit {
     } else {
       this.connectedUser = this.authenticationService.getCurrentUser();
       this.globalService.setSelectedUser(this.connectedUser);
+    }
+
+    if (this.connectedUser) {
+      if (this.connectedUser.lastExport) {
+        this.editEntryMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
+      } else {
+        this.editEntryMinDate = new Date(this.connectedUser.startDate);
+      }
     }
 
     this.globalService.updateMenuItem(4);
@@ -163,6 +175,7 @@ export class EditMobileComponent implements OnInit {
         address: this.editEntryAddress.id,
         totalAmount: this.totalAmount,
         entryitems: itemsToUpdate,
+        entryDate: this.editEntryDate,
         id: this.editEntry.id
       };
       this.entryService.updateEntry(entryToUpdate).subscribe(
@@ -198,5 +211,21 @@ export class EditMobileComponent implements OnInit {
         this.totalAmount = this.totalAmount + parseFloat(itemAmount);
       }
     });
+  }
+
+  onDeleteEntry() {
+    this.showDeleteConfirmation = true;
+  }
+
+  onDelete() {
+    this.entryService.deleteEntry(this.editEntry).subscribe(
+      () => {
+        this.showDeleteConfirmation = false;
+        this.onGoToLedger();
+      },
+      (error) => {
+        console.log(`Error: ${error}`);
+      }
+    );
   }
 }

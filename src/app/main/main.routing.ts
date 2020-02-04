@@ -6,6 +6,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
 import { ClientsComponent } from './clients/clients.component';
 import { AddMobileComponent } from './add-mobile/add-mobile.component';
 import { EditMobileComponent } from './edit-mobile/edit-mobile.component';
+import { DisplayMobileComponent } from './display-mobile/display-mobile.component';
 
 export const routes: Routes = [
   {
@@ -17,11 +18,19 @@ export const routes: Routes = [
       { path: 'ledger', component: LedgerComponent },
       { path: 'configuration', component: ConfigurationComponent },
       { path: 'add-mobile', component: AddMobileComponent },
-      { path: 'edit-mobile', component: EditMobileComponent }
+      { path: 'edit-mobile', component: EditMobileComponent },
+      { path: 'display-mobile', component: DisplayMobileComponent }
     ]
   }
   // { path: '', redirectTo: 'ledger', pathMatch: 'full' },
   // { path: 'ledger', component: LedgerComponent }
 ];
 
-export const navigatableComponents = [LedgerComponent, ConfigurationComponent, ClientsComponent, AddMobileComponent, EditMobileComponent];
+export const navigatableComponents = [
+  LedgerComponent,
+  ConfigurationComponent,
+  ClientsComponent,
+  AddMobileComponent,
+  EditMobileComponent,
+  DisplayMobileComponent
+];
