@@ -35,7 +35,7 @@
         </div>
         <mat-form-field class="ml-6" style="padding-top: 6px">
           <input matInput readonly [matDatepicker]="editEntryPicker" placeholder="Date" (focus)="editEntryPicker.open()"
-            [min]="editEntryMinDate" (click)="editEntryPicker.open()" [(ngModel)]="editEntryDate">
+            [min]="editEntryMinDate" [max]="entryMaxDate" (click)="editEntryPicker.open()" [(ngModel)]="editEntryDate">
           <mat-datepicker-toggle matSuffix [for]="editEntryPicker">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
           </mat-datepicker-toggle>
@@ -82,10 +82,10 @@
           <span>Ajouter entrée</span>
         </div>
         <div class="py-2 flex justify-center items-center h-full shadow w-1/5" (click)="onDeleteEntry()">
-          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_delete.png" alt="Add">
+          <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_delete.png" alt="Add">
         </div>
         <div class="py-2 flex justify-center items-center h-full shadow w-2/5" (click)="onSaveEditEntry()">
-          <img class="w-6 h-auto cursor-pointer" src="assets/images/bt_save.png" alt="Save">
+          <img class="w-6 h-auto cursor-pointer mr-2" src="assets/images/bt_save.png" alt="Save">
           <span>Enregistrer</span>
         </div>
       </div>

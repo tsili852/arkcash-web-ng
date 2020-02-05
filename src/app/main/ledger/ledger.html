@@ -111,8 +111,9 @@
       </div>
       <div class="hidden lg:flex items-center">
         <mat-form-field>
-          <input readonly matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()" [class.date-error]="datesError"
-            [min]="dateFromMinDate" [(ngModel)]="searchTerms.dateFrom" (dateChange)="changeDateFrom($event)" />
+          <input readonly matInput [matDatepicker]="picker" placeholder="Date de" (focus)="picker.open()"
+            [class.date-error]="datesError" [min]="dateFromMinDate" [(ngModel)]="searchTerms.dateFrom"
+            (dateChange)="changeDateFrom($event)" />
           <mat-datepicker-toggle matSuffix [for]="picker">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
           </mat-datepicker-toggle>
@@ -122,8 +123,8 @@
           -
         </div>
         <mat-form-field>
-          <input readonly matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()" [class.date-error]="datesError"
-            [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)" />
+          <input readonly matInput [matDatepicker]="pickerTo" placeholder="Date à" (focus)="pickerTo.open()"
+            [class.date-error]="datesError" [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateTo($event)" />
           <mat-datepicker-toggle matSuffix [for]="pickerTo">
             <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
           </mat-datepicker-toggle>
@@ -251,7 +252,8 @@
   <div class="absolute w-88 h-88 bg-white rounded-lg shadow-lg flex flex-col items-center justify-start p-5 pt-4">
     <mat-form-field>
       <input matInput readonly [matDatepicker]="pickerModal" placeholder="Date du" (focus)="pickerModal.open()"
-        [min]="dateFromMinDate" [(ngModel)]="searchTerms.dateFrom" />
+        [class.date-error]="datesError" [min]="dateFromMinDate" [(ngModel)]="searchTerms.dateFrom"
+        (dateChange)="changeDateFromMobile($event)" />
       <mat-datepicker-toggle matSuffix [for]="pickerModal">
         <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
       </mat-datepicker-toggle>
@@ -259,7 +261,7 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput readonly [matDatepicker]="pickerToModal" placeholder="Date à" (focus)="pickerToModal.open()"
-        [(ngModel)]="searchTerms.dateTo" />
+        [class.date-error]="datesError" [(ngModel)]="searchTerms.dateTo" (dateChange)="changeDateToMobile($event)" />
       <mat-datepicker-toggle matSuffix [for]="pickerToModal">
         <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
       </mat-datepicker-toggle>
@@ -313,7 +315,7 @@
         placeholder="Adresse"></ejs-dropdownlist>
       <mat-form-field class="ml-6" style="padding-top: 6px">
         <input matInput readonly [matDatepicker]="newEntryPicker" placeholder="Date" (focus)="newEntryPicker.open()"
-          [min]="newEntryMinDate" [(ngModel)]="newEntryDate" />
+          [min]="newEntryMinDate" [max]="entryMaxDate" [(ngModel)]="newEntryDate" />
         <mat-datepicker-toggle matSuffix [for]="newEntryPicker">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
         </mat-datepicker-toggle>
@@ -386,7 +388,7 @@
         (change)="onEditAddressChange($event)" placeholder="Adresse"></ejs-dropdownlist>
       <mat-form-field class="ml-6" style="padding-top: 6px">
         <input matInput readonly [matDatepicker]="editEntryPicker" placeholder="Date" (focus)="editEntryPicker.open()"
-          [(ngModel)]="editEntryDate" />
+          [min]="newEntryMinDate" [max]="entryMaxDate" [(ngModel)]="editEntryDate" />
         <mat-datepicker-toggle matSuffix [for]="editEntryPicker">
           <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
         </mat-datepicker-toggle>

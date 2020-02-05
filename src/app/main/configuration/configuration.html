@@ -177,12 +177,12 @@
       [ngClass]="selectedMode === 3 ? 'bg-green-500' : 'bg-transparent hover:bg-gray-800'"
       class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 mt-4 w-full cursor-pointer"
       (click)="onSelectMode(3)">
-      <div>Cons. catégories entrées</div>
+      <div>Gérer catégories entrées</div>
     </div>
     <div *ngIf="logedinUser.isAdmin" [ngClass]="selectedMode === 4 ? 'bg-red-500' : 'bg-transparent hover:bg-gray-800'"
       class="text-sm xl:text-base text-white flex justify-center items-center py-3 px-3 w-full cursor-pointer"
       (click)="onSelectMode(4)">
-      <div>Cons. catégories sorties</div>
+      <div>Gérer catégories sorties</div>
     </div>
   </div>
   <div class="main-content w-full md:w-10/12">

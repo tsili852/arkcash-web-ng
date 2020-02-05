@@ -87,6 +87,7 @@ export class LedgerComponent implements OnInit {
 
   dateFromMinDate: Date;
   newEntryMinDate: Date;
+  entryMaxDate: Date;
   newEntryDate: Date = new Date();
   newEntryInOut = 2;
   newEntryItems: {
@@ -157,6 +158,8 @@ export class LedgerComponent implements OnInit {
       this.dateFromMinDate = new Date(this.connectedUser.startDate);
     }
 
+    this.entryMaxDate = new Date();
+
     if (this.connectedUser && this.connectedUser.lastExport) {
       this.clientLastExportDate = new Date(this.connectedUser.lastExport);
     } else {
@@ -188,7 +191,7 @@ export class LedgerComponent implements OnInit {
 
     this.searchTerms = new SearchTerms(null, new Date(), 0, 0, '', this.exporteesChecked);
     if (this.clientLastExportDate) {
-      this.searchTerms.dateFrom = this.clientLastExportDate;
+      this.searchTerms.dateFrom = Utilities.addDays(this.clientLastExportDate, 1);
     } else {
       this.searchTerms.dateFrom = new Date(this.connectedUser.startDate);
     }
@@ -282,8 +285,11 @@ export class LedgerComponent implements OnInit {
 
   onApplySearch() {
     this.searchTerms.exportees = this.exporteesChecked;
-    this.showSearchModal = false;
-    this.fetchEntries();
+    this.validateDates();
+    if (!this.datesError) {
+      this.showSearchModal = false;
+      this.fetchEntries();
+    }
   }
 
   onResetFilters() {
@@ -297,7 +303,7 @@ export class LedgerComponent implements OnInit {
       text: ''
     };
     if (this.clientLastExportDate) {
-      this.searchTerms.dateFrom = this.clientLastExportDate;
+      this.searchTerms.dateFrom = Utilities.addDays(this.clientLastExportDate, 1);
     } else {
       this.searchTerms.dateFrom = new Date(this.connectedUser.startDate);
     }
@@ -322,6 +328,18 @@ export class LedgerComponent implements OnInit {
     if (!this.datesError) {
       this.fetchEntries();
     }
+  }
+
+  changeDateFromMobile(args: MatDatepickerInputEvent<Date>) {
+    const dateFrom = args.value;
+    this.searchTerms.dateFrom = dateFrom;
+    this.validateDates();
+  }
+
+  changeDateToMobile(args: MatDatepickerInputEvent<Date>) {
+    const dateTo = args.value;
+    this.searchTerms.dateTo = dateTo;
+    this.validateDates();
   }
 
   validateDates() {
@@ -388,7 +406,7 @@ export class LedgerComponent implements OnInit {
 
   onShowExportModal() {
     this.showExportModal = true;
-    this.exportDate = new Date();
+    this.exportDate = Utilities.addDays(new Date(), -1);
     // this.exportDate.setDate(this.exportDate.getDate() - 1);
     this.filterEntriesToExport();
   }

@@ -31,6 +31,7 @@ export class EditMobileComponent implements OnInit {
   editEntryItems: EntryItem[];
   editEntryMinDate: Date;
   editEntryDate: Date;
+  entryMaxDate: Date;
   editEntryPieceNo = 0;
   editEntryAddress: Address;
   editEntryErrors = false;
@@ -112,6 +113,8 @@ export class EditMobileComponent implements OnInit {
         this.editEntryMinDate = new Date(this.connectedUser.startDate);
       }
     }
+
+    this.entryMaxDate = new Date();
 
     this.globalService.updateMenuItem(4);
   }

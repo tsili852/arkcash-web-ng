@@ -33,6 +33,7 @@ export class AddMobileComponent implements OnInit {
   }[];
   newEntryMinDate: Date;
   newEntryDate: Date;
+  entryMaxDate: Date;
   newEntryPieceNo = 0;
   newEntryAddress: Address;
   newEntryErrors = false;
@@ -69,6 +70,8 @@ export class AddMobileComponent implements OnInit {
         this.newEntryMinDate = new Date(this.connectedUser.startDate);
       }
     }
+
+    this.entryMaxDate = new Date();
 
     if (this.logedinUser.isAdmin) {
       if (!this.connectedUser) {
