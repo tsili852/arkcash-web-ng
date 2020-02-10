@@ -122,6 +122,8 @@ export class LedgerComponent implements OnInit {
 
   showExportModal = false;
   exportDate: Date = new Date();
+  exportMinDate: Date;
+  exportMaxDate: Date;
   exportEntriesCount = 0;
   exportFileName = '';
   entriesToExport: Entry[];
@@ -159,9 +161,11 @@ export class LedgerComponent implements OnInit {
     }
 
     this.entryMaxDate = new Date();
+    this.exportMaxDate = Utilities.addDays(new Date(), -1);
 
     if (this.connectedUser && this.connectedUser.lastExport) {
       this.clientLastExportDate = new Date(this.connectedUser.lastExport);
+      this.exportMinDate = Utilities.addDays(this.clientLastExportDate, 1);
     } else {
       this.clientLastExportDate = null;
     }
@@ -780,7 +784,7 @@ export class LedgerComponent implements OnInit {
           Libelle: entryName,
           Cpt_debit: debitAccount,
           Cpt_credit: creditAccount,
-          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'fr-CH'),
+          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'de-CH'),
           // Montant: entryAmount,
           Journal: entryJournal,
           ME_cours: '',
@@ -816,7 +820,7 @@ export class LedgerComponent implements OnInit {
           Libelle: entryName,
           Cpt_debit: debitAccount,
           Cpt_credit: creditAccount,
-          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'fr-CH'),
+          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'de-CH'),
           Journal: entryJournal,
           ME_cours: '',
           ME_mnt: '',
@@ -885,6 +889,9 @@ export class LedgerComponent implements OnInit {
     this.entryService.updateList(this.exportDate.toISOString()).subscribe(
       (data) => {
         console.log(`Exported Updated: ${JSON.stringify(data, null, 2)}`);
+        this.dateFromMinDate = Utilities.addDays(this.exportDate, 1);
+        this.searchTerms.dateFrom = this.dateFromMinDate;
+        this.newEntryMinDate = Utilities.addDays(this.exportDate, 1);
         this.fetchEntries();
       },
       (error) => {
