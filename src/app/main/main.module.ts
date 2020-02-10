@@ -8,20 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { GridModule, SortService, VirtualScrollService, ExcelExportService } from '@syncfusion/ej2-angular-grids';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe } from '../utils/pipes';
+import { EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe, RemoveSpacesPipe } from '../utils/pipes';
 
 @NgModule({
-  declarations: [MainComponent, EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe, ...navigatableComponents],
+  declarations: [MainComponent, EntrySearchPipe, AddressSearchPipe, UserSearchPipe, CategorySearchPipe, RemoveSpacesPipe, ...navigatableComponents],
   imports: [CommonModule, RouterModule.forChild(routes), NgScrollbarModule, MaterialModule, FormsModule, GridModule, DropDownListModule],
-  providers: [
-    SortService,
-    VirtualScrollService,
-    AddressSearchPipe,
-    CategorySearchPipe,
-    EntrySearchPipe,
-    ExcelExportService,
-    UserSearchPipe
-  ],
+  providers: [SortService, VirtualScrollService, AddressSearchPipe, CategorySearchPipe, EntrySearchPipe, ExcelExportService, UserSearchPipe, RemoveSpacesPipe],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class MainModule {}

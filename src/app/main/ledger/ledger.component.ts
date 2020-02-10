@@ -17,7 +17,7 @@ import { Address, AddressService } from '../../shared/address';
 import { Category, CategoryService } from '../../shared/category';
 import { GlobalService } from '../../shared/global.service';
 import { User, AuthenticationService } from '../../shared/authentication';
-import { EntrySearchPipe } from '../../utils/pipes';
+import { EntrySearchPipe, RemoveSpacesPipe } from '../../utils/pipes';
 
 setCulture('fr-CH');
 
@@ -140,7 +140,8 @@ export class LedgerComponent implements OnInit {
     private readonly globalService: GlobalService,
     private readonly route: ActivatedRoute,
     private readonly authenticationService: AuthenticationService,
-    private readonly entryPipe: EntrySearchPipe
+    private readonly entryPipe: EntrySearchPipe,
+    private readonly removeSpaces: RemoveSpacesPipe
   ) {
     this.selectionOptions = { checkboxOnly: true };
     this.appVersion = applicationVersion;
@@ -784,7 +785,7 @@ export class LedgerComponent implements OnInit {
           Libelle: entryName,
           Cpt_debit: debitAccount,
           Cpt_credit: creditAccount,
-          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'de-CH'),
+          Montant: this.removeSpaces.transform(this.decimalPipe.transform(entryAmount, '1.2-2', 'fr-CH')),
           // Montant: entryAmount,
           Journal: entryJournal,
           ME_cours: '',
