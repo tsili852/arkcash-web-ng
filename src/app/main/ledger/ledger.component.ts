@@ -154,8 +154,10 @@ export class LedgerComponent implements OnInit {
     if (this.connectedUser) {
       if (this.connectedUser.lastExport) {
         this.newEntryMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
+        this.exportMinDate = Utilities.addDays(this.clientLastExportDate, 1);
       } else {
         this.newEntryMinDate = new Date(this.connectedUser.startDate);
+        this.exportMinDate = new Date(this.connectedUser.startDate);
       }
 
       this.dateFromMinDate = new Date(this.connectedUser.startDate);
@@ -166,7 +168,6 @@ export class LedgerComponent implements OnInit {
 
     if (this.connectedUser && this.connectedUser.lastExport) {
       this.clientLastExportDate = new Date(this.connectedUser.lastExport);
-      this.exportMinDate = Utilities.addDays(this.clientLastExportDate, 1);
     } else {
       this.clientLastExportDate = null;
     }
@@ -892,6 +893,7 @@ export class LedgerComponent implements OnInit {
         console.log(`Exported Updated: ${JSON.stringify(data, null, 2)}`);
         this.dateFromMinDate = Utilities.addDays(this.exportDate, 1);
         this.searchTerms.dateFrom = this.dateFromMinDate;
+        this.exportMinDate = this.dateFromMinDate;
         this.newEntryMinDate = Utilities.addDays(this.exportDate, 1);
         this.fetchEntries();
       },
