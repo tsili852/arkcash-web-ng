@@ -493,8 +493,9 @@
   <div class="modal-overlay absolute w-full h-full bg-black opacity-25 top-0 left-0 cursor-pointer"></div>
   <div class="absolute bg-white rounded-lg shadow-lg flex flex-col items-start justify-start p-5 border">
     <mat-form-field>
-      <input readonly matInput [min]="exportMinDate" [matDatepicker]="exportPicker" placeholder="Date d'exportation"
-        (focus)="exportPicker.open()" [(ngModel)]="exportDate" (dateChange)="changeExportDate($event)" />
+      <input readonly matInput [min]="exportMinDate" [max]="exportMaxDate" [matDatepicker]="exportPicker"
+        placeholder="Date d'exportation" (focus)="exportPicker.open()" [(ngModel)]="exportDate"
+        (dateChange)="changeExportDate($event)" />
       <mat-datepicker-toggle matSuffix [for]="exportPicker">
         <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
       </mat-datepicker-toggle>
