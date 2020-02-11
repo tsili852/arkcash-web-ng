@@ -149,12 +149,10 @@ export class LedgerComponent implements OnInit {
     this.connectedUser = this.globalService.getSelectedUser();
     this.logedinUser = this.authenticationService.getCurrentUser();
 
-    console.log(`Connected user: ${JSON.stringify(this.connectedUser, null, 2)}`);
-
     if (this.connectedUser) {
       if (this.connectedUser.lastExport) {
         this.newEntryMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
-        this.exportMinDate = Utilities.addDays(this.clientLastExportDate, 1);
+        this.exportMinDate = Utilities.addDays(new Date(this.connectedUser.lastExport), 1);
       } else {
         this.newEntryMinDate = new Date(this.connectedUser.startDate);
         this.exportMinDate = new Date(this.connectedUser.startDate);
@@ -804,40 +802,40 @@ export class LedgerComponent implements OnInit {
           Ecr_vtcode: ''
         });
       } else {
-        entryName = `Divers-${entry.address.name}`;
-        entryAmount = entry.totalAmount;
-        if (entry.inout === 1) {
-          debitAccount = '1000';
-          creditAccount = '';
-          entryJournal = 'v';
-        } else {
-          creditAccount = '1000';
-          debitAccount = '';
-          entryJournal = 'a';
-        }
+        // entryName = `Divers-${entry.address.name}`;
+        // entryAmount = entry.totalAmount;
+        // if (entry.inout === 1) {
+        //   debitAccount = '1000';
+        //   creditAccount = '';
+        //   entryJournal = 'v';
+        // } else {
+        //   creditAccount = '1000';
+        //   debitAccount = '';
+        //   entryJournal = 'a';
+        // }
 
-        exportData.push({
-          Date: this.datePipe.transform(entry.entryDate, 'dd.MM.yyyy'),
-          Piece: entry.pieceNo,
-          Libelle: entryName,
-          Cpt_debit: debitAccount,
-          Cpt_credit: creditAccount,
-          Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'de-CH'),
-          Journal: entryJournal,
-          ME_cours: '',
-          ME_mnt: '',
-          TVA_taux: '',
-          TVA_mnt: '',
-          TVA_cpt: '',
-          TVA_typ: '',
-          TVA_meth: '',
-          TVA_soum: '',
-          Ecr_monnai: '',
-          Ecr_monqte: '',
-          Comment: '',
-          Ecr_ana: '',
-          Ecr_vtcode: ''
-        });
+        // exportData.push({
+        //   Date: this.datePipe.transform(entry.entryDate, 'dd.MM.yyyy'),
+        //   Piece: entry.pieceNo,
+        //   Libelle: entryName,
+        //   Cpt_debit: debitAccount,
+        //   Cpt_credit: creditAccount,
+        //   Montant: this.decimalPipe.transform(entryAmount, '1.2-2', 'de-CH'),
+        //   Journal: entryJournal,
+        //   ME_cours: '',
+        //   ME_mnt: '',
+        //   TVA_taux: '',
+        //   TVA_mnt: '',
+        //   TVA_cpt: '',
+        //   TVA_typ: '',
+        //   TVA_meth: '',
+        //   TVA_soum: '',
+        //   Ecr_monnai: '',
+        //   Ecr_monqte: '',
+        //   Comment: '',
+        //   Ecr_ana: '',
+        //   Ecr_vtcode: ''
+        // });
 
         entry.entryitems.forEach((item) => {
           entryName = '';
@@ -851,9 +849,11 @@ export class LedgerComponent implements OnInit {
 
           if (entry.inout === 1) {
             creditAccount = item.category.accNo;
+            debitAccount = '1000';
             entryJournal = 'v';
           } else {
             debitAccount = item.category.accNo;
+            creditAccount = '1000';
             entryJournal = 'a';
           }
 
