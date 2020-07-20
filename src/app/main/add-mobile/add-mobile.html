@@ -73,8 +73,7 @@
           (change)="onChangeItemCategory($event, itemIndex)" placeholder="Catégorie">
         </ejs-dropdownlist>
         <div class="border-b border-gray-500 flex items-center ml-2 w-1/2 mr-4">
-          <input [ngModel]="item.amount" (ngModelChange)="onNewEntryItemAmountChange(item, $event)" inputmode="numeric"
-            type="number" (mouseup)="$event.target.select()"
+          <input [ngModel]="item.amount" (ngModelChange)="onNewEntryItemAmountChange(item, $event)" inputmode="decimal" (mouseup)="$event.target.select()"
             class="appearance-none bg-transparent border-none w-full py-1 px-2 leading-tight focus:outline-none text-right text-sm"
             type="text" placeholder="Montant" aria-label="Amount">
         </div>
