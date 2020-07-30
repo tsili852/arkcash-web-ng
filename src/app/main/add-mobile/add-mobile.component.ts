@@ -172,14 +172,16 @@ export class AddMobileComponent implements OnInit {
   }
 
   onSaveNewEntry() {
-    const validItems = this.newEntryItems.filter((item) => +item.amount > 0 && item.category);
+    const validItems = this.newEntryItems.filter((item) => item.amount && item.category);
     const itemsToUpdate: any[] = new Array<any>();
     if (validItems.length > 0 && this.newEntryAddress.id && this.newEntryDate) {
       validItems.forEach((item) => {
-        itemsToUpdate.push({
-          amount: item.amount,
-          category: item.category.id
-        });
+        let amt = parseFloat(item.amount.toString().replace(',', '.'));
+        if(amt > 0)
+          itemsToUpdate.push({
+            amount: amt, //item.amount,
+            category: item.category.id
+          });
       });
       this.drawerService.getDrawerByClient().subscribe((drawer) => {
         const newEntry = {
@@ -220,7 +222,7 @@ export class AddMobileComponent implements OnInit {
 
     this.newEntryItems.forEach((item) => {
       if (item.amount) {
-        const itemAmount: string = item.amount.toString();
+        const itemAmount: string = item.amount.toString().replace(',', '.');
         this.totalAmount = this.totalAmount + parseFloat(itemAmount);
       }
     });
